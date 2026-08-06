@@ -1,0 +1,14 @@
+{
+  "name": "ObraClara — Maternidade Porte I",
+  "short_name": "ObraClara",
+  "description": "Gestão da obra Maternidade Porte I — ritmo, cronograma, financeiro, caixa e restrições.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F8F6F1",
+  "theme_color": "#2D6A4F",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

@@ -105,15 +105,18 @@ O caixa nunca fica negativo — **desde que a entrada caia antes de começar a p
 
 ## 3. Pendências antes de assinar
 
-Três coisas apareceram na leitura das propostas que valem dinheiro:
+> **Atualização de 06/08/2026 — decisões batidas:**
+> **(1) Ferragem 100% do contratante nas três propostas** — resolve a pendência abaixo; uniformizar o texto da EST 26 e EST 27 continua valendo, mas o custo já está fora do escopo MSE nas três. **(2) Prazo pedido: 3 meses**, usado como referência contratual no app (tela Cronograma). **(3) Custos confirmados pelo Maurício** — concreto R$ 52.156 (com perda de 10%), mão de obra R$ 21.760/mês, pátio R$ 3.000/mês, escritório R$ 16.000, dívida Mateus R$ 5.000, escritório R$ 4.000, meta 300 m/dia. São exatamente os números já usados no modelo abaixo — nada mudou nos cálculos.
 
-**1. A ferragem não está excluída no texto da EST 26 e da EST 27.**
-A EST 28 diz explicitamente que "as treliças TG12/TR 12645 e os vergalhões de reforço deverão ser disponibilizados pelo contratante", e registra que R$ 69.587,97 de ferragem foram retirados do valor global. A EST 26 e a EST 27 **não têm essa ressalva** — nem nos itens contemplados, nem nas exclusões. Os valores parecem já ajustados (o quadro diz "valores comerciais proporcionalmente ajustados ao novo total da proposta"), mas o texto não fecha. Do jeito que está, o cliente pode cobrar a ferragem dessas duas. **Uniformizar o texto das três antes de assinar.**
+Duas coisas continuam valendo a pena resolver antes de assinar:
+
+**1. Uniformizar o texto de exclusão de ferragem nas três propostas.**
+A EST 28 diz explicitamente que "as treliças TG12/TR 12645 e os vergalhões de reforço deverão ser disponibilizados pelo contratante". A EST 26 e a EST 27 **não têm essa ressalva por escrito** — mesmo com a decisão de que a ferragem é 100% do contratante nas três, o contrato final deve deixar isso escrito nas três propostas, não só na EST 28.
 
 **2. A EST 28 sai 63% mais cara por metro que a EST 26.**
 R$ 24,89/m contra R$ 14,53/m e R$ 15,37/m — mesmo produto, mesma treliça, comprimento médio parecido (3,15 m contra 3,94 m e 3,59 m). Ou os custos indiretos foram todos alocados na EST 28, ou a EST 26 e a EST 27 estão subprecificadas. Vale conferir a composição antes de dar 18% em cima do conjunto.
 
-**3. O desconto de 18% zera o lucro projetado.** Ver 2.4.
+**3. O desconto de 18% zera boa parte do lucro projetado.** Ver 2.4.
 
 ### Perguntas que faltam para fechar o modelo
 
@@ -308,6 +311,27 @@ Registradas para poderem ser corrigidas:
 5. A produção acompanha o ritmo médio de forma linear (sem curva de aprendizado nem ramp-up).
 6. Medição mensal proporcional ao produzido, com 50% já adiantado na entrada, pagamento no mês seguinte.
 7. O contrato líquido de R$ 227.420,27 é o valor com os 18% — se fechar em outro percentual, todos os números do documento mudam proporcionalmente.
+
+---
+
+## 11. O app — já no ar
+
+A Fase 1 foi construída em `index.html` + `app.js` + `pages.js`, direto neste repositório, na mesma branch. É um app único (sem build, sem framework), com as 6 telas do plano:
+
+- **Hoje** — apontamento diário de produção em poucos campos, com os 4 números do topo se atualizando a cada lançamento.
+- **Cronograma** — curva S (previsto × realizado), datas de início/prazo/término projetado, avanço por lote EST 26/27/28.
+- **Financeiro** — contrato, ledger de custos, medições, e a visão orçado × realizado × projetado (EAC).
+- **Caixa** — projeção de 12 semanas com alerta de furo de caixa antes de acontecer.
+- **Simulador** — sliders de ritmo, desconto, concreto e custo fixo, recalculando prazo/custo/resultado/margem em tempo real.
+- **Restrições** — quadro Last Planner (ferragem, concreto, formas, projeto, pagamento) + PPC semanal.
+
+**Como funciona:**
+- **Acesso:** PIN simples de equipe (`2027`), mesmo padrão de segurança leve dos outros apps da MSE. Trocar em `pages.js` → `APP_PIN` quando quiser.
+- **Dados:** salvos no aparelho (`localStorage`) e sincronizados com o Firebase do `mse-gestao` (mesmo projeto, coleção separada `obraclara_maternidade`) — funciona offline e sincroniza quando a internet volta.
+- **PWA:** `manifest.json` + `sw.js` deixam o app instalável no celular, com o shell em cache para abrir sem sinal.
+- **Motor de cálculo:** `calcModel()` em `app.js` é o mesmo modelo validado no diagnóstico (seção 2) — o cenário-base de 300 m/dia bate com os números deste documento. A projeção viva (`projecao()`) troca a meta pelo ritmo real assim que o primeiro apontamento é lançado.
+
+**O que ainda não entrou** (Fases 2–4 do roadmap): portal do cliente e replicação para a próxima obra.
 
 ---
 

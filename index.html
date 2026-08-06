@@ -4,7 +4,8 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <meta name="theme-color" content="#2D6A4F"/>
-<title>ObraClara — Sistema de Gestão de Obras</title>
+<title>ObraClara — Maternidade Porte I</title>
+<link rel="manifest" href="manifest.json"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -23,20 +24,23 @@
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;overflow-x:hidden;}
 a{color:inherit;text-decoration:none;}
 button{font-family:inherit;cursor:pointer;border:none;background:none;}
+input,select,textarea{font-family:inherit;font-size:14px;}
 
 /* Layout */
 .app{display:flex;min-height:100vh;}
 .sidebar{position:fixed;top:0;left:0;height:100vh;width:var(--sidebar-w);background:var(--sidebar);color:var(--text-inv);display:flex;flex-direction:column;z-index:100;transition:transform .3s;}
 .sidebar-logo{padding:20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.1);}
 .sidebar-logo .icon{width:36px;height:36px;border-radius:10px;background:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;}
-.sidebar-logo h1{font-family:var(--font-display);font-size:18px;font-weight:700;line-height:1.2;}
+.sidebar-logo h1{font-family:var(--font-display);font-size:17px;font-weight:700;line-height:1.2;}
 .sidebar-logo p{font-size:10px;opacity:.5;}
 .sidebar nav{flex:1;padding:16px 12px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;}
 .nav-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:rgba(255,255,255,.7);transition:all .2s;cursor:pointer;}
 .nav-item:hover{background:var(--sidebar-hover);color:#fff;}
 .nav-item.active{background:var(--primary);color:#fff;}
 .nav-item svg{width:20px;height:20px;flex-shrink:0;}
-.sidebar-footer{padding:12px;border-top:1px solid rgba(255,255,255,.1);}
+.sidebar-footer{padding:12px;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;gap:4px;}
+.sidebar-footer .sync{font-size:11px;color:rgba(255,255,255,.45);padding:6px 12px;display:flex;align-items:center;gap:6px;}
+.sidebar-footer .sync .dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0;}
 .main{flex:1;margin-left:var(--sidebar-w);display:flex;flex-direction:column;min-width:0;}
 
 /* Mobile sidebar */
@@ -47,14 +51,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
 
 /* Header */
 .header{height:var(--header-h);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;padding:0 16px;position:sticky;top:0;z-index:40;}
-.search-box{position:relative;flex:1;max-width:400px;}
-.search-box input{width:100%;padding:8px 12px 8px 36px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;background:var(--bg);transition:all .2s;}
-.search-box input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(45,106,79,.1);}
-.search-box svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--text3);}
-.header-right{display:flex;align-items:center;gap:12px;}
-.notif-btn{position:relative;padding:8px;color:var(--text3);border-radius:8px;transition:all .2s;}
-.notif-btn:hover{background:var(--bg);color:var(--text);}
-.notif-btn .dot{position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid var(--surface);}
+.header-title{flex:1;font-size:14px;font-weight:600;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.header-right{display:flex;align-items:center;gap:12px;margin-left:auto;}
 .user-info{display:flex;align-items:center;gap:10px;padding-left:12px;border-left:1px solid var(--border);}
 .user-avatar{width:32px;height:32px;border-radius:50%;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;}
 .user-avatar svg{width:16px;height:16px;color:var(--primary);}
@@ -65,26 +63,32 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
 .content{padding:16px;}
 .page-title{font-family:var(--font-display);font-size:22px;font-weight:700;margin-bottom:4px;}
 .page-sub{font-size:13px;color:var(--text3);margin-bottom:20px;}
+.page-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:4px;}
 
 /* Cards */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;transition:box-shadow .2s;}
-.card:hover{box-shadow:0 4px 12px rgba(0,0,0,.06);}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;}
 .card-title{font-size:15px;font-weight:600;}
 
-/* KPI */
-.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;}
-.kpi{display:flex;align-items:flex-start;gap:12px;}
-.kpi-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.kpi-icon.green{background:var(--primary-pale);color:var(--primary);}
-.kpi-icon.yellow{background:#FFF8E1;color:var(--warn);}
-.kpi-icon.red{background:#FFEBEE;color:var(--danger);}
-.kpi-icon.blue{background:#E3F2FD;color:var(--blue);}
-.kpi-icon svg{width:20px;height:20px;}
-.kpi-label{font-size:12px;color:var(--text3);font-weight:500;}
-.kpi-value{font-size:24px;font-weight:700;line-height:1.2;margin:2px 0;}
-.kpi-sub{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px;}
-.kpi-sub .up{color:var(--ok);}
-.kpi-sub .down{color:var(--danger);}
+/* KPI bar (os 4 números, sempre no topo) */
+.kpi-bar{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px;}
+.kpi-tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;position:relative;overflow:hidden;}
+.kpi-tile::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--tone,var(--border));}
+.kpi-tile .k-label{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
+.kpi-tile .k-value{font-family:var(--font-mono);font-size:22px;font-weight:700;line-height:1.25;margin-top:3px;letter-spacing:-.02em;}
+.kpi-tile .k-note{font-size:11.5px;color:var(--text3);margin-top:3px;}
+.kpi-tile.ok{--tone:var(--ok);}
+.kpi-tile.warn{--tone:var(--warn);}
+.kpi-tile.danger{--tone:var(--danger);}
+.kpi-frase{background:var(--primary-pale);border-radius:10px;padding:12px 14px;font-size:13.5px;color:#1B4332;margin-bottom:20px;line-height:1.55;}
+.kpi-frase strong{font-weight:700;}
+
+/* Pills / badges */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:99px;font-size:11px;font-weight:600;white-space:nowrap;}
+.badge-ok{background:var(--primary-pale);color:var(--ok);}
+.badge-warn{background:#FFF3CD;color:#856404;}
+.badge-danger{background:#FFEBEE;color:var(--danger);}
+.badge-blue{background:#E3F2FD;color:var(--blue);}
+.badge-neutral{background:var(--bg);color:var(--text3);}
 
 /* Grid */
 .grid-2{display:grid;grid-template-columns:1fr;gap:12px;}
@@ -96,98 +100,120 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
 .progress-bar .fill{height:100%;border-radius:99px;transition:width .5s;}
 .progress-sm{height:6px;}
 
-/* Badge */
-.badge{display:inline-flex;align-items:center;padding:2px 10px;border-radius:99px;font-size:11px;font-weight:600;white-space:nowrap;}
-.badge-ok{background:var(--primary-pale);color:var(--ok);}
-.badge-warn{background:#FFF3CD;color:#856404;}
-.badge-danger{background:#FFEBEE;color:var(--danger);}
-.badge-blue{background:#E3F2FD;color:var(--blue);}
-
-/* Obra Card */
-.obra-card{cursor:pointer;transition:all .2s;}
-.obra-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08);}
-.obra-card .obra-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:8px;}
-.obra-card h3{font-size:15px;font-weight:600;}
-.obra-card .obra-meta{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;color:var(--text2);margin-bottom:12px;}
-.obra-card .obra-meta span{display:flex;align-items:center;gap:5px;}
-.obra-card .obra-meta svg{width:13px;height:13px;color:var(--text3);}
-.obra-card .progress-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;}
-.obra-card .progress-label .pct{font-weight:600;}
-.obra-card .obra-budget{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border);margin-top:10px;}
-.obra-card .obra-budget .item small{font-size:10px;color:var(--text3);}
-.obra-card .obra-budget .item .val{font-size:13px;font-weight:600;}
-
-/* Table */
-.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
-table{width:100%;border-collapse:collapse;min-width:600px;}
-th{text-align:left;padding:10px 12px;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;background:var(--bg);border-bottom:1px solid var(--border);white-space:nowrap;}
-td{padding:10px 12px;font-size:13px;border-bottom:1px solid rgba(229,225,216,.5);}
-tr:hover td{background:var(--surface-hover);}
-
-/* Chart */
-.bar-chart{display:flex;flex-direction:column;gap:6px;}
-.bar-row{display:flex;align-items:center;gap:8px;}
-.bar-label{width:44px;font-size:11px;color:var(--text3);text-align:right;flex-shrink:0;}
-.bar-track{flex:1;height:20px;background:var(--bg);border-radius:6px;overflow:hidden;position:relative;}
-.bar-track .bar-fill{position:absolute;inset-y:0;left:0;border-radius:6px;transition:width .5s;}
-.bar-track .bar-expected{background:rgba(45,106,79,.15);}
-.bar-track .bar-actual{background:var(--primary);}
-.bar-value{width:36px;font-size:11px;font-family:var(--font-mono);text-align:right;}
-
-/* Despesas */
-.donut-list{display:flex;flex-direction:column;gap:10px;}
-.donut-item .donut-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;}
-.donut-item .donut-bar{height:8px;background:var(--bg);border-radius:99px;overflow:hidden;}
-.donut-item .donut-fill{height:100%;border-radius:99px;}
-
-/* Alert */
-.alert{display:flex;gap:10px;padding:14px;border-radius:12px;border-left:4px solid var(--warn);background:#FFFBF0;}
-.alert h3{font-size:14px;font-weight:600;margin-bottom:6px;}
-.alert ul{list-style:none;display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--text2);}
-.alert li{display:flex;align-items:center;gap:6px;}
-.alert li svg{width:14px;height:14px;flex-shrink:0;}
+/* Forms */
+.form-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:10px;}
+.fgroup label{display:block;font-size:11.5px;font-weight:600;color:var(--text3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px;}
+.fgroup input,.fgroup select,.fgroup textarea{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);}
+.fgroup input:focus,.fgroup select:focus,.fgroup textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(45,106,79,.1);}
+.fgroup textarea{resize:vertical;min-height:60px;}
 
 /* Buttons */
-.btn{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
+.btn{padding:9px 16px;border-radius:8px;font-size:13px;font-weight:600;transition:all .2s;display:inline-flex;align-items:center;justify-content:center;gap:6px;}
 .btn-primary{background:var(--primary);color:#fff;}
 .btn-primary:hover{background:#1B4332;}
 .btn-outline{border:1.5px solid var(--primary);color:var(--primary);}
 .btn-outline:hover{background:var(--primary-pale);}
+.btn-danger-outline{border:1.5px solid var(--danger);color:var(--danger);}
+.btn-danger-outline:hover{background:#FFEBEE;}
 .btn-sm{padding:6px 12px;font-size:12px;}
+.btn-icon{padding:6px;border-radius:6px;color:var(--text3);}
+.btn-icon:hover{background:var(--bg);color:var(--danger);}
 
-/* Stats */
-.stat-mini{text-align:center;padding:10px;}
-.stat-mini .num{font-size:24px;font-weight:700;}
-.stat-mini .label{font-size:11px;color:var(--text3);}
+/* Table */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;min-width:520px;}
+th{text-align:left;padding:10px 12px;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;background:var(--bg);border-bottom:1px solid var(--border);white-space:nowrap;}
+td{padding:10px 12px;font-size:13px;border-bottom:1px solid rgba(229,225,216,.5);}
+tr:hover td{background:var(--surface-hover);}
+td.n,th.n{text-align:right;font-family:var(--font-mono);white-space:nowrap;}
+tr.tot td{font-weight:700;background:var(--bg);}
 
-/* Filters */
-.filters{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
-.filters input{padding:8px 12px 8px 36px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;background:var(--surface);width:100%;max-width:260px;}
-.filters input:focus{outline:none;border-color:var(--primary);}
+/* Chart bars (curva, composição) */
+.bar-chart{display:flex;flex-direction:column;gap:6px;}
+.bar-row{display:flex;align-items:center;gap:8px;}
+.bar-label{width:56px;font-size:11px;color:var(--text3);text-align:right;flex-shrink:0;font-family:var(--font-mono);}
+.bar-track{flex:1;height:20px;background:var(--bg);border-radius:6px;overflow:hidden;position:relative;}
+.bar-track .bar-fill{position:absolute;inset-y:0;left:0;border-radius:6px;transition:width .5s;}
+.bar-track .bar-expected{background:rgba(45,106,79,.18);}
+.bar-track .bar-actual{background:var(--primary);}
+.bar-track .bar-proj{background:repeating-linear-gradient(135deg,var(--blue),var(--blue) 4px,transparent 4px,transparent 8px);opacity:.55;}
+.bar-value{width:40px;font-size:11px;font-family:var(--font-mono);text-align:right;flex-shrink:0;}
+.legend-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:var(--text3);}
+.legend-row span{display:flex;align-items:center;gap:5px;}
+.legend-row i{width:10px;height:10px;border-radius:2px;display:inline-block;flex-shrink:0;}
+
+/* Composição stack */
+.stack{display:flex;width:100%;height:36px;border-radius:8px;overflow:hidden;margin-bottom:10px;}
+.stack span{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;}
+
+/* Lote progress */
+.lote-row{padding:12px 0;border-bottom:1px solid var(--border);}
+.lote-row:last-child{border-bottom:none;}
+.lote-head{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;}
+.lote-head b{font-weight:700;}
+.lote-head .meta{color:var(--text3);font-size:11.5px;}
+
+/* Alert */
+.alert{display:flex;gap:10px;padding:14px;border-radius:12px;border-left:4px solid var(--warn);background:#FFFBF0;margin-bottom:16px;}
+.alert.danger{border-left-color:var(--danger);background:#FFF2F1;}
+.alert h3{font-size:14px;font-weight:600;margin-bottom:4px;}
+.alert p{font-size:12.5px;color:var(--text2);}
 
 /* Empty state */
-.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;color:var(--text3);text-align:center;}
-.empty svg{width:48px;height:48px;margin-bottom:16px;opacity:.4;}
-.empty p{font-size:14px;}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;color:var(--text3);text-align:center;}
+.empty svg{width:40px;height:40px;margin-bottom:12px;opacity:.4;}
+.empty p{font-size:13px;}
 
-/* Page header */
-.page-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:4px;}
+/* Restrições board */
+.restr-card{border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:10px;border-left:4px solid var(--border);}
+.restr-card.aberta{border-left-color:var(--danger);}
+.restr-card.andamento{border-left-color:var(--warn);}
+.restr-card.liberada{border-left-color:var(--ok);opacity:.7;}
+.restr-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:4px;}
+.restr-top b{font-size:13.5px;}
+.restr-meta{font-size:11.5px;color:var(--text3);display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;}
 
-/* Tarefas counters */
-.tarefa-counts{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;}
-.tarefa-counts .card{padding:8px 14px;display:flex;align-items:center;gap:8px;white-space:nowrap;}
+/* PPC */
+.ppc-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.ppc-row:last-child{border-bottom:none;}
+.ppc-week{font-family:var(--font-mono);width:70px;color:var(--text3);flex-shrink:0;}
 
-/* Financeiro header */
-.fin-header{display:flex;flex-wrap:wrap;gap:8px;}
+/* Simulador */
+.sim-slider{margin-bottom:18px;}
+.sim-slider .sl-head{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px;}
+.sim-slider .sl-head b{font-family:var(--font-mono);color:var(--primary);font-size:14px;}
+.sim-slider input[type=range]{width:100%;accent-color:var(--primary);}
+.sim-result{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.sim-result .sr-item{background:var(--bg);border-radius:10px;padding:12px;}
+.sim-result .sr-item .l{font-size:10.5px;color:var(--text3);text-transform:uppercase;font-weight:600;letter-spacing:.3px;}
+.sim-result .sr-item .v{font-family:var(--font-mono);font-size:18px;font-weight:700;margin-top:2px;}
+
+/* Toast */
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--text);color:#fff;padding:11px 20px;border-radius:99px;font-size:13px;font-weight:600;z-index:200;transition:transform .25s;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+#toast.show{transform:translateX(-50%) translateY(0);}
+
+/* Login gate */
+.gate{position:fixed;inset:0;background:var(--sidebar);display:flex;align-items:center;justify-content:center;z-index:500;padding:20px;}
+.gate-box{background:var(--surface);border-radius:16px;padding:32px 28px;width:100%;max-width:340px;text-align:center;}
+.gate-box .icon{width:52px;height:52px;border-radius:14px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;margin:0 auto 16px;font-size:18px;}
+.gate-box h2{font-family:var(--font-display);font-size:19px;margin-bottom:4px;}
+.gate-box p{font-size:12.5px;color:var(--text3);margin-bottom:18px;}
+.gate-box input{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:10px;text-align:center;font-size:20px;letter-spacing:6px;margin-bottom:12px;font-family:var(--font-mono);}
+.gate-box input:focus{outline:none;border-color:var(--primary);}
+.gate-box .btn{width:100%;padding:12px;}
+.gate-box .err{color:var(--danger);font-size:12px;margin-bottom:10px;min-height:16px;}
 
 /* Responsive */
 @media(min-width:769px){
-  .kpi-grid{grid-template-columns:repeat(4,1fr);}
+  .kpi-bar{grid-template-columns:repeat(4,1fr);}
   .grid-2{grid-template-columns:1fr 1fr;}
   .grid-3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
   .grid-4{grid-template-columns:repeat(4,1fr);}
   .content{padding:24px;}
   .page-title{font-size:24px;}
+  .form-grid{grid-template-columns:repeat(3,1fr);}
+  .form-grid.cols2{grid-template-columns:1fr 1fr;}
+  .sim-result{grid-template-columns:repeat(4,1fr);}
 }
 
 @media(max-width:768px){
@@ -197,30 +223,37 @@ tr:hover td{background:var(--surface-hover);}
   .hamburger{display:flex;}
   .main{margin-left:0;}
   .header{padding:0 12px;}
-  .search-box{max-width:none;}
-  .search-box input{font-size:16px;} /* prevent zoom on iOS */
   .user-info .user-name,.user-info .user-role{display:none;}
   .user-info{padding-left:8px;border-left:none;}
   .page-header{flex-direction:column;}
   .page-header .btn{align-self:flex-start;}
-  .fin-header{flex-direction:column;}
-  .fin-header .btn{width:100%;justify-content:center;}
 }
 </style>
 </head>
 <body>
-<div class="app">
-  <!-- Sidebar Overlay (mobile) -->
+
+<div class="gate" id="gate">
+  <div class="gate-box">
+    <div class="icon">OC</div>
+    <h2>ObraClara</h2>
+    <p>Maternidade Porte I — acesso da equipe MSE</p>
+    <div class="err" id="gateErr"></div>
+    <input type="password" inputmode="numeric" maxlength="6" id="gatePin" placeholder="••••" autofocus/>
+    <button class="btn btn-primary" onclick="tentarEntrar()">Entrar</button>
+  </div>
+</div>
+
+<div class="app" id="app" style="display:none">
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
-  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
       <div class="icon">OC</div>
-      <div class="logo-text"><h1>ObraClara</h1><p>Gestão de Obras</p></div>
+      <div class="logo-text"><h1>ObraClara</h1><p>Maternidade Porte I</p></div>
     </div>
     <nav id="nav"></nav>
     <div class="sidebar-footer">
+      <div class="sync" id="syncStatus"><span class="dot"></span><span>Carregando…</span></div>
       <div class="nav-item" onclick="closeSidebar()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg>
         <span class="nav-label">Fechar</span>
@@ -228,24 +261,16 @@ tr:hover td{background:var(--surface-hover);}
     </div>
   </aside>
 
-  <!-- Main -->
   <div class="main">
     <header class="header">
       <button class="hamburger" onclick="openSidebar()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
-      <div class="search-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="text" placeholder="Buscar obras, tarefas, pessoas..." id="searchInput"/>
-      </div>
+      <div class="header-title" id="headerTitle">Maternidade Porte I</div>
       <div class="header-right">
-        <button class="notif-btn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          <span class="dot"></span>
-        </button>
         <div class="user-info">
           <div class="user-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-          <div><div class="user-name">Carlos Mendes</div><div class="user-role">Engenheiro</div></div>
+          <div><div class="user-name">Equipe MSE</div><div class="user-role">Sr. Rafael · Maternidade</div></div>
         </div>
       </div>
     </header>
@@ -253,335 +278,11 @@ tr:hover td{background:var(--surface-hover);}
   </div>
 </div>
 
-<script>
-// === DATA ===
-const obras = [
-  {id:"obra-1",nome:"Residência Silva",cliente:"João e Maria Silva",endereco:"Rua das Flores, 123",cidade:"São Paulo/SP",tipo:"Residencial",padrao:"Alto Padrão",area:320,pavimentos:2,dataInicio:"2025-08-01",dataEntrega:"2026-02-28",orcamento:850000,gasto:510000,pct:65,status:"em_andamento",engenheiro:"Carlos Mendes",mestre:"Roberto",fase:"Acabamento"},
-  {id:"obra-2",nome:"Edifício Aurora",cliente:"Aurora Incorporações",endereco:"Av. Paulista, 1000",cidade:"São Paulo/SP",tipo:"Comercial",padrao:"Corporativo",area:2400,pavimentos:8,dataInicio:"2025-03-15",dataEntrega:"2026-06-30",orcamento:4200000,gasto:1680000,pct:42,status:"em_andamento",engenheiro:"Carlos Mendes",mestre:"Antônio",fase:"Estrutura"},
-  {id:"obra-3",nome:"Casa de Praia Oliveira",cliente:"Família Oliveira",endereco:"Rua do Mar, 45",cidade:"Ubatuba/SP",tipo:"Residencial",padrao:"Médio",area:180,pavimentos:2,dataInicio:"2025-10-01",dataEntrega:"2026-04-15",orcamento:420000,gasto:380000,pct:88,status:"em_andamento",engenheiro:"Ana Souza",mestre:"Carlos",fase:"Finalização"},
-  {id:"obra-4",nome:"Reforma Escritório Tech",cliente:"TechCorp LTDA",endereco:"Rua Augusta, 500",cidade:"São Paulo/SP",tipo:"Reforma",padrao:"Corporativo",area:150,pavimentos:1,dataInicio:"2025-11-15",dataEntrega:"2026-01-30",orcamento:180000,gasto:195000,pct:92,status:"em_andamento",engenheiro:"Ana Souza",mestre:"Roberto",fase:"Entrega"},
-  {id:"obra-5",nome:"Galpão Logístico Norte",cliente:"LogisMax SA",endereco:"Rod. Fernão Dias, km 120",cidade:"Guarulhos/SP",tipo:"Industrial",padrao:"Standard",area:3500,pavimentos:1,dataInicio:"2025-06-01",dataEntrega:"2026-03-31",orcamento:2800000,gasto:1120000,pct:38,status:"em_andamento",engenheiro:"Carlos Mendes",mestre:"Antônio",fase:"Fundação"},
-];
+<div id="toast"></div>
 
-const tarefas = [
-  {id:"t-1",obraId:"obra-1",titulo:"Instalação elétrica - Térreo",fase:"Acabamento",resp:"Equipe Elétrica",fim:"2026-02-10",status:"concluida",prioridade:"alta",pct:100},
-  {id:"t-2",obraId:"obra-1",titulo:"Pintura interna",fase:"Acabamento",resp:"Equipe Pintura",fim:"2026-02-20",status:"em_andamento",prioridade:"media",pct:60},
-  {id:"t-3",obraId:"obra-1",titulo:"Revestimento banheiros",fase:"Acabamento",resp:"Equipe Revestimento",fim:"2026-02-15",status:"em_andamento",prioridade:"alta",pct:75},
-  {id:"t-4",obraId:"obra-1",titulo:"Paisagismo jardim",fase:"Exterior",resp:"Paisagista",fim:"2026-02-25",status:"pendente",prioridade:"baixa",pct:0},
-  {id:"t-5",obraId:"obra-2",titulo:"Concretagem pilares 4º andar",fase:"Estrutura",resp:"Equipe Estrutural",fim:"2026-02-05",status:"concluida",prioridade:"critica",pct:100},
-  {id:"t-6",obraId:"obra-2",titulo:"Alvenaria 2º e 3º andar",fase:"Alvenaria",resp:"Equipe Alvenaria",fim:"2026-03-01",status:"em_andamento",prioridade:"alta",pct:45},
-  {id:"t-7",obraId:"obra-3",titulo:"Instalação hidráulica",fase:"Instalações",resp:"Equipe Hidráulica",fim:"2026-01-15",status:"concluida",prioridade:"alta",pct:100},
-  {id:"t-8",obraId:"obra-3",titulo:"Esquadrias",fase:"Acabamento",resp:"Marcenaria",fim:"2026-02-10",status:"em_andamento",prioridade:"media",pct:80},
-  {id:"t-9",obraId:"obra-4",titulo:"Demolição paredes internas",fase:"Demolição",resp:"Equipe Geral",fim:"2025-12-05",status:"concluida",prioridade:"critica",pct:100},
-  {id:"t-10",obraId:"obra-4",titulo:"Forro drywall",fase:"Acabamento",resp:"Equipe Drywall",fim:"2026-01-25",status:"atrasada",prioridade:"alta",pct:70},
-  {id:"t-11",obraId:"obra-5",titulo:"Escavação fundação",fase:"Fundação",resp:"Equipe Terraplanagem",fim:"2025-08-30",status:"concluida",prioridade:"critica",pct:100},
-  {id:"t-12",obraId:"obra-5",titulo:"Baldrame e vigas",fase:"Fundação",resp:"Equipe Estrutural",fim:"2025-11-30",status:"concluida",prioridade:"critica",pct:100},
-];
-
-const transacoes = [
-  {id:"tx-1",obraId:"obra-1",tipo:"despesa",cat:"material",desc:"Cimento CP-II (200 sacos)",valor:12000,data:"2026-01-15",status:"pago"},
-  {id:"tx-2",obraId:"obra-1",tipo:"despesa",cat:"mao_de_obra",desc:"Equipe elétrica - Janeiro",valor:8500,data:"2026-01-31",status:"pago"},
-  {id:"tx-3",obraId:"obra-1",tipo:"despesa",cat:"material",desc:"Porcelanato (120m²)",valor:9600,data:"2026-02-01",status:"pago"},
-  {id:"tx-4",obraId:"obra-1",tipo:"despesa",cat:"servico",desc:"Projeto paisagístico",valor:4500,data:"2026-02-05",status:"pendente"},
-  {id:"tx-5",obraId:"obra-2",tipo:"despesa",cat:"material",desc:"Aço CA-50 (5 toneladas)",valor:35000,data:"2026-01-10",status:"pago"},
-  {id:"tx-6",obraId:"obra-2",tipo:"despesa",cat:"equipamento",desc:"Aluguel betoneira",valor:3200,data:"2026-01-15",status:"pago"},
-  {id:"tx-7",obraId:"obra-2",tipo:"despesa",cat:"mao_de_obra",desc:"Equipe estrutural - Janeiro",valor:28000,data:"2026-01-31",status:"pago"},
-  {id:"tx-8",obraId:"obra-3",tipo:"despesa",cat:"material",desc:"Tubulação PVC",valor:4200,data:"2025-12-05",status:"pago"},
-  {id:"tx-9",obraId:"obra-3",tipo:"despesa",cat:"material",desc:"Esquadrias alumínio",valor:18000,data:"2026-01-10",status:"pago"},
-  {id:"tx-10",obraId:"obra-4",tipo:"despesa",cat:"mao_de_obra",desc:"Equipe demolição",valor:5500,data:"2025-12-01",status:"pago"},
-  {id:"tx-11",obraId:"obra-4",tipo:"despesa",cat:"material",desc:"Placas drywall + perfis",valor:7800,data:"2026-01-05",status:"atrasado"},
-  {id:"tx-12",obraId:"obra-1",tipo:"receita",cat:"servico",desc:"3ª parcela do cliente",valor:170000,data:"2026-01-20",status:"pago"},
-  {id:"tx-13",obraId:"obra-2",tipo:"receita",cat:"servico",desc:"5ª medição",valor:525000,data:"2026-01-25",status:"pago"},
-  {id:"tx-14",obraId:"obra-3",tipo:"receita",cat:"servico",desc:"Parcela final",valor:84000,data:"2026-02-01",status:"pendente"},
-];
-
-const evolucao = [
-  {mes:"Set/25",prev:5,real:4},{mes:"Out/25",prev:12,real:10},{mes:"Nov/25",prev:20,real:18},
-  {mes:"Dez/25",prev:30,real:27},{mes:"Jan/26",prev:42,real:38},{mes:"Fev/26",prev:55,real:50},
-  {mes:"Mar/26",prev:68,real:null},{mes:"Abr/26",prev:78,real:null},{mes:"Mai/26",prev:88,real:null},{mes:"Jun/26",prev:100,real:null},
-];
-
-const despesasCat = [
-  {nome:"Material",valor:86600,cor:"#2D6A4F"},{nome:"Mão de Obra",valor:50000,cor:"#52B788"},
-  {nome:"Equipamento",valor:12200,cor:"#457B9D"},{nome:"Serviço",valor:14500,cor:"#E76F51"},{nome:"Outros",valor:3700,cor:"#E9A84C"},
-];
-
-// === HELPERS ===
-const fmt = v => new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v);
-const fmtDate = d => {try{return new Date(d+'T12:00:00').toLocaleDateString('pt-BR')}catch(e){return d}};
-const diasRest = d => Math.ceil((new Date(d+'T12:00:00')-new Date())/(864e5));
-const statusPrazo = (d,pct) => d<0?'atrasado':pct<50?'atencao':'ok';
-const statusFin = pct => pct>100?'critico':pct>80?'atencao':'ok';
-const statusGeral = (p,f) => p==='atrasado'||f==='critico'?'vermelho':p==='atencao'||f==='atencao'?'amarelo':'verde';
-
-function svg(name,w,h){
-  w=w||20;h=h||20;
-  const s = {
-    dashboard:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
-    building:'<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22V12h6v10"/><path d="M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01"/>',
-    check:'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
-    dollar:'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
-    users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
-    camera:'<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',
-    package:'<line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',
-    file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
-    chart:'<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
-    settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
-    up:'<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
-    down:'<polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/>',
-    alert:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
-    clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
-    map:'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
-    ruler:'<path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/>',
-    user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
-    arrow:'<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>',
-    plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
-    filter:'<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>',
-    menu:'<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>',
-    close:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
-  };
-  return '<svg width="'+w+'" height="'+h+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(s[name]||'')+'</svg>';
-}
-
-// === NAV ===
-const pages = [
-  {id:'dashboard',label:'Dashboard',icon:'dashboard'},
-  {id:'obras',label:'Obras',icon:'building'},
-  {id:'tarefas',label:'Tarefas',icon:'check'},
-  {id:'financeiro',label:'Financeiro',icon:'dollar'},
-  {id:'equipe',label:'Equipe',icon:'users'},
-  {id:'fotos',label:'Fotos',icon:'camera'},
-  {id:'materiais',label:'Materiais',icon:'package'},
-  {id:'documentos',label:'Documentos',icon:'file'},
-  {id:'relatorios',label:'Relatórios',icon:'chart'},
-];
-
-let currentPage = 'dashboard';
-
-function renderNav(){
-  document.getElementById('nav').innerHTML = pages.map(function(p){
-    return '<a class="nav-item '+(currentPage===p.id?'active':'')+'" onclick="navigate(\''+p.id+'\')" href="#">'+
-      svg(p.icon)+'<span class="nav-label">'+p.label+'</span></a>';
-  }).join('');
-}
-
-function navigate(page){
-  currentPage = page;
-  renderNav();
-  renderPage();
-  closeSidebar();
-  window.scrollTo(0,0);
-}
-
-function openSidebar(){
-  document.getElementById('sidebar').classList.add('open');
-  document.getElementById('sidebarOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-
-function closeSidebar(){
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebarOverlay').classList.remove('open');
-  document.body.style.overflow='';
-}
-
-// === PAGES ===
-function renderPage(){
-  var c = document.getElementById('content');
-  switch(currentPage){
-    case 'dashboard': c.innerHTML = renderDashboard(); break;
-    case 'obras': c.innerHTML = renderObras(); break;
-    case 'tarefas': c.innerHTML = renderTarefas(); break;
-    case 'financeiro': c.innerHTML = renderFinanceiro(); break;
-    default: c.innerHTML = renderGeneric(currentPage);
-  }
-}
-
-function obraCard(o){
-  var dias = diasRest(o.dataEntrega);
-  var pStatus = statusPrazo(dias,o.pct);
-  var fStatus = statusFin((o.gasto/o.orcamento)*100);
-  var gStatus = statusGeral(pStatus,fStatus);
-  var badgeLabel = {verde:'No prazo',amarelo:'Atenção',vermelho:'Crítico'}[gStatus];
-  var badgeClass = {verde:'badge-ok',amarelo:'badge-warn',vermelho:'badge-danger'}[gStatus];
-  var barColor = {verde:'var(--primary)',amarelo:'var(--warn)',vermelho:'var(--danger)'}[gStatus];
-  var diasText = dias>0?dias+' dias restantes':dias===0?'Entrega hoje':Math.abs(dias)+' dias atrasado';
-
-  return '<div class="card obra-card" onclick="navigate(\'obras\')">'+
-    '<div class="obra-header">'+
-      '<div><h3>'+o.nome+'</h3><div style="font-size:12px;color:var(--text3);display:flex;align-items:center;gap:4px;margin-top:2px">'+svg('user',14,14)+' '+o.cliente+'</div></div>'+
-      '<span class="badge '+badgeClass+'">'+badgeLabel+'</span>'+
-    '</div>'+
-    '<div class="obra-meta">'+
-      '<span>'+svg('map',13,13)+' '+o.cidade+'</span>'+
-      '<span>'+svg('ruler',13,13)+' '+o.area+'m² · '+o.pavimentos+'p</span>'+
-      '<span>'+svg('clock',13,13)+' '+o.fase+'</span>'+
-      '<span style="color:var(--text3)">'+diasText+'</span>'+
-    '</div>'+
-    '<div class="progress-label"><span style="color:var(--text3)">Progresso</span><span class="pct">'+o.pct+'%</span></div>'+
-    '<div class="progress-bar"><div class="fill" style="width:'+o.pct+'%;background:'+barColor+'"></div></div>'+
-    '<div class="obra-budget">'+
-      '<div class="item"><small>Orçamento</small><div class="val">'+fmt(o.orcamento)+'</div></div>'+
-      '<div class="item" style="text-align:right"><small>Gasto</small><div class="val" style="color:'+(fStatus==='critico'?'var(--danger)':fStatus==='atencao'?'var(--warn)':'var(--text)')+'">'+fmt(o.gasto)+'</div></div>'+
-    '</div>'+
-  '</div>';
-}
-
-function renderDashboard(){
-  var ativas = obras.filter(function(o){return o.status==='em_andamento'}).length;
-  var tPend = tarefas.filter(function(t){return t.status==='pendente'||t.status==='em_andamento'}).length;
-  var tAtras = tarefas.filter(function(t){return t.status==='atrasada'}).length;
-  var rec = transacoes.filter(function(t){return t.tipo==='receita'}).reduce(function(s,t){return s+t.valor},0);
-  var desp = transacoes.filter(function(t){return t.tipo==='despesa'}).reduce(function(s,t){return s+t.valor},0);
-  var saldo = rec-desp;
-  var pctMed = Math.round(obras.reduce(function(s,o){return s+o.pct},0)/obras.length);
-
-  return '<h1 class="page-title">Dashboard</h1>'+
-    '<p class="page-sub">Visão geral das suas obras e projetos</p>'+
-    '<div class="kpi-grid">'+
-      '<div class="card"><div class="kpi"><div class="kpi-icon green">'+svg('building')+'</div><div><div class="kpi-label">Obras Ativas</div><div class="kpi-value">'+ativas+'</div><div class="kpi-sub">'+obras.length+' total</div></div></div></div>'+
-      '<div class="card"><div class="kpi"><div class="kpi-icon '+(tAtras>0?'yellow':'green')+'">'+svg('check')+'</div><div><div class="kpi-label">Tarefas Pendentes</div><div class="kpi-value">'+tPend+'</div><div class="kpi-sub"><span class="'+(tAtras>0?'down':'up')+'">'+tAtras+' atrasadas</span></div></div></div></div>'+
-      '<div class="card"><div class="kpi"><div class="kpi-icon '+(saldo>=0?'green':'red')+'">'+svg('dollar')+'</div><div><div class="kpi-label">Saldo do Mês</div><div class="kpi-value">'+fmt(saldo)+'</div><div class="kpi-sub"><span class="up">↑ 8%</span></div></div></div></div>'+
-      '<div class="card"><div class="kpi"><div class="kpi-icon blue">'+svg('up')+'</div><div><div class="kpi-label">Progresso Médio</div><div class="kpi-value">'+pctMed+'%</div><div class="kpi-sub">das obras</div></div></div></div>'+
-    '</div>'+
-    '<div class="grid-2" style="margin-bottom:20px">'+
-      '<div class="card"><div class="card-title" style="margin-bottom:14px">Evolução das Obras</div><div class="bar-chart">'+
-        evolucao.map(function(e){
-          return '<div class="bar-row"><span class="bar-label">'+e.mes+'</span><div class="bar-track">'+
-            '<div class="bar-fill bar-expected" style="width:'+e.prev+'%"></div>'+
-            (e.real!==null?'<div class="bar-fill bar-actual" style="width:'+e.real+'%"></div>':'')+
-            '</div><span class="bar-value">'+(e.real!=null?e.real:'—')+'%</span></div>';
-        }).join('')+
-      '</div><div style="display:flex;gap:12px;margin-top:10px;font-size:11px;color:var(--text3)">'+
-        '<span><span style="display:inline-block;width:10px;height:10px;background:rgba(45,106,79,.15);border-radius:2px;margin-right:4px"></span>Previsto</span>'+
-        '<span><span style="display:inline-block;width:10px;height:10px;background:var(--primary);border-radius:2px;margin-right:4px"></span>Realizado</span>'+
-      '</div></div>'+
-      '<div class="card"><div class="card-title" style="margin-bottom:14px">Despesas por Categoria</div><div class="donut-list">'+
-        despesasCat.map(function(c){
-          var total=despesasCat.reduce(function(s,x){return s+x.valor},0);
-          var pct=(c.valor/total)*100;
-          return '<div class="donut-item"><div class="donut-label"><span>'+c.nome+'</span><span style="font-family:var(--font-mono)">'+fmt(c.valor)+'</span></div>'+
-            '<div class="donut-bar"><div class="donut-fill" style="width:'+pct+'%;background:'+c.cor+'"></div></div></div>';
-        }).join('')+
-      '</div></div>'+
-    '</div>'+
-    '<h2 style="font-family:var(--font-display);font-size:17px;font-weight:700;margin-bottom:14px">Obras em Andamento</h2>'+
-    '<div class="grid-3" style="margin-bottom:20px">'+obras.slice(0,3).map(obraCard).join('')+'</div>'+
-    '<div class="alert">'+svg('alert')+'<div><h3>Alertas e Atenção</h3><ul>'+
-      '<li>'+svg('clock',14,14)+' <strong>Forro drywall</strong> (Reforma Escritório Tech) — 70% concluído, prazo era 25/01</li>'+
-      '<li>'+svg('dollar',14,14)+' <strong>Placas drywall + perfis</strong> — R$ 7.800 em atraso</li>'+
-      '<li>'+svg('dollar',14,14)+' <strong>Reforma Escritório Tech</strong> — Orçamento ultrapassado em 8%</li>'+
-    '</ul></div></div>';
-}
-
-function renderObras(){
-  return '<div class="page-header">'+
-    '<div><h1 class="page-title">Obras</h1><p class="page-sub">Gerencie todos os seus projetos</p></div>'+
-    '<button class="btn btn-primary">'+svg('plus',16,16)+' Nova Obra</button>'+
-  '</div>'+
-  '<div class="filters"><input type="text" placeholder="Buscar obras..."/><button class="btn btn-outline btn-sm">'+svg('filter',16,16)+' Filtros</button></div>'+
-  '<div class="grid-4" style="margin-bottom:16px">'+
-    '<div class="card stat-mini"><div class="num" style="color:var(--primary)">'+obras.length+'</div><div class="label">Total</div></div>'+
-    '<div class="card stat-mini"><div class="num" style="color:var(--primary)">'+obras.filter(function(o){return o.status==='em_andamento'}).length+'</div><div class="label">Em andamento</div></div>'+
-    '<div class="card stat-mini"><div class="num" style="color:var(--warn)">1</div><div class="label">Atenção</div></div>'+
-    '<div class="card stat-mini"><div class="num" style="color:var(--danger)">1</div><div class="label">Críticas</div></div>'+
-  '</div>'+
-  '<div class="grid-3">'+obras.map(obraCard).join('')+'</div>';
-}
-
-function renderTarefas(){
-  var counts = {
-    pendente:tarefas.filter(function(t){return t.status==='pendente'}).length,
-    em_andamento:tarefas.filter(function(t){return t.status==='em_andamento'}).length,
-    concluida:tarefas.filter(function(t){return t.status==='concluida'}).length,
-    atrasada:tarefas.filter(function(t){return t.status==='atrasada'}).length,
-  };
-  var statusIcon = function(s){return {concluida:'<span style="color:var(--ok)">✓</span>',em_andamento:'<span style="color:var(--blue)">◷</span>',atrasada:'<span style="color:var(--danger)">⚠</span>',pendente:'<span style="color:var(--text3)">○</span>'}[s]};
-  var priorBadge = function(p){return {critica:'badge-danger',alta:'badge-warn',media:'badge-blue',baixa:''}[p]};
-  var priorLabel = function(p){return {critica:'Crítica',alta:'Alta',media:'Média',baixa:'Baixa'}[p]};
-
-  return '<div class="page-header">'+
-    '<div><h1 class="page-title">Tarefas</h1><p class="page-sub">Acompanhe todas as atividades das obras</p></div>'+
-    '<button class="btn btn-primary">'+svg('plus',16,16)+' Nova Tarefa</button>'+
-  '</div>'+
-  '<div class="tarefa-counts">'+
-    [{l:'Pendentes',c:counts.pendente,cl:'var(--text3)'},{l:'Em Andamento',c:counts.em_andamento,cl:'var(--blue)'},{l:'Concluídas',c:counts.concluida,cl:'var(--ok)'},{l:'Atrasadas',c:counts.atrasada,cl:'var(--danger)'}].map(function(s){
-      return '<div class="card"><span style="font-size:18px;font-weight:700;color:'+s.cl+'">'+s.c+'</span><span style="font-size:12px;color:var(--text3)">'+s.l+'</span></div>';
-    }).join('')+
-  '</div>'+
-  '<div class="card" style="padding:0;overflow:hidden"><div class="table-wrap"><table>'+
-    '<thead><tr><th>Status</th><th>Tarefa</th><th>Obra</th><th>Responsável</th><th>Prioridade</th><th>Prazo</th><th>Progresso</th></tr></thead>'+
-    '<tbody>'+tarefas.map(function(t){
-      var obra = obras.find(function(o){return o.id===t.obraId});
-      var barCl = t.status==='concluida'?'var(--ok)':t.status==='atrasada'?'var(--danger)':'var(--primary)';
-      return '<tr><td>'+statusIcon(t.status)+'</td>'+
-        '<td><div style="font-weight:500">'+t.titulo+'</div><div style="font-size:11px;color:var(--text3)">'+t.fase+'</div></td>'+
-        '<td style="color:var(--text2)">'+(obra?obra.nome:'')+'</td>'+
-        '<td style="color:var(--text2)">'+t.resp+'</td>'+
-        '<td><span class="badge '+priorBadge(t.prioridade)+'">'+priorLabel(t.prioridade)+'</span></td>'+
-        '<td style="font-size:12px;color:var(--text3)">'+fmtDate(t.fim)+'</td>'+
-        '<td><div style="display:flex;align-items:center;gap:6px"><div class="progress-bar progress-sm" style="width:56px"><div class="fill" style="width:'+t.pct+'%;background:'+barCl+'"></div></div><span style="font-size:11px;color:var(--text3)">'+t.pct+'%</span></div></td>'+
-      '</tr>';
-    }).join('')+'</tbody></table></div></div>';
-}
-
-function renderFinanceiro(){
-  var rec = transacoes.filter(function(t){return t.tipo==='receita'}).reduce(function(s,t){return s+t.valor},0);
-  var desp = transacoes.filter(function(t){return t.tipo==='despesa'}).reduce(function(s,t){return s+t.valor},0);
-  var saldo = rec-desp;
-
-  return '<div class="page-header">'+
-    '<div><h1 class="page-title">Financeiro</h1><p class="page-sub">Controle de receitas, despesas e fluxo de caixa</p></div>'+
-    '<div class="fin-header"><button class="btn btn-outline">'+svg('down',16,16)+' Nova Receita</button><button class="btn btn-primary">'+svg('up',16,16)+' Nova Despesa</button></div>'+
-  '</div>'+
-  '<div class="grid-3" style="margin-bottom:20px">'+
-    '<div class="card" style="border-left:4px solid var(--ok)"><div class="kpi"><div class="kpi-icon green">'+svg('up')+'</div><div><div class="kpi-label">Total Receitas</div><div class="kpi-value" style="color:var(--ok)">'+fmt(rec)+'</div></div></div></div>'+
-    '<div class="card" style="border-left:4px solid var(--danger)"><div class="kpi"><div class="kpi-icon red">'+svg('down')+'</div><div><div class="kpi-label">Total Despesas</div><div class="kpi-value" style="color:var(--danger)">'+fmt(desp)+'</div></div></div></div>'+
-    '<div class="card" style="border-left:4px solid var(--primary)"><div class="kpi"><div class="kpi-icon blue">'+svg('dollar')+'</div><div><div class="kpi-label">Saldo</div><div class="kpi-value" style="color:'+(saldo>=0?'var(--ok)':'var(--danger)')+'">'+fmt(saldo)+'</div></div></div></div>'+
-  '</div>'+
-  '<div class="grid-2">'+
-    '<div class="card" style="padding:0"><div style="padding:14px;border-bottom:1px solid var(--border)"><div class="card-title">Últimas Transações</div></div><div class="table-wrap"><table>'+
-      '<thead><tr><th>Tipo</th><th>Descrição</th><th>Obra</th><th>Data</th><th>Status</th><th style="text-align:right">Valor</th></tr></thead>'+
-      '<tbody>'+transacoes.sort(function(a,b){return new Date(b.data)-new Date(a.data)}).map(function(tx){
-        var obra=obras.find(function(o){return o.id===tx.obraId});
-        var isRec=tx.tipo==='receita';
-        var statusCl=tx.status==='pago'?'badge-ok':tx.status==='atrasado'?'badge-danger':'badge-warn';
-        var statusLabel=tx.status==='pago'?'Pago':tx.status==='atrasado'?'Atrasado':'Pendente';
-        return '<tr><td><span style="color:'+(isRec?'var(--ok)':'var(--danger)')+';font-weight:600;font-size:11px">'+(isRec?'↑ Receita':'↓ Despesa')+'</span></td>'+
-          '<td>'+tx.desc+'</td>'+
-          '<td style="font-size:11px;color:var(--text2)">'+(obra?obra.nome:'')+'</td>'+
-          '<td style="font-size:11px;color:var(--text3)">'+fmtDate(tx.data)+'</td>'+
-          '<td><span class="badge '+statusCl+'">'+statusLabel+'</span></td>'+
-          '<td style="text-align:right;font-family:var(--font-mono);font-weight:600;color:'+(isRec?'var(--ok)':'var(--danger)')+'">'+(isRec?'+':'−')+fmt(tx.valor)+'</td></tr>';
-      }).join('')+'</tbody></table></div></div>'+
-    '<div class="card"><div class="card-title" style="margin-bottom:14px">Despesas por Categoria</div><div class="donut-list">'+
-      despesasCat.map(function(c){
-        var pct=(c.valor/desp)*100;
-        return '<div class="donut-item"><div class="donut-label"><span>'+c.nome+'</span><span style="font-family:var(--font-mono);font-weight:600">'+fmt(c.valor)+'</span></div>'+
-          '<div class="donut-bar"><div class="donut-fill" style="width:'+pct+'%;background:'+c.cor+'"></div></div>'+
-          '<div style="font-size:10px;color:var(--text3);text-align:right">'+pct.toFixed(1)+'%</div></div>';
-      }).join('')+
-    '</div><div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:space-between">'+
-      '<span style="font-weight:600;font-size:14px">Total Despesas</span>'+
-      '<span style="font-weight:700;color:var(--danger)">'+fmt(desp)+'</span>'+
-    '</div></div>'+
-  '</div>';
-}
-
-function renderGeneric(name){
-  var titles = {equipe:'Equipe',fotos:'Fotos',materiais:'Materiais',documentos:'Documentos',relatorios:'Relatórios'};
-  return '<h1 class="page-title">'+(titles[name]||name)+'</h1>'+
-    '<p class="page-sub">Módulo em desenvolvimento</p>'+
-    '<div class="empty">'+
-      svg(name==='equipe'?'users':name==='fotos'?'camera':name==='materiais'?'package':'chart')+
-      '<p>Este módulo será implementado na próxima sprint.</p>'+
-      '<button class="btn btn-outline" style="margin-top:16px" onclick="navigate(\'dashboard\')">Voltar ao Dashboard</button>'+
-    '</div>';
-}
-
-// === INIT ===
-renderNav();
-renderPage();
-</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="app.js"></script>
+<script src="pages.js"></script>
 </body>
 </html>
