@@ -1,0 +1,684 @@
+<title>Maternidade Porte I — Planejamento MSE</title>
+
+<style>
+:root{
+  --ground:#E7E4DE; --surface:#F7F6F3; --surface-2:#EFEDE7;
+  --ink:#16191A; --ink-2:#565D60; --ink-3:#868C90;
+  --line:#D3CFC7; --line-soft:#E0DCD4;
+  --accent:#0A5567; --accent-soft:#E2EEF1;
+
+  --c1:#9AD2DC; --c2:#3E97A9; --c3:#0A5567; --c-res:#2F7D4F;
+  --pos:#07798A; --neg:#B3402F;
+  --ok:#2F7D4F; --warn:#9A6800; --crit:#A83A2A;
+  --ok-bg:#E4F0E8; --warn-bg:#F6EEDC; --crit-bg:#F6E5E2;
+
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+
+  --w:1080px; --prose:66ch;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --ground:#131516; --surface:#1C1F21; --surface-2:#24282A;
+    --ink:#E9E7E2; --ink-2:#9BA2A5; --ink-3:#6E7679;
+    --line:#31373A; --line-soft:#272C2E;
+    --accent:#6FC3D2; --accent-soft:#173036;
+    --c1:#9AD2DC; --c2:#3E97A9; --c3:#0A5567; --c-res:#4FA06B;
+    --pos:#3FB0C4; --neg:#E2705C;
+    --ok:#5FB07C; --warn:#D9A227; --crit:#E2705C;
+    --ok-bg:#1A2C22; --warn-bg:#2E2718; --crit-bg:#2E1E1B;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#131516; --surface:#1C1F21; --surface-2:#24282A;
+  --ink:#E9E7E2; --ink-2:#9BA2A5; --ink-3:#6E7679;
+  --line:#31373A; --line-soft:#272C2E;
+  --accent:#6FC3D2; --accent-soft:#173036;
+  --c1:#9AD2DC; --c2:#3E97A9; --c3:#0A5567; --c-res:#4FA06B;
+  --pos:#3FB0C4; --neg:#E2705C;
+  --ok:#5FB07C; --warn:#D9A227; --crit:#E2705C;
+  --ok-bg:#1A2C22; --warn-bg:#2E2718; --crit-bg:#2E1E1B;
+}
+:root[data-theme="light"]{
+  --ground:#E7E4DE; --surface:#F7F6F3; --surface-2:#EFEDE7;
+  --ink:#16191A; --ink-2:#565D60; --ink-3:#868C90;
+  --line:#D3CFC7; --line-soft:#E0DCD4;
+  --accent:#0A5567; --accent-soft:#E2EEF1;
+  --c1:#9AD2DC; --c2:#3E97A9; --c3:#0A5567; --c-res:#2F7D4F;
+  --pos:#07798A; --neg:#B3402F;
+  --ok:#2F7D4F; --warn:#9A6800; --crit:#A83A2A;
+  --ok-bg:#E4F0E8; --warn-bg:#F6EEDC; --crit-bg:#F6E5E2;
+}
+
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:var(--sans); font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--w); margin:0 auto; padding:0 24px 96px;}
+@media (max-width:640px){ .wrap{padding:0 16px 64px;} }
+
+h1,h2,h3{text-wrap:balance; line-height:1.12; letter-spacing:-0.021em;}
+h2{font-size:clamp(24px,3.4vw,32px); font-weight:800; margin:0 0 6px;}
+h3{font-size:17px; font-weight:700; margin:0 0 4px; letter-spacing:-0.01em;}
+p{margin:0 0 14px; max-width:var(--prose);}
+strong{font-weight:650;}
+a{color:var(--accent); text-underline-offset:3px;}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px;}
+
+.eyebrow{
+  font-family:var(--mono); font-size:11px; font-weight:500;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3);
+}
+.num{font-family:var(--mono); font-variant-numeric:tabular-nums; letter-spacing:-0.02em;}
+
+/* ---- treliça: o divisor da página é o próprio produto, visto de perfil ---- */
+.trelica{display:block; width:100%; height:15px; color:var(--line); margin:0;}
+
+/* ---- cabeçalho ---- */
+.head{padding:56px 0 8px;}
+.head h1{
+  font-size:clamp(38px,7vw,68px); font-weight:800; letter-spacing:-0.035em;
+  margin:14px 0 8px;
+}
+.head .sub{font-size:clamp(17px,2.2vw,20px); color:var(--ink-2); max-width:52ch; margin:0 0 30px;}
+.ficha{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:1px; background:var(--line-soft); border:1px solid var(--line-soft);
+  border-radius:2px; overflow:hidden; margin-bottom:36px;
+}
+.ficha div{background:var(--surface); padding:12px 14px;}
+.ficha dt{font-family:var(--mono); font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); margin-bottom:3px;}
+.ficha dd{margin:0; font-size:14.5px; font-weight:600;}
+
+/* ---- seções ---- */
+section{padding:44px 0 0;}
+.sec-head{display:flex; align-items:baseline; gap:12px; margin-bottom:18px; flex-wrap:wrap;}
+.sec-head .eyebrow{flex:0 0 auto;}
+.lede{font-size:18px; color:var(--ink-2); max-width:60ch; margin-bottom:22px;}
+
+/* ---- tiles ---- */
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-bottom:8px;}
+.tile{
+  background:var(--surface); border:1px solid var(--line-soft);
+  border-radius:3px; padding:16px 16px 14px; display:flex; flex-direction:column; gap:2px;
+}
+.tile .k{font-family:var(--mono); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3);}
+.tile .v{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:clamp(24px,3.4vw,31px); font-weight:600; letter-spacing:-0.035em; line-height:1.1; margin-top:5px;}
+.tile .n{font-size:13px; color:var(--ink-2); line-height:1.45; margin-top:5px;}
+
+.pill{
+  display:inline-flex; align-items:center; gap:5px; align-self:flex-start;
+  font-family:var(--mono); font-size:10.5px; font-weight:600; letter-spacing:.07em; text-transform:uppercase;
+  padding:3px 8px; border-radius:2px; margin-top:9px;
+}
+.pill.ok{background:var(--ok-bg); color:var(--ok);}
+.pill.warn{background:var(--warn-bg); color:var(--warn);}
+.pill.crit{background:var(--crit-bg); color:var(--crit);}
+.pill .dot{width:6px; height:6px; border-radius:50%; background:currentColor;}
+
+/* ---- tabelas ---- */
+.scroll{overflow-x:auto; margin-bottom:20px; border:1px solid var(--line-soft); border-radius:3px; background:var(--surface);}
+table{border-collapse:collapse; width:100%; font-size:14.5px; min-width:520px;}
+th,td{padding:9px 14px; text-align:left; border-bottom:1px solid var(--line-soft);}
+thead th{
+  font-family:var(--mono); font-size:10px; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:500; background:var(--surface-2); white-space:nowrap;
+}
+td.n,th.n{text-align:right; font-family:var(--mono); font-variant-numeric:tabular-nums; white-space:nowrap;}
+tbody tr:last-child td{border-bottom:none;}
+tr.total td{font-weight:700; background:var(--surface-2); border-top:1.5px solid var(--line);}
+tr.hi td{background:var(--accent-soft);}
+caption{caption-side:bottom; text-align:left; padding:9px 14px; font-size:12.5px; color:var(--ink-3); border-top:1px solid var(--line-soft);}
+
+/* ---- barra empilhada ---- */
+.figure{background:var(--surface); border:1px solid var(--line-soft); border-radius:3px; padding:20px; margin-bottom:20px;}
+.fig-title{font-size:15px; font-weight:650; margin-bottom:2px;}
+.fig-note{font-size:13px; color:var(--ink-3); margin-bottom:16px;}
+
+.stack{display:flex; width:100%; height:46px; gap:2px; margin-bottom:12px;}
+.stack span{
+  position:relative; border-radius:2px; display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:11.5px; font-weight:600; color:#08191D;
+  transition:filter .15s;
+}
+.stack span:hover{filter:brightness(1.08);}
+.legend{display:flex; flex-wrap:wrap; gap:8px 20px;}
+.legend div{display:flex; align-items:center; gap:7px; font-size:13px; color:var(--ink-2);}
+.legend i{width:11px; height:11px; border-radius:2px; flex:0 0 auto;}
+.legend b{font-family:var(--mono); font-variant-numeric:tabular-nums; color:var(--ink); font-weight:600;}
+
+/* ---- gráfico divergente ---- */
+.dv{display:grid; grid-template-columns:auto 1fr auto; gap:2px 12px; align-items:center;}
+.dv .lab{font-family:var(--mono); font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--ink-2); white-space:nowrap; text-align:right;}
+.dv .lab.on{color:var(--ink); font-weight:700;}
+.dv .track{position:relative; height:26px; min-width:0;}
+.dv .track::before{content:""; position:absolute; left:50%; top:-2px; bottom:-2px; width:1px; background:var(--line);}
+.dv .bar{position:absolute; top:4px; height:18px; border-radius:2px;}
+.dv .bar.p{left:50%; background:var(--pos); border-radius:2px 4px 4px 2px;}
+.dv .bar.n{right:50%; background:var(--neg); border-radius:4px 2px 2px 4px;}
+.dv .bar.on{outline:2px solid var(--ink); outline-offset:2px;}
+.dv .val{
+  font-family:var(--mono); font-size:12.5px; font-variant-numeric:tabular-nums;
+  color:var(--ink-2); white-space:nowrap; text-align:right;
+}
+.dv .val.on{color:var(--ink); font-weight:700;}
+.dv .val.neg{color:var(--neg);}
+.dv-axis{display:grid; grid-template-columns:auto 1fr auto; gap:12px; margin-top:8px;}
+.dv-axis .sc{position:relative; height:16px; font-family:var(--mono); font-size:10.5px; color:var(--ink-3);}
+.dv-axis .sc span{position:absolute; transform:translateX(-50%); white-space:nowrap;}
+.dv-axis .sc span:first-child{transform:none;}
+.dv-axis .sc span:last-child{transform:translateX(-100%);}
+
+/* ---- pendências ---- */
+.flags{display:grid; gap:12px;}
+.flag{
+  background:var(--surface); border:1px solid var(--line-soft); border-left:3px solid var(--crit);
+  border-radius:3px; padding:16px 18px;
+}
+.flag.w{border-left-color:var(--warn);}
+.flag .t{display:flex; align-items:baseline; gap:10px; margin-bottom:6px; flex-wrap:wrap;}
+.flag .t .n{font-family:var(--mono); font-size:12px; color:var(--ink-3);}
+.flag p{margin:0; font-size:14.5px; color:var(--ink-2); max-width:none;}
+.flag p + p{margin-top:8px;}
+.flag .act{margin-top:10px; font-size:13.5px; font-weight:600; color:var(--ink);}
+
+/* ---- telas do app ---- */
+.screens{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:12px;}
+.screen{background:var(--surface); border:1px solid var(--line-soft); border-radius:3px; padding:16px 18px;}
+.screen .n{font-family:var(--mono); font-size:11px; color:var(--accent); letter-spacing:.1em; margin-bottom:7px;}
+.screen h3{margin-bottom:5px;}
+.screen p{font-size:14px; color:var(--ink-2); margin:0; max-width:none;}
+.screen ul{margin:9px 0 0; padding-left:17px; font-size:13.5px; color:var(--ink-2);}
+.screen li{margin-bottom:3px;}
+
+.quote{
+  border-left:2px solid var(--accent); padding:4px 0 4px 18px; margin:22px 0;
+  font-size:17px; color:var(--ink); max-width:58ch;
+}
+.quote span{color:var(--ink-3); font-size:14px; display:block; margin-top:6px; font-family:var(--mono);}
+
+ul.plain{margin:0 0 16px; padding-left:19px; max-width:var(--prose); color:var(--ink-2);}
+ul.plain li{margin-bottom:6px;}
+ul.plain strong{color:var(--ink);}
+
+details{background:var(--surface); border:1px solid var(--line-soft); border-radius:3px; padding:14px 18px; margin-bottom:12px;}
+summary{cursor:pointer; font-weight:650; font-size:15px;}
+details[open] summary{margin-bottom:10px;}
+details ol{margin:0; padding-left:19px; font-size:14.5px; color:var(--ink-2);}
+details ol li{margin-bottom:6px;}
+
+footer{margin-top:52px; padding-top:22px; border-top:1px solid var(--line-soft); font-size:13px; color:var(--ink-3);}
+footer a{color:var(--ink-2);}
+
+/* Em tela estreita a pista fica curta demais para uma escala legível.
+   Cada barra já carrega o valor exato, então a escala sai em vez de colidir. */
+@media (max-width:700px){
+  .figure{padding:14px;}
+  .dv{gap:3px 9px;}
+  .dv .lab,.dv .val{font-size:11.5px;}
+  .dv-axis{display:none;}
+  .stack{height:40px;}
+  .stack span{font-size:10.5px;}
+  .quote{font-size:16px;}
+}
+
+/* ---- tooltip ---- */
+#tip{
+  position:fixed; z-index:50; pointer-events:none; opacity:0; transition:opacity .12s;
+  background:var(--ink); color:var(--ground); padding:7px 10px; border-radius:3px;
+  font-family:var(--mono); font-size:12px; line-height:1.45; white-space:nowrap;
+  box-shadow:0 4px 14px rgba(0,0,0,.2);
+}
+#tip.on{opacity:1;}
+@media (prefers-reduced-motion:reduce){ *{transition:none !important; animation:none !important;} }
+</style>
+
+<div class="wrap">
+
+<header class="head">
+  <div class="eyebrow">MSE · Maranhão Soluções de Engenharia · Planejamento</div>
+  <h1>Maternidade Porte&nbsp;I</h1>
+  <p class="sub">Fornecimento de 4.567 vigotas treliçadas. O que o contrato aguenta, onde ele quebra, e o app que vai manter isso à vista todo dia.</p>
+
+  <dl class="ficha">
+    <div><dt>Cliente</dt><dd>Sr. Rafael</dd></div>
+    <div><dt>Propostas</dt><dd>MSE-2026-076/077/078</dd></div>
+    <div><dt>Projetos</dt><dd>EST 26 · 27 · 28</dd></div>
+    <div><dt>Escopo MSE</dt><dd>Mão de obra + concreto</dd></div>
+    <div><dt>Ferragem e frete</dt><dd>Contratante</dd></div>
+    <div><dt>Concreto</dt><dd>fck 35 MPa</dd></div>
+  </dl>
+</header>
+
+<svg class="trelica" viewBox="0 0 400 15" preserveAspectRatio="none" aria-hidden="true">
+  <defs><pattern id="tz" width="20" height="15" patternUnits="userSpaceOnUse">
+    <path d="M0 13 L10 2 L20 13" fill="none" stroke="currentColor" stroke-width="1.1"/>
+  </pattern></defs>
+  <rect width="400" height="15" fill="url(#tz)"/>
+  <line x1="0" y1="13.5" x2="400" y2="13.5" stroke="currentColor" stroke-width="1.1"/>
+  <line x1="0" y1="1.6" x2="400" y2="1.6" stroke="currentColor" stroke-width="1.1"/>
+</svg>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">A decisão</span></div>
+  <h2>Quatro números decidem esta obra</h2>
+  <p class="lede">Tudo o mais é detalhe. Se estes quatro estiverem à vista todo dia, a obra está sob controle.</p>
+
+  <div class="tiles">
+    <div class="tile">
+      <span class="k">Contrato líquido</span>
+      <span class="v">R$ 227.420</span>
+      <span class="n">R$ 277.342 bruto, menos 18% de desconto. R$ 13,67 por metro.</span>
+    </div>
+    <div class="tile">
+      <span class="k">Prazo a 300 m/dia</span>
+      <span class="v">56 dias</span>
+      <span class="n">16.639 m de vigota. 2,5 meses ou 11 semanas de fábrica.</span>
+    </div>
+    <div class="tile">
+      <span class="k">Resultado projetado</span>
+      <span class="v">R$ 49.815</span>
+      <span class="n">21,9% sobre o contrato líquido, com toda a estrutura paga.</span>
+      <span class="pill ok"><i class="dot"></i>Positivo</span>
+    </div>
+    <div class="tile">
+      <span class="k">Ponto de equilíbrio</span>
+      <span class="v">215 m/dia</span>
+      <span class="n">Abaixo disso a obra deixa de pagar a estrutura da MSE.</span>
+      <span class="pill warn"><i class="dot"></i>28% de folga</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">O contrato</span></div>
+  <h2>16.639 metros, 366 tipos de peça</h2>
+  <p>Os três projetos foram extraídos das propostas item a item — os 366 tipos de vigota, com comprimento, reforço, quantidade e preço. <strong>Peças e metros batem exatamente</strong> com os totais declarados em cada PDF, então a base do app já nasce conferida.</p>
+
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th>Proposta</th><th>Projeto</th><th class="n">Itens</th><th class="n">Peças</th><th class="n">Metros</th><th class="n">Valor bruto</th><th class="n">R$/m</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="num">MSE-2026-076</td><td>EST 26</td><td class="n">146</td><td class="n">1.874</td><td class="n">7.381,12</td><td class="n">107.222,38</td><td class="n">14,53</td></tr>
+        <tr><td class="num">MSE-2026-077</td><td>EST 27</td><td class="n">143</td><td class="n">1.765</td><td class="n">6.332,99</td><td class="n">97.312,22</td><td class="n">15,37</td></tr>
+        <tr><td class="num">MSE-2026-078</td><td>EST 28</td><td class="n">77</td><td class="n">928</td><td class="n">2.925,08</td><td class="n">72.807,19</td><td class="n"><strong>24,89</strong></td></tr>
+        <tr class="total"><td colspan="2">Total</td><td class="n">366</td><td class="n">4.567</td><td class="n">16.639,19</td><td class="n">277.341,79</td><td class="n">16,67</td></tr>
+      </tbody>
+      <caption>Extraído dos PDFs de 14/07/2026. A EST 28 sai 63% mais cara por metro que a EST 26 — ver pendência 2.</caption>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">O dinheiro</span></div>
+  <h2>Para onde vão os R$ 227 mil</h2>
+  <p class="lede">A 300 m/dia, cada metro custa R$ 10,67 e vende por R$ 13,67. A diferença é a obra inteira.</p>
+
+  <div class="figure">
+    <div class="fig-title">Composição do contrato líquido</div>
+    <div class="fig-note">Cenário base: 300 m/dia, 22 dias úteis/mês, 2,52 meses de fábrica.</div>
+    <div class="stack" id="stack" role="img" aria-label="Composição: concreto 22,9%, fábrica 27,4%, estrutura 27,7%, resultado 21,9%">
+      <span style="width:22.93%;background:var(--c1)" data-tip="Concreto · R$ 52.156 · R$ 3,13/m">22,9%</span>
+      <span style="width:27.45%;background:var(--c2)" data-tip="Mão de obra + pátio · R$ 62.422 · R$ 3,75/m">27,4%</span>
+      <span style="width:27.71%;background:var(--c3);color:#EAF4F6" data-tip="Escritório + dívida · R$ 63.027 · R$ 3,79/m">27,7%</span>
+      <span style="width:21.91%;background:var(--c-res);color:#EAF4F6" data-tip="Resultado · R$ 49.815 · R$ 2,99/m">21,9%</span>
+    </div>
+    <div class="legend">
+      <div><i style="background:var(--c1)"></i>Concreto <b>R$ 52.156</b></div>
+      <div><i style="background:var(--c2)"></i>Fábrica — mão de obra + pátio <b>R$ 62.422</b></div>
+      <div><i style="background:var(--c3)"></i>Estrutura — escritório + dívida <b>R$ 63.027</b></div>
+      <div><i style="background:var(--c-res)"></i>Resultado <b>R$ 49.815</b></div>
+    </div>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Linha</th><th class="n">Valor</th><th class="n">Por metro</th></tr></thead>
+      <tbody>
+        <tr><td>Concreto — já com perda de 10%</td><td class="n">52.156,00</td><td class="n">3,13</td></tr>
+        <tr><td>Mão de obra da fábrica — R$ 21.760/mês × 2,52</td><td class="n">54.858,91</td><td class="n">3,30</td></tr>
+        <tr><td>Pátio da fábrica — R$ 3.000/mês × 2,52</td><td class="n">7.563,27</td><td class="n">0,45</td></tr>
+        <tr class="total"><td>Custo direto</td><td class="n">114.578,17</td><td class="n">6,89</td></tr>
+        <tr><td>Estrutura — escritório R$ 16.000 + dívida R$ 5.000 + escritório R$ 4.000</td><td class="n">63.027,23</td><td class="n">3,79</td></tr>
+        <tr class="total"><td>Custo total</td><td class="n">177.605,41</td><td class="n">10,67</td></tr>
+        <tr class="hi"><td><strong>Resultado</strong> — 21,9% sobre o contrato líquido</td><td class="n"><strong>49.814,86</strong></td><td class="n"><strong>2,99</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<svg class="trelica" viewBox="0 0 400 15" preserveAspectRatio="none" aria-hidden="true">
+  <rect width="400" height="15" fill="url(#tz)"/>
+  <line x1="0" y1="13.5" x2="400" y2="13.5" stroke="currentColor" stroke-width="1.1"/>
+  <line x1="0" y1="1.6" x2="400" y2="1.6" stroke="currentColor" stroke-width="1.1"/>
+</svg>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">O risco nº 1</span></div>
+  <h2>O ritmo é que decide</h2>
+  <p class="lede">O concreto é o único custo que varia com a produção. Todo o resto corre por mês, produzindo ou não. Por isso cada metro contribui com R$ 10,53 para pagar R$ 49.760 de custo fixo mensal — e por isso o ritmo vale mais que qualquer negociação.</p>
+
+  <div class="figure">
+    <div class="fig-title">Resultado da obra conforme o ritmo de produção</div>
+    <div class="fig-note">Ponto de equilíbrio em 215 m/dia; abaixo disso a obra dá prejuízo.</div>
+
+    <div class="dv" id="dv"></div>
+    <div class="dv-axis" aria-hidden="true">
+      <div class="lab" style="visibility:hidden">000 m/dia</div>
+      <div class="sc">
+        <span style="left:0%">−90 mil</span>
+        <span style="left:25%">−45</span>
+        <span style="left:50%">0</span>
+        <span style="left:75%">+45</span>
+        <span style="left:100%">+90 mil</span>
+      </div>
+      <div class="val" style="visibility:hidden">−R$ 00.000</div>
+    </div>
+  </div>
+
+  <div class="quote">
+    Cair de 300 para 250 m/dia custa R$ 25 mil. Cair para 200 custa R$ 63 mil.
+    <span>metade do lucro cabe em 50 m/dia de ritmo</span>
+  </div>
+
+  <p>E o efeito é duplo: ritmo baixo estica os meses de custo fixo <strong>e</strong> encarece o concreto, porque a concreteira cobra volume mínimo por viagem — dia de pouca produção joga concreto fora. É a razão de o app começar pela tela de apontamento diário, e não pelo relatório.</p>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">A negociação</span></div>
+  <h2>Os 18% de desconto são o lucro inteiro</h2>
+
+  <div class="tiles">
+    <div class="tile">
+      <span class="k">Sem desconto</span>
+      <span class="v">R$ 99.736</span>
+      <span class="n">36,0% sobre R$ 277.342</span>
+    </div>
+    <div class="tile">
+      <span class="k">Com 18%</span>
+      <span class="v">R$ 49.815</span>
+      <span class="n">21,9% sobre R$ 227.420</span>
+    </div>
+    <div class="tile">
+      <span class="k">O desconto custa</span>
+      <span class="v">R$ 49.922</span>
+      <span class="n">praticamente igual ao resultado projetado de R$ 49.815</span>
+      <span class="pill crit"><i class="dot"></i>Atenção</span>
+    </div>
+    <div class="tile">
+      <span class="k">Cada 1% vale</span>
+      <span class="v">R$ 2.773</span>
+      <span class="n">ou 5,6% do lucro. Fechar em 15% põe R$ 8.320 a mais no bolso.</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">O caixa</span></div>
+  <h2>A entrada de 50% é o que banca a obra</h2>
+  <p>Com medição mensal proporcional paga no mês seguinte, o caixa nunca vira negativo — <strong>desde que a entrada caia antes de a fábrica ligar</strong>. Sem ela, a MSE financia R$ 70 mil por mês do próprio bolso. O mês 2 é o mais apertado, com R$ 18 mil de folga.</p>
+
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Mês</th><th class="n">Produção</th><th class="n">Recebe</th><th class="n">Paga</th><th class="n">Caixa acumulado</th></tr></thead>
+      <tbody>
+        <tr><td>1 — entrada de 50%</td><td class="n">6.600 m</td><td class="n">113.710</td><td class="n">70.448</td><td class="n">43.262</td></tr>
+        <tr class="hi"><td>2 — mês mais apertado</td><td class="n">6.600 m</td><td class="n">45.104</td><td class="n">70.448</td><td class="n">17.918</td></tr>
+        <tr><td>3 — fim da produção</td><td class="n">3.439 m</td><td class="n">45.104</td><td class="n">36.710</td><td class="n">26.312</td></tr>
+        <tr><td>4 — medição final</td><td class="n">—</td><td class="n">23.503</td><td class="n">—</td><td class="n">49.815</td></tr>
+      </tbody>
+      <caption>O caixa final fecha exatamente no resultado projetado, como tem que ser.</caption>
+    </table>
+  </div>
+</section>
+
+<svg class="trelica" viewBox="0 0 400 15" preserveAspectRatio="none" aria-hidden="true">
+  <rect width="400" height="15" fill="url(#tz)"/>
+  <line x1="0" y1="13.5" x2="400" y2="13.5" stroke="currentColor" stroke-width="1.1"/>
+  <line x1="0" y1="1.6" x2="400" y2="1.6" stroke="currentColor" stroke-width="1.1"/>
+</svg>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Antes de assinar</span></div>
+  <h2>Três coisas apareceram na leitura das propostas</h2>
+  <p class="lede">Todas valem dinheiro, e todas são mais baratas de resolver agora do que depois.</p>
+
+  <div class="flags">
+    <div class="flag">
+      <div class="t"><span class="n">01</span><h3>A ferragem não está excluída no texto da EST 26 e da EST 27</h3></div>
+      <p>A EST 28 diz com todas as letras que “as treliças TG12/TR 12645 e os vergalhões de reforço deverão ser disponibilizados pelo contratante”, e registra que R$ 69.587,97 de ferragem saíram do valor global. A EST 26 e a EST 27 <strong>não têm essa ressalva</strong> — nem nos itens contemplados, nem nas exclusões.</p>
+      <p>Os valores parecem já ajustados: o quadro analítico das duas diz “valores comerciais proporcionalmente ajustados ao novo total da proposta”. Mas o texto não fecha, e do jeito que está o cliente pode cobrar a ferragem dessas duas.</p>
+      <div class="act">→ Uniformizar o texto das três propostas antes de assinar.</div>
+    </div>
+
+    <div class="flag w">
+      <div class="t"><span class="n">02</span><h3>A EST 28 sai 63% mais cara por metro que a EST 26</h3></div>
+      <p>R$ 24,89/m contra R$ 14,53/m e R$ 15,37/m — mesmo produto, mesma treliça, comprimento médio parecido (3,15 m contra 3,94 m e 3,59 m). Ou os custos indiretos foram todos alocados na EST 28, ou a EST 26 e a EST 27 estão subprecificadas.</p>
+      <div class="act">→ Conferir a composição antes de dar 18% em cima do conjunto.</div>
+    </div>
+
+    <div class="flag w">
+      <div class="t"><span class="n">03</span><h3>Não há prazo contratual nem multa definidos</h3></div>
+      <p>As três propostas dizem “a definir conforme liberação da obra”. Com custo fixo de R$ 49.760/mês correndo, prazo aberto é risco aberto — e é justamente o número que o app vai passar a medir todo dia.</p>
+      <div class="act">→ Fechar prazo, marco de medição e prazo de pagamento no contrato.</div>
+    </div>
+  </div>
+
+  <details>
+    <summary>Nove perguntas que faltam para travar o modelo</summary>
+    <ol>
+      <li>Salário escritório, dívida e escritório são mensais e 100% desta obra? (foi o que assumi)</li>
+      <li>22 ou 26 dias úteis por mês, com sábado? Muda o prazo de 2,5 para 2,1 meses.</li>
+      <li>Quantas formas/pistas tem a fábrica? Os 300 m/dia são limitados por forma, por concreto ou por gente?</li>
+      <li>Qual o volume mínimo cobrado por viagem de concreto? Define o lote mínimo econômico do dia.</li>
+      <li>Prazo contratual e multa por atraso.</li>
+      <li>Medição: periodicidade e prazo de pagamento.</li>
+      <li>O munck da fábrica até o caminhão está no custo? O frete de retirada é do contratante, mas o carregamento é nosso.</li>
+      <li>Volume total de concreto em m³. Os R$ 52.156 sugerem cerca de 80 m³ a preço de mercado — precisa confirmar para rastrear consumo real.</li>
+      <li>Ordem de produção: EST 26 → 27 → 28, ou por liberação da obra?</li>
+    </ol>
+  </details>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">O app</span></div>
+  <h2>Seis telas, nem uma a mais</h2>
+  <p class="lede">Pesquisei o que Procore, Buildertrend, Planyard e o Last Planner System fazem, e separei o que serve para três pessoas e uma obra de 2,5 meses — descartando de propósito RFI, submittals, BIM, punch list e dashboard de portfólio. São exatamente os módulos que fazem equipe pequena abandonar o sistema na terceira semana.</p>
+
+  <div class="quote">
+    Se não couber em três toques no celular, não entra.
+    <span>um app que ninguém alimenta não dá clareza nenhuma</span>
+  </div>
+
+  <div class="screens">
+    <div class="screen">
+      <div class="n">TELA 1</div>
+      <h3>Hoje</h3>
+      <p>A tela que a fábrica abre às 17h. Apontamento em 30 segundos e os quatro números no topo.</p>
+      <ul>
+        <li>Metros e peças, por lote</li>
+        <li>Efetivo presente</li>
+        <li>m³ de concreto e nº de viagens</li>
+        <li>Foto e ocorrência, opcionais</li>
+      </ul>
+    </div>
+    <div class="screen">
+      <div class="n">TELA 2</div>
+      <h3>Cronograma</h3>
+      <p>Curva S em metros: previsto, realizado e projetado.</p>
+      <ul>
+        <li>Data de término recalculada a cada apontamento</li>
+        <li>Avanço por lote EST 26 / 27 / 28</li>
+        <li>Calendário de concretagem</li>
+      </ul>
+    </div>
+    <div class="screen">
+      <div class="n">TELA 3</div>
+      <h3>Financeiro</h3>
+      <p>Orçado → comprometido → realizado → projetado, com a projeção editável na mão.</p>
+      <ul>
+        <li>Medições, da previsão ao pagamento</li>
+        <li>Custo real por metro vs. os R$ 10,67 do plano</li>
+        <li>Resultado projetado, sempre atualizado</li>
+      </ul>
+    </div>
+    <div class="screen">
+      <div class="n">TELA 4</div>
+      <h3>Caixa</h3>
+      <p>Fluxo semanal projetado, doze semanas à frente.</p>
+      <ul>
+        <li>Recebimento contra desembolso</li>
+        <li>Saldo mínimo e em que semana ele acontece</li>
+        <li>Alerta de furo antes, não depois</li>
+      </ul>
+    </div>
+    <div class="screen">
+      <div class="n">TELA 5</div>
+      <h3>Simulador</h3>
+      <p>A tela de bater o martelo. Sliders de ritmo, preço, concreto, folha e desconto.</p>
+      <ul>
+        <li>Prazo, custo, resultado e equilíbrio em tempo real</li>
+        <li>Serve para decidir agora e para orçar a próxima obra</li>
+      </ul>
+    </div>
+    <div class="screen">
+      <div class="n">TELA 6</div>
+      <h3>Restrições</h3>
+      <p>O quadro do Last Planner enxuto: o que trava a produção da semana.</p>
+      <ul>
+        <li>Ferragem, concreto, formas, projeto, pagamento</li>
+        <li>Responsável, prazo e status</li>
+        <li>PPC semanal — 70 a 85% é obra sob controle</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Como fazer</span></div>
+  <h2>Roadmap e stack</h2>
+
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Fase</th><th>O que entra</th><th>Quando serve</th></tr></thead>
+      <tbody>
+        <tr><td><strong>0 — agora</strong></td><td>Resolver as três pendências e fechar o contrato</td><td>Antes de assinar</td></tr>
+        <tr><td><strong>1 — semana 1</strong></td><td>Contrato carregado + Hoje + Cronograma</td><td>Dia 1 de produção</td></tr>
+        <tr><td><strong>2 — semana 2</strong></td><td>Financeiro + Caixa + Medições</td><td>Primeira medição</td></tr>
+        <tr><td><strong>3 — semana 3</strong></td><td>Simulador + Restrições + PWA offline</td><td>Obra em regime</td></tr>
+        <tr><td><strong>4 — depois</strong></td><td>Portal do cliente + segunda obra</td><td>Replicação</td></tr>
+      </tbody>
+      <caption>A Fase 1 já dá clareza: sabendo o ritmo e a data projetada, você sabe se está ganhando ou perdendo dinheiro.</caption>
+    </table>
+  </div>
+
+  <ul class="plain">
+    <li><strong>Front:</strong> um <code>index.html</code>, sem framework e sem build — o padrão que já funciona nos três repos de vocês.</li>
+    <li><strong>Backend:</strong> Firebase. O <code>mse-gestao</code> já roda nisso, então o time entra com o <strong>mesmo login</strong>, e o Firestore tem persistência offline nativa — que é o que a fábrica precisa.</li>
+    <li><strong>PWA:</strong> instala no celular, funciona sem sinal e sincroniza depois.</li>
+    <li><strong>Deploy:</strong> Vercel, que o repo já tem configurado.</li>
+    <li><strong>Descartado:</strong> Supabase, que exigiria segundo login e segunda base, e qualquer framework com build step — atrito sem retorno numa obra de 2,5 meses.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Transparência</span></div>
+  <h2>O que foi assumido</h2>
+  <p>Registrado para poder ser corrigido — qualquer um destes muda os números acima.</p>
+  <ul class="plain">
+    <li>Escritório, dívida e escritório são <strong>mensais</strong> e alocados <strong>100%</strong> nesta obra, por ser a obra ativa.</li>
+    <li><strong>22 dias úteis por mês.</strong></li>
+    <li>Os R$ 52.156 de concreto são o <strong>total do contrato</strong>, já com a perda de 10% embutida.</li>
+    <li>O concreto é o <strong>único custo variável</strong>; mão de obra e pátio correm fixos enquanto a fábrica produzir.</li>
+    <li>A produção segue o ritmo médio de forma linear, <strong>sem ramp-up</strong> nem curva de aprendizado.</li>
+    <li>Medição mensal proporcional ao produzido, com 50% adiantados na entrada e pagamento no mês seguinte.</li>
+    <li>O contrato líquido de R$ 227.420,27 já é o valor com os 18% — fechando em outro percentual, tudo muda proporcionalmente.</li>
+  </ul>
+</section>
+
+<footer>
+  Planejamento gerado a partir das três propostas comerciais MSE de 14/07/2026 e dos parâmetros de custo passados pelo Maurício em 28/07.
+  Os 366 itens de vigota estão em <code>dados/contrato-maternidade.json</code>, no repositório <code>plano-mestre-obraclara</code>, branch <code>claude/construction-management-app-0u72yt</code>.
+  <br><br>
+  Benchmark:
+  <a href="https://constructioncoverage.com/construction-project-management-software">Construction Coverage</a> ·
+  <a href="https://buildertrend.com/buildertrend-vs-procore/">Buildertrend vs. Procore</a> ·
+  <a href="https://blog.redteam.com/cost-to-complete-ctc-vs-estimate-at-completion-eac/">RedTeam — CTC vs. EAC</a> ·
+  <a href="https://planyard.com/construction-cash-flow-forecasting-software">Planyard</a> ·
+  <a href="https://www.bauwise.com/construction-cash-flow-forecasting/">Bauwise</a> ·
+  <a href="https://ptaginc.com/earned-value-management/">PTAG — EVM e curva S</a> ·
+  <a href="https://mensuraengenharia.com.br/blog/last-planner-na-pratica.html">MENSURA — Last Planner</a> ·
+  <a href="https://sienge.com.br/blog/last-planner-system/">Sienge</a>
+</footer>
+
+</div>
+
+<div id="tip" role="status"></div>
+
+<script>
+(function(){
+  var dados = [
+    {ritmo:400, dias:42,  res: 81177},
+    {ritmo:350, dias:48,  res: 67736},
+    {ritmo:300, dias:56,  res: 49815, plano:true},
+    {ritmo:250, dias:67,  res: 24725},
+    {ritmo:215, dias:77,  res:   219, equilibrio:true},
+    {ritmo:200, dias:83,  res:-12910},
+    {ritmo:150, dias:111, res:-75635}
+  ];
+  var MAX = 90000;
+  var brl = new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0});
+
+  var dv = document.getElementById('dv');
+  dados.forEach(function(d){
+    var lab = document.createElement('div');
+    lab.className = 'lab' + (d.plano ? ' on' : '');
+    lab.textContent = d.ritmo + ' m/dia';
+
+    var track = document.createElement('div');
+    track.className = 'track';
+
+    var pct = Math.abs(d.res) / MAX * 50;
+    var bar = document.createElement('div');
+    bar.className = 'bar ' + (d.res >= 0 ? 'p' : 'n') + (d.plano ? ' on' : '');
+    bar.style.width = Math.max(pct, 0.35) + '%';
+
+    var val = document.createElement('div');
+    val.className = 'val' + (d.plano ? ' on' : '') + (d.res < 0 ? ' neg' : '');
+    val.textContent = (d.res >= 0 ? '+' : '−') + brl.format(Math.abs(d.res));
+
+    var nota = d.plano ? ' · plano atual' : (d.equilibrio ? ' · ponto de equilíbrio' : '');
+    var tip = d.ritmo + ' m/dia — ' + d.dias + ' dias úteis' + nota + '\n' +
+              'resultado ' + (d.res >= 0 ? '+' : '−') + brl.format(Math.abs(d.res)) +
+              ' (' + (d.res / 227420.27 * 100).toFixed(1).replace('.', ',') + '%)';
+    track.setAttribute('data-tip', tip);
+    val.setAttribute('data-tip', tip);
+    lab.setAttribute('data-tip', tip);
+
+    track.appendChild(bar);
+    dv.appendChild(lab);
+    dv.appendChild(track);
+    dv.appendChild(val);
+  });
+
+  var tip = document.getElementById('tip');
+  function mostra(e){
+    var alvo = e.target.closest('[data-tip]');
+    if (!alvo) { tip.classList.remove('on'); return; }
+    tip.textContent = alvo.getAttribute('data-tip');
+    tip.style.whiteSpace = 'pre';
+    tip.classList.add('on');
+    var x = e.clientX + 14, y = e.clientY + 16;
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    if (x + w > window.innerWidth - 12) x = e.clientX - w - 14;
+    if (y + h > window.innerHeight - 12) y = e.clientY - h - 16;
+    tip.style.left = x + 'px';
+    tip.style.top = y + 'px';
+  }
+  document.addEventListener('mousemove', mostra);
+  document.addEventListener('mouseleave', function(){ tip.classList.remove('on'); });
+})();
+</script>
