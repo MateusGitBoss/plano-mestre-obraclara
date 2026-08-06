@@ -1,0 +1,3414 @@
+{
+  "_fonte": "Extraido das 3 propostas comerciais MSE de 14/07/2026 (PDF). Pecas e metros conferem 100% com os totais declarados nas propostas.",
+  "_gerado_em": "2026-08-06",
+  "obra": {
+    "id": "maternidade-porte-i",
+    "nome": "Maternidade Porte I",
+    "cliente": "Sr. Rafael",
+    "fornecedor": "MSE - Maranhao Solucoes de Engenharia",
+    "responsavel": "Mauricio Cavalcante C. Fonseca",
+    "escopo": "Fabricacao e fornecimento de vigotas trelicadas pre-fabricadas de concreto armado fck 35 MPa. MSE entra com mao de obra e concreto; ferragem (trelicas TG12/TR 12645 e vergalhoes de reforco) e frete de retirada sao do contratante.",
+    "local": "A definir",
+    "data_propostas": "2026-07-14",
+    "validade_dias": 15
+  },
+  "contrato": {
+    "pecas": 4567,
+    "metros": 16639.19,
+    "valor_bruto": 277341.79,
+    "desconto_pct": 18.0,
+    "desconto_valor": 49921.52,
+    "valor_liquido": 227420.27,
+    "preco_liquido_m": 13.67,
+    "preco_liquido_peca": 49.8,
+    "entrada_pct": 50.0,
+    "entrada_valor": 113710.13,
+    "saldo_valor": 113710.13,
+    "forma_saldo": "Conforme medicoes / faturamento dos lotes produzidos",
+    "prazo_contratual_dias": null,
+    "multa_atraso": null
+  },
+  "premissas": {
+    "producao_meta_m_dia": 300,
+    "dias_uteis_mes": 22,
+    "perda_concreto_pct": 10,
+    "fck": 35,
+    "trelica": "TG12 / TR 12645"
+  },
+  "custos": {
+    "variaveis": [
+      {
+        "id": "concreto",
+        "nome": "Concreto fck 35 (total, ja com perda de 10%)",
+        "tipo": "variavel",
+        "valor_total": 52156.0,
+        "valor_por_m": 3.1345,
+        "obs": "Concreteira cobra volume minimo por viagem - o custo real por metro sobe se a producao diaria cair."
+      }
+    ],
+    "fixos_mensais": [
+      {
+        "id": "mao_obra_fabrica",
+        "nome": "Mao de obra da fabrica",
+        "valor": 21760.0,
+        "grupo": "direto"
+      },
+      {
+        "id": "patio_fabrica",
+        "nome": "Patio da fabrica",
+        "valor": 3000.0,
+        "grupo": "direto"
+      },
+      {
+        "id": "salario_escritorio",
+        "nome": "Salario escritorio",
+        "valor": 16000.0,
+        "grupo": "estrutura"
+      },
+      {
+        "id": "divida_mateus",
+        "nome": "Divida Mateus",
+        "valor": 5000.0,
+        "grupo": "estrutura"
+      },
+      {
+        "id": "escritorio",
+        "nome": "Escritorio",
+        "valor": 4000.0,
+        "grupo": "estrutura"
+      }
+    ]
+  },
+  "lotes": [
+    {
+      "id": "est26",
+      "codigo": "EST26",
+      "proposta": "MSE-2026-076",
+      "projeto": "MS_MATERNIDADE_EST_26_R00",
+      "pecas": 1874,
+      "metros": 7381.12,
+      "valor_bruto": 107222.38,
+      "preco_medio_m": 14.53,
+      "itens": [
+        {
+          "codigo": "VT201a",
+          "laje": "L201",
+          "comp_m": 4.68,
+          "reforco": "1x Ø8.0 mm C=4.82 m",
+          "qtde": 18,
+          "preco_m": 14.49,
+          "total": 1220.57
+        },
+        {
+          "codigo": "VT202a",
+          "laje": "L202",
+          "comp_m": 4.65,
+          "reforco": "1x Ø8.0 mm C=4.79 m",
+          "qtde": 15,
+          "preco_m": 14.49,
+          "total": 1010.65
+        },
+        {
+          "codigo": "VT203a",
+          "laje": "L203",
+          "comp_m": 3.32,
+          "reforco": "1x Ø5.0 mm C=3.41 m",
+          "qtde": 17,
+          "preco_m": 13.49,
+          "total": 761.51
+        },
+        {
+          "codigo": "VT204a",
+          "laje": "L204",
+          "comp_m": 4.02,
+          "reforco": "1x Ø6.3 mm C=4.13 m",
+          "qtde": 18,
+          "preco_m": 13.81,
+          "total": 999.5
+        },
+        {
+          "codigo": "VT205a",
+          "laje": "L205",
+          "comp_m": 2.82,
+          "reforco": "1x Ø5.0 mm C=2.91 m",
+          "qtde": 17,
+          "preco_m": 13.5,
+          "total": 646.99
+        },
+        {
+          "codigo": "VT206a",
+          "laje": "L206",
+          "comp_m": 4.02,
+          "reforco": "1x Ø5.0 mm C=4.11 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 704.94
+        },
+        {
+          "codigo": "VT207a",
+          "laje": "L207",
+          "comp_m": 4.63,
+          "reforco": "1x Ø8.0 mm C=4.77 m",
+          "qtde": 14,
+          "preco_m": 14.49,
+          "total": 939.23
+        },
+        {
+          "codigo": "VT208a",
+          "laje": "L208",
+          "comp_m": 3.12,
+          "reforco": "1x Ø5.0 mm C=3.21 m",
+          "qtde": 15,
+          "preco_m": 13.49,
+          "total": 631.5
+        },
+        {
+          "codigo": "VT209a",
+          "laje": "L209",
+          "comp_m": 6.12,
+          "reforco": "1x Ø5.0 mm C=6.21 m",
+          "qtde": 6,
+          "preco_m": 13.48,
+          "total": 495.11
+        },
+        {
+          "codigo": "VT209b",
+          "laje": "L209",
+          "comp_m": 6.12,
+          "reforco": "2x Ø5.0 mm C=6.21 m",
+          "qtde": 8,
+          "preco_m": 14.22,
+          "total": 696.14
+        },
+        {
+          "codigo": "VT210a",
+          "laje": "L210",
+          "comp_m": 6.12,
+          "reforco": "1x Ø6.3 mm C=6.23 m",
+          "qtde": 6,
+          "preco_m": 13.8,
+          "total": 506.85
+        },
+        {
+          "codigo": "VT210b",
+          "laje": "L210",
+          "comp_m": 6.12,
+          "reforco": "2x Ø6.3 mm C=6.23 m",
+          "qtde": 8,
+          "preco_m": 14.86,
+          "total": 727.45
+        },
+        {
+          "codigo": "VT211a",
+          "laje": "L211",
+          "comp_m": 5.16,
+          "reforco": "1x Ø10.0 mm C=5.35 m",
+          "qtde": 18,
+          "preco_m": 15.34,
+          "total": 1425.24
+        },
+        {
+          "codigo": "VT212a",
+          "laje": "L212",
+          "comp_m": 3.02,
+          "reforco": "1x Ø5.0 mm C=3.11 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 529.79
+        },
+        {
+          "codigo": "VT213a",
+          "laje": "L213",
+          "comp_m": 3.12,
+          "reforco": "1x Ø5.0 mm C=3.21 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 547.3
+        },
+        {
+          "codigo": "VT214a",
+          "laje": "L214",
+          "comp_m": 3.12,
+          "reforco": "1x Ø5.0 mm C=3.21 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 547.3
+        },
+        {
+          "codigo": "VT215a",
+          "laje": "L215",
+          "comp_m": 3.12,
+          "reforco": "1x Ø5.0 mm C=3.21 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 547.3
+        },
+        {
+          "codigo": "VT216a",
+          "laje": "L216",
+          "comp_m": 1.97,
+          "reforco": "1x Ø5.0 mm C=2.06 m",
+          "qtde": 13,
+          "preco_m": 13.51,
+          "total": 345.89
+        },
+        {
+          "codigo": "VT217a",
+          "laje": "L217",
+          "comp_m": 2.92,
+          "reforco": "1x Ø5.0 mm C=3.01 m",
+          "qtde": 13,
+          "preco_m": 13.5,
+          "total": 512.27
+        },
+        {
+          "codigo": "VT218a",
+          "laje": "L218",
+          "comp_m": 2.02,
+          "reforco": "1x Ø5.0 mm C=2.11 m",
+          "qtde": 13,
+          "preco_m": 13.5,
+          "total": 354.64
+        },
+        {
+          "codigo": "VT219a",
+          "laje": "L219",
+          "comp_m": 2.4,
+          "reforco": "1x Ø5.0 mm C=2.49 m",
+          "qtde": 15,
+          "preco_m": 13.5,
+          "total": 486.0
+        },
+        {
+          "codigo": "VT220a",
+          "laje": "L220",
+          "comp_m": 4.02,
+          "reforco": "1x Ø5.0 mm C=4.11 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 704.94
+        },
+        {
+          "codigo": "VT221a",
+          "laje": "L221",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5.0 mm C=2.41 m",
+          "qtde": 9,
+          "preco_m": 13.5,
+          "total": 281.9
+        },
+        {
+          "codigo": "VT222a",
+          "laje": "L222",
+          "comp_m": 4.02,
+          "reforco": "1x Ø5.0 mm C=4.11 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 704.94
+        },
+        {
+          "codigo": "VT223a",
+          "laje": "L223",
+          "comp_m": 4.02,
+          "reforco": "1x Ø5.0 mm C=4.11 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 704.94
+        },
+        {
+          "codigo": "VT224a",
+          "laje": "L224",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5.0 mm C=2.41 m",
+          "qtde": 9,
+          "preco_m": 13.5,
+          "total": 281.9
+        },
+        {
+          "codigo": "VT225a",
+          "laje": "L225",
+          "comp_m": 4.02,
+          "reforco": "1x Ø5.0 mm C=4.11 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 704.94
+        },
+        {
+          "codigo": "VT226a",
+          "laje": "L226",
+          "comp_m": 4.02,
+          "reforco": "1x Ø5.0 mm C=4.11 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 704.94
+        },
+        {
+          "codigo": "VT227a",
+          "laje": "L227",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5.0 mm C=2.41 m",
+          "qtde": 9,
+          "preco_m": 13.5,
+          "total": 281.9
+        },
+        {
+          "codigo": "VT228a",
+          "laje": "L228",
+          "comp_m": 4.02,
+          "reforco": "1x Ø5.0 mm C=4.11 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 704.94
+        },
+        {
+          "codigo": "VT229a",
+          "laje": "L229",
+          "comp_m": 5.63,
+          "reforco": "2x Ø8.0 mm C=5.77 m",
+          "qtde": 10,
+          "preco_m": 16.21,
+          "total": 912.79
+        },
+        {
+          "codigo": "VT229b",
+          "laje": "L229",
+          "comp_m": 5.63,
+          "reforco": "2x Ø8.0 mm C=5.77 m",
+          "qtde": 22,
+          "preco_m": 16.21,
+          "total": 2008.14
+        },
+        {
+          "codigo": "VT230a",
+          "laje": "L230",
+          "comp_m": 5.53,
+          "reforco": "2x Ø8.0 mm C=5.67 m",
+          "qtde": 10,
+          "preco_m": 16.22,
+          "total": 896.66
+        },
+        {
+          "codigo": "VT230b",
+          "laje": "L230",
+          "comp_m": 5.53,
+          "reforco": "2x Ø8.0 mm C=5.67 m",
+          "qtde": 22,
+          "preco_m": 16.22,
+          "total": 1972.66
+        },
+        {
+          "codigo": "VT231a",
+          "laje": "L231",
+          "comp_m": 3.22,
+          "reforco": "1x Ø5.0 mm C=3.31 m",
+          "qtde": 9,
+          "preco_m": 13.49,
+          "total": 391.03
+        },
+        {
+          "codigo": "VT232a",
+          "laje": "L232",
+          "comp_m": 3.73,
+          "reforco": "1x Ø8.0 mm C=3.87 m",
+          "qtde": 15,
+          "preco_m": 14.5,
+          "total": 811.39
+        },
+        {
+          "codigo": "VT233a",
+          "laje": "L233",
+          "comp_m": 4.7,
+          "reforco": "1x Ø12.5 mm C=4.92 m",
+          "qtde": 20,
+          "preco_m": 16.92,
+          "total": 1590.23
+        },
+        {
+          "codigo": "VT234a",
+          "laje": "L234",
+          "comp_m": 4.7,
+          "reforco": "1x Ø12.5 mm C=4.92 m",
+          "qtde": 26,
+          "preco_m": 16.92,
+          "total": 2067.3
+        },
+        {
+          "codigo": "VT235a",
+          "laje": "L235",
+          "comp_m": 4.17,
+          "reforco": "1x Ø5.0 mm C=4.26 m",
+          "qtde": 6,
+          "preco_m": 13.49,
+          "total": 337.48
+        },
+        {
+          "codigo": "VT235b",
+          "laje": "L235",
+          "comp_m": 4.17,
+          "reforco": "2x Ø5.0 mm C=4.26 m",
+          "qtde": 6,
+          "preco_m": 14.23,
+          "total": 356.0
+        },
+        {
+          "codigo": "VT236a",
+          "laje": "L236",
+          "comp_m": 3.12,
+          "reforco": "1x Ø5.0 mm C=3.21 m",
+          "qtde": 25,
+          "preco_m": 13.49,
+          "total": 1052.51
+        },
+        {
+          "codigo": "VT237a",
+          "laje": "L237",
+          "comp_m": 5.42,
+          "reforco": "1x Ø6.3 mm C=5.53 m",
+          "qtde": 6,
+          "preco_m": 13.8,
+          "total": 448.96
+        },
+        {
+          "codigo": "VT237b",
+          "laje": "L237",
+          "comp_m": 5.42,
+          "reforco": "2x Ø6.3 mm C=5.53 m",
+          "qtde": 8,
+          "preco_m": 14.86,
+          "total": 644.45
+        },
+        {
+          "codigo": "VT238a",
+          "laje": "L238",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5.0 mm C=2.41 m",
+          "qtde": 15,
+          "preco_m": 13.5,
+          "total": 469.83
+        },
+        {
+          "codigo": "VT239a",
+          "laje": "L239",
+          "comp_m": 5.42,
+          "reforco": "1x Ø5.0 mm C=5.51 m",
+          "qtde": 6,
+          "preco_m": 13.48,
+          "total": 438.52
+        },
+        {
+          "codigo": "VT239b",
+          "laje": "L239",
+          "comp_m": 5.42,
+          "reforco": "2x Ø5.0 mm C=5.51 m",
+          "qtde": 8,
+          "preco_m": 14.22,
+          "total": 616.63
+        },
+        {
+          "codigo": "VT240a",
+          "laje": "L240",
+          "comp_m": 5.42,
+          "reforco": "1x Ø6.3 mm C=5.53 m",
+          "qtde": 6,
+          "preco_m": 13.8,
+          "total": 448.96
+        },
+        {
+          "codigo": "VT240b",
+          "laje": "L240",
+          "comp_m": 5.42,
+          "reforco": "2x Ø6.3 mm C=5.53 m",
+          "qtde": 8,
+          "preco_m": 14.86,
+          "total": 644.45
+        },
+        {
+          "codigo": "VT241a",
+          "laje": "L241",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5.0 mm C=2.41 m",
+          "qtde": 15,
+          "preco_m": 13.5,
+          "total": 469.83
+        },
+        {
+          "codigo": "VT242a",
+          "laje": "L242",
+          "comp_m": 5.42,
+          "reforco": "1x Ø6.3 mm C=5.53 m",
+          "qtde": 6,
+          "preco_m": 13.8,
+          "total": 448.96
+        },
+        {
+          "codigo": "VT242b",
+          "laje": "L242",
+          "comp_m": 5.42,
+          "reforco": "2x Ø6.3 mm C=5.53 m",
+          "qtde": 8,
+          "preco_m": 14.86,
+          "total": 644.45
+        },
+        {
+          "codigo": "VT243a",
+          "laje": "L243",
+          "comp_m": 5.42,
+          "reforco": "1x Ø6.3 mm C=5.53 m",
+          "qtde": 6,
+          "preco_m": 13.8,
+          "total": 448.96
+        },
+        {
+          "codigo": "VT243b",
+          "laje": "L243",
+          "comp_m": 5.42,
+          "reforco": "2x Ø6.3 mm C=5.53 m",
+          "qtde": 8,
+          "preco_m": 14.86,
+          "total": 644.45
+        },
+        {
+          "codigo": "VT244a",
+          "laje": "L244",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5.0 mm C=2.41 m",
+          "qtde": 15,
+          "preco_m": 13.5,
+          "total": 469.83
+        },
+        {
+          "codigo": "VT245a",
+          "laje": "L245",
+          "comp_m": 5.42,
+          "reforco": "1x Ø5.0 mm C=5.51 m",
+          "qtde": 6,
+          "preco_m": 13.48,
+          "total": 438.52
+        },
+        {
+          "codigo": "VT245b",
+          "laje": "L245",
+          "comp_m": 5.42,
+          "reforco": "2x Ø5.0 mm C=5.51 m",
+          "qtde": 8,
+          "preco_m": 14.22,
+          "total": 616.63
+        },
+        {
+          "codigo": "VT246a",
+          "laje": "L246",
+          "comp_m": 2.62,
+          "reforco": "1x Ø5.0 mm C=2.71 m",
+          "qtde": 19,
+          "preco_m": 13.5,
+          "total": 671.91
+        },
+        {
+          "codigo": "VT247a",
+          "laje": "L247",
+          "comp_m": 4.99,
+          "reforco": "1x Ø12.5 mm C=5.21 m",
+          "qtde": 20,
+          "preco_m": 16.9,
+          "total": 1687.27
+        },
+        {
+          "codigo": "VT248a",
+          "laje": "L248",
+          "comp_m": 5.32,
+          "reforco": "1x Ø10.0 mm C=5.51 m",
+          "qtde": 7,
+          "preco_m": 15.34,
+          "total": 571.34
+        },
+        {
+          "codigo": "VT248b",
+          "laje": "L248",
+          "comp_m": 5.32,
+          "reforco": "2x Ø10.0 mm C=5.51 m",
+          "qtde": 13,
+          "preco_m": 17.94,
+          "total": 1240.45
+        },
+        {
+          "codigo": "VT249a",
+          "laje": "L249",
+          "comp_m": 4.51,
+          "reforco": "1x Ø10.0 mm C=4.70 m",
+          "qtde": 12,
+          "preco_m": 15.36,
+          "total": 831.19
+        },
+        {
+          "codigo": "VT250a",
+          "laje": "L250",
+          "comp_m": 5.42,
+          "reforco": "2x Ø8.0 mm C=5.56 m",
+          "qtde": 14,
+          "preco_m": 16.22,
+          "total": 1230.49
+        },
+        {
+          "codigo": "VT251a",
+          "laje": "L251",
+          "comp_m": 4.08,
+          "reforco": "1x Ø8.0 mm C=4.22 m",
+          "qtde": 10,
+          "preco_m": 14.5,
+          "total": 591.46
+        },
+        {
+          "codigo": "VT252a",
+          "laje": "L252",
+          "comp_m": 5.48,
+          "reforco": "2x Ø8.0 mm C=5.62 m",
+          "qtde": 10,
+          "preco_m": 16.22,
+          "total": 888.6
+        },
+        {
+          "codigo": "VT252b",
+          "laje": "L252",
+          "comp_m": 5.48,
+          "reforco": "2x Ø8.0 mm C=5.62 m",
+          "qtde": 14,
+          "preco_m": 16.22,
+          "total": 1244.04
+        },
+        {
+          "codigo": "VT253a",
+          "laje": "L253",
+          "comp_m": 2.42,
+          "reforco": "1x Ø5.0 mm C=2.51 m",
+          "qtde": 23,
+          "preco_m": 13.5,
+          "total": 751.39
+        },
+        {
+          "codigo": "VT254a",
+          "laje": "L254",
+          "comp_m": 5.42,
+          "reforco": "1x Ø6.3 mm C=5.53 m",
+          "qtde": 6,
+          "preco_m": 13.8,
+          "total": 448.96
+        },
+        {
+          "codigo": "VT254b",
+          "laje": "L254",
+          "comp_m": 5.42,
+          "reforco": "2x Ø6.3 mm C=5.53 m",
+          "qtde": 8,
+          "preco_m": 14.86,
+          "total": 644.45
+        },
+        {
+          "codigo": "VT255a",
+          "laje": "L255",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5.0 mm C=2.41 m",
+          "qtde": 15,
+          "preco_m": 13.5,
+          "total": 469.83
+        },
+        {
+          "codigo": "VT256a",
+          "laje": "L256",
+          "comp_m": 5.42,
+          "reforco": "1x Ø6.3 mm C=5.53 m",
+          "qtde": 6,
+          "preco_m": 13.8,
+          "total": 448.96
+        },
+        {
+          "codigo": "VT256b",
+          "laje": "L256",
+          "comp_m": 5.42,
+          "reforco": "2x Ø6.3 mm C=5.53 m",
+          "qtde": 8,
+          "preco_m": 14.86,
+          "total": 644.45
+        },
+        {
+          "codigo": "VT257a",
+          "laje": "L257",
+          "comp_m": 5.42,
+          "reforco": "1x Ø6.3 mm C=5.53 m",
+          "qtde": 6,
+          "preco_m": 13.8,
+          "total": 448.96
+        },
+        {
+          "codigo": "VT257b",
+          "laje": "L257",
+          "comp_m": 5.42,
+          "reforco": "2x Ø6.3 mm C=5.53 m",
+          "qtde": 8,
+          "preco_m": 14.86,
+          "total": 644.45
+        },
+        {
+          "codigo": "VT258a",
+          "laje": "L258",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5.0 mm C=2.41 m",
+          "qtde": 15,
+          "preco_m": 13.5,
+          "total": 469.83
+        },
+        {
+          "codigo": "VT259a",
+          "laje": "L259",
+          "comp_m": 5.42,
+          "reforco": "1x Ø6.3 mm C=5.53 m",
+          "qtde": 6,
+          "preco_m": 13.8,
+          "total": 448.96
+        },
+        {
+          "codigo": "VT259b",
+          "laje": "L259",
+          "comp_m": 5.42,
+          "reforco": "2x Ø6.3 mm C=5.53 m",
+          "qtde": 8,
+          "preco_m": 14.86,
+          "total": 644.45
+        },
+        {
+          "codigo": "VT260a",
+          "laje": "L260",
+          "comp_m": 5.42,
+          "reforco": "1x Ø6.3 mm C=5.53 m",
+          "qtde": 5,
+          "preco_m": 13.8,
+          "total": 374.13
+        },
+        {
+          "codigo": "VT260b",
+          "laje": "L260",
+          "comp_m": 5.42,
+          "reforco": "2x Ø6.3 mm C=5.53 m",
+          "qtde": 9,
+          "preco_m": 14.86,
+          "total": 725.01
+        },
+        {
+          "codigo": "VT261a",
+          "laje": "L261",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5.0 mm C=2.41 m",
+          "qtde": 25,
+          "preco_m": 13.5,
+          "total": 783.05
+        },
+        {
+          "codigo": "VT262a",
+          "laje": "L262",
+          "comp_m": 5.42,
+          "reforco": "Sem reforço",
+          "qtde": 4,
+          "preco_m": 12.75,
+          "total": 276.39
+        },
+        {
+          "codigo": "VT262b",
+          "laje": "L262",
+          "comp_m": 5.42,
+          "reforco": "1x Ø5.0 mm C=5.51 m",
+          "qtde": 6,
+          "preco_m": 13.48,
+          "total": 438.52
+        },
+        {
+          "codigo": "VT263a",
+          "laje": "L263",
+          "comp_m": 4.47,
+          "reforco": "1x Ø6.3 mm C=4.58 m",
+          "qtde": 4,
+          "preco_m": 13.81,
+          "total": 246.93
+        },
+        {
+          "codigo": "VT263b",
+          "laje": "L263",
+          "comp_m": 4.47,
+          "reforco": "2x Ø6.3 mm C=4.58 m",
+          "qtde": 10,
+          "preco_m": 14.87,
+          "total": 664.77
+        },
+        {
+          "codigo": "VT264a",
+          "laje": "L264",
+          "comp_m": 4.07,
+          "reforco": "1x Ø6.3 mm C=4.18 m",
+          "qtde": 6,
+          "preco_m": 13.81,
+          "total": 337.3
+        },
+        {
+          "codigo": "VT264b",
+          "laje": "L264",
+          "comp_m": 4.07,
+          "reforco": "2x Ø6.3 mm C=4.18 m",
+          "qtde": 8,
+          "preco_m": 14.87,
+          "total": 484.39
+        },
+        {
+          "codigo": "VT265a",
+          "laje": "L265",
+          "comp_m": 5.63,
+          "reforco": "2x Ø8.0 mm C=5.77 m",
+          "qtde": 8,
+          "preco_m": 16.21,
+          "total": 730.23
+        },
+        {
+          "codigo": "VT265b",
+          "laje": "L265",
+          "comp_m": 5.63,
+          "reforco": "2x Ø8.0 mm C=5.77 m",
+          "qtde": 14,
+          "preco_m": 16.21,
+          "total": 1277.91
+        },
+        {
+          "codigo": "VT266a",
+          "laje": "L266",
+          "comp_m": 5.56,
+          "reforco": "2x Ø10.0 mm C=5.75 m",
+          "qtde": 22,
+          "preco_m": 17.93,
+          "total": 2192.98
+        },
+        {
+          "codigo": "VT267a",
+          "laje": "L267",
+          "comp_m": 3.63,
+          "reforco": "1x Ø8.0 mm C=3.77 m",
+          "qtde": 13,
+          "preco_m": 14.51,
+          "total": 684.44
+        },
+        {
+          "codigo": "VT268a",
+          "laje": "L268",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5.0 mm C=2.41 m",
+          "qtde": 70,
+          "preco_m": 13.5,
+          "total": 2192.54
+        },
+        {
+          "codigo": "VT269a",
+          "laje": "L269",
+          "comp_m": 3.32,
+          "reforco": "1x Ø5.0 mm C=3.41 m",
+          "qtde": 19,
+          "preco_m": 13.49,
+          "total": 851.1
+        },
+        {
+          "codigo": "VT270a",
+          "laje": "L270",
+          "comp_m": 5.46,
+          "reforco": "1x Ø10.0 mm C=5.65 m",
+          "qtde": 26,
+          "preco_m": 15.34,
+          "total": 2177.65
+        },
+        {
+          "codigo": "VT271a",
+          "laje": "L271",
+          "comp_m": 4.02,
+          "reforco": "1x Ø5.0 mm C=4.11 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 704.94
+        },
+        {
+          "codigo": "VT272a",
+          "laje": "L272",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5.0 mm C=2.41 m",
+          "qtde": 47,
+          "preco_m": 13.5,
+          "total": 1472.14
+        },
+        {
+          "codigo": "VT273a",
+          "laje": "L273",
+          "comp_m": 3.92,
+          "reforco": "1x Ø5.0 mm C=4.01 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 687.42
+        },
+        {
+          "codigo": "VT274a",
+          "laje": "L274",
+          "comp_m": 3.92,
+          "reforco": "1x Ø5.0 mm C=4.01 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 687.42
+        },
+        {
+          "codigo": "VT275a",
+          "laje": "L275",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5.0 mm C=2.41 m",
+          "qtde": 9,
+          "preco_m": 13.5,
+          "total": 281.9
+        },
+        {
+          "codigo": "VT276a",
+          "laje": "L276",
+          "comp_m": 3.92,
+          "reforco": "1x Ø5.0 mm C=4.01 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 687.42
+        },
+        {
+          "codigo": "VT277a",
+          "laje": "L277",
+          "comp_m": 3.92,
+          "reforco": "1x Ø5.0 mm C=4.01 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 687.42
+        },
+        {
+          "codigo": "VT278a",
+          "laje": "L278",
+          "comp_m": 2.62,
+          "reforco": "1x Ø5.0 mm C=2.71 m",
+          "qtde": 13,
+          "preco_m": 13.5,
+          "total": 459.73
+        },
+        {
+          "codigo": "VT279a",
+          "laje": "L279",
+          "comp_m": 2.92,
+          "reforco": "1x Ø5.0 mm C=3.01 m",
+          "qtde": 13,
+          "preco_m": 13.5,
+          "total": 512.27
+        },
+        {
+          "codigo": "VT280a",
+          "laje": "L280",
+          "comp_m": 4.03,
+          "reforco": "1x Ø8.0 mm C=4.17 m",
+          "qtde": 10,
+          "preco_m": 14.5,
+          "total": 584.24
+        },
+        {
+          "codigo": "VT281a",
+          "laje": "L281",
+          "comp_m": 3.17,
+          "reforco": "1x Ø5.0 mm C=3.26 m",
+          "qtde": 19,
+          "preco_m": 13.49,
+          "total": 812.71
+        },
+        {
+          "codigo": "VT282a",
+          "laje": "L282",
+          "comp_m": 3.63,
+          "reforco": "1x Ø8.0 mm C=3.77 m",
+          "qtde": 15,
+          "preco_m": 14.51,
+          "total": 789.73
+        },
+        {
+          "codigo": "VT283a",
+          "laje": "L283",
+          "comp_m": 6.13,
+          "reforco": "2x Ø8.0 mm C=6.27 m",
+          "qtde": 9,
+          "preco_m": 16.21,
+          "total": 894.09
+        },
+        {
+          "codigo": "VT283b",
+          "laje": "L283",
+          "comp_m": 6.13,
+          "reforco": "2x Ø8.0 mm C=6.27 m",
+          "qtde": 12,
+          "preco_m": 16.21,
+          "total": 1192.12
+        },
+        {
+          "codigo": "VT284a",
+          "laje": "L284",
+          "comp_m": 2.12,
+          "reforco": "1x Ø5.0 mm C=2.21 m",
+          "qtde": 6,
+          "preco_m": 13.5,
+          "total": 171.77
+        },
+        {
+          "codigo": "VT285a",
+          "laje": "L285",
+          "comp_m": 4.27,
+          "reforco": "1x Ø8.0 mm C=4.41 m",
+          "qtde": 8,
+          "preco_m": 14.49,
+          "total": 495.12
+        },
+        {
+          "codigo": "VT285b",
+          "laje": "L285",
+          "comp_m": 4.27,
+          "reforco": "2x Ø8.0 mm C=4.41 m",
+          "qtde": 12,
+          "preco_m": 16.24,
+          "total": 832.12
+        },
+        {
+          "codigo": "VT286a",
+          "laje": "L286",
+          "comp_m": 3.82,
+          "reforco": "1x Ø5.0 mm C=3.91 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 669.9
+        },
+        {
+          "codigo": "VT287a",
+          "laje": "L287",
+          "comp_m": 4.48,
+          "reforco": "1x Ø8.0 mm C=4.62 m",
+          "qtde": 18,
+          "preco_m": 14.49,
+          "total": 1168.59
+        },
+        {
+          "codigo": "VT288a",
+          "laje": "L288",
+          "comp_m": 4.47,
+          "reforco": "1x Ø5.0 mm C=4.56 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 783.75
+        },
+        {
+          "codigo": "VT289a",
+          "laje": "L289",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5.0 mm C=2.41 m",
+          "qtde": 11,
+          "preco_m": 13.5,
+          "total": 344.54
+        },
+        {
+          "codigo": "VT290a",
+          "laje": "L290",
+          "comp_m": 4.48,
+          "reforco": "1x Ø8.0 mm C=4.62 m",
+          "qtde": 39,
+          "preco_m": 14.49,
+          "total": 2531.95
+        },
+        {
+          "codigo": "VT291a",
+          "laje": "L291",
+          "comp_m": 3.77,
+          "reforco": "1x Ø8.0 mm C=3.91 m",
+          "qtde": 11,
+          "preco_m": 14.5,
+          "total": 601.37
+        },
+        {
+          "codigo": "VT292a",
+          "laje": "L292",
+          "comp_m": 3.02,
+          "reforco": "1x Ø5.0 mm C=3.11 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 529.79
+        },
+        {
+          "codigo": "VT293a",
+          "laje": "L293",
+          "comp_m": 3.02,
+          "reforco": "1x Ø5.0 mm C=3.11 m",
+          "qtde": 29,
+          "preco_m": 13.49,
+          "total": 1181.84
+        },
+        {
+          "codigo": "VT294a",
+          "laje": "L294",
+          "comp_m": 3.22,
+          "reforco": "1x Ø5.0 mm C=3.31 m",
+          "qtde": 25,
+          "preco_m": 13.49,
+          "total": 1086.19
+        },
+        {
+          "codigo": "VT295a",
+          "laje": "L295",
+          "comp_m": 4.53,
+          "reforco": "1x Ø8.0 mm C=4.67 m",
+          "qtde": 8,
+          "preco_m": 14.49,
+          "total": 525.15
+        },
+        {
+          "codigo": "VT295b",
+          "laje": "L295",
+          "comp_m": 4.53,
+          "reforco": "2x Ø8.0 mm C=4.67 m",
+          "qtde": 16,
+          "preco_m": 16.23,
+          "total": 1176.6
+        },
+        {
+          "codigo": "VT296a",
+          "laje": "L296",
+          "comp_m": 4.22,
+          "reforco": "1x Ø6.3 mm C=4.33 m",
+          "qtde": 6,
+          "preco_m": 13.81,
+          "total": 349.71
+        },
+        {
+          "codigo": "VT296b",
+          "laje": "L296",
+          "comp_m": 4.22,
+          "reforco": "2x Ø6.3 mm C=4.33 m",
+          "qtde": 6,
+          "preco_m": 14.87,
+          "total": 376.63
+        },
+        {
+          "codigo": "VT297a",
+          "laje": "L297",
+          "comp_m": 4.48,
+          "reforco": "1x Ø8.0 mm C=4.62 m",
+          "qtde": 8,
+          "preco_m": 14.49,
+          "total": 519.37
+        },
+        {
+          "codigo": "VT297b",
+          "laje": "L297",
+          "comp_m": 4.48,
+          "reforco": "2x Ø8.0 mm C=4.62 m",
+          "qtde": 12,
+          "preco_m": 16.23,
+          "total": 872.77
+        },
+        {
+          "codigo": "VT298a",
+          "laje": "L298",
+          "comp_m": 4.48,
+          "reforco": "1x Ø8.0 mm C=4.62 m",
+          "qtde": 6,
+          "preco_m": 14.49,
+          "total": 389.53
+        },
+        {
+          "codigo": "VT298b",
+          "laje": "L298",
+          "comp_m": 4.48,
+          "reforco": "2x Ø8.0 mm C=4.62 m",
+          "qtde": 12,
+          "preco_m": 16.23,
+          "total": 872.77
+        },
+        {
+          "codigo": "VT299a",
+          "laje": "L299",
+          "comp_m": 4.37,
+          "reforco": "1x Ø5.0 mm C=4.46 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 766.24
+        },
+        {
+          "codigo": "VT300a",
+          "laje": "L300",
+          "comp_m": 3.92,
+          "reforco": "1x Ø5.0 mm C=4.01 m",
+          "qtde": 27,
+          "preco_m": 13.49,
+          "total": 1427.72
+        },
+        {
+          "codigo": "VT301a",
+          "laje": "L301",
+          "comp_m": 3.62,
+          "reforco": "1x Ø5.0 mm C=3.71 m",
+          "qtde": 10,
+          "preco_m": 13.49,
+          "total": 488.37
+        },
+        {
+          "codigo": "VT301b",
+          "laje": "L301",
+          "comp_m": 1.42,
+          "reforco": "1x Ø5.0 mm C=1.51 m",
+          "qtde": 1,
+          "preco_m": 13.52,
+          "total": 19.2
+        },
+        {
+          "codigo": "VT302a",
+          "laje": "L302",
+          "comp_m": 3.92,
+          "reforco": "1x Ø5.0 mm C=4.01 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 687.42
+        },
+        {
+          "codigo": "VT303a",
+          "laje": "L303",
+          "comp_m": 3.92,
+          "reforco": "1x Ø5.0 mm C=4.01 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 687.42
+        },
+        {
+          "codigo": "VT304a",
+          "laje": "L304",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5.0 mm C=2.41 m",
+          "qtde": 9,
+          "preco_m": 13.5,
+          "total": 281.9
+        },
+        {
+          "codigo": "VT305a",
+          "laje": "L305",
+          "comp_m": 3.92,
+          "reforco": "1x Ø5.0 mm C=4.01 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 687.42
+        },
+        {
+          "codigo": "VT306a",
+          "laje": "L306",
+          "comp_m": 3.92,
+          "reforco": "1x Ø5.0 mm C=4.01 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 687.42
+        },
+        {
+          "codigo": "VT307a",
+          "laje": "L307",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5.0 mm C=2.41 m",
+          "qtde": 9,
+          "preco_m": 13.5,
+          "total": 281.9
+        },
+        {
+          "codigo": "VT308a",
+          "laje": "L308",
+          "comp_m": 4.17,
+          "reforco": "1x Ø5.0 mm C=4.26 m",
+          "qtde": 3,
+          "preco_m": 13.49,
+          "total": 168.74
+        },
+        {
+          "codigo": "VT308b",
+          "laje": "L308",
+          "comp_m": 4.17,
+          "reforco": "2x Ø5.0 mm C=4.26 m",
+          "qtde": 7,
+          "preco_m": 14.23,
+          "total": 415.33
+        },
+        {
+          "codigo": "VT309a",
+          "laje": "L309",
+          "comp_m": 4.21,
+          "reforco": "1x Ø10.0 mm C=4.40 m",
+          "qtde": 26,
+          "preco_m": 15.37,
+          "total": 1681.94
+        },
+        {
+          "codigo": "VT310a",
+          "laje": "L310",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5.0 mm C=2.41 m",
+          "qtde": 10,
+          "preco_m": 13.5,
+          "total": 313.22
+        },
+        {
+          "codigo": "VT311a",
+          "laje": "L311",
+          "comp_m": 4.22,
+          "reforco": "1x Ø6.3 mm C=4.33 m",
+          "qtde": 6,
+          "preco_m": 13.81,
+          "total": 349.71
+        },
+        {
+          "codigo": "VT311b",
+          "laje": "L311",
+          "comp_m": 4.22,
+          "reforco": "2x Ø6.3 mm C=4.33 m",
+          "qtde": 18,
+          "preco_m": 14.87,
+          "total": 1129.88
+        },
+        {
+          "codigo": "VT312a",
+          "laje": "L312",
+          "comp_m": 3.72,
+          "reforco": "1x Ø5.0 mm C=3.81 m",
+          "qtde": 13,
+          "preco_m": 13.49,
+          "total": 652.39
+        },
+        {
+          "codigo": "VT313a",
+          "laje": "L313",
+          "comp_m": 2.72,
+          "reforco": "1x Ø5.0 mm C=2.81 m",
+          "qtde": 11,
+          "preco_m": 13.5,
+          "total": 403.82
+        },
+        {
+          "codigo": "VT313b",
+          "laje": "L313",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5.0 mm C=2.41 m",
+          "qtde": 8,
+          "preco_m": 13.5,
+          "total": 250.58
+        },
+        {
+          "codigo": "VT314a",
+          "laje": "L314",
+          "comp_m": 5.42,
+          "reforco": "1x Ø6.3 mm C=5.53 m",
+          "qtde": 6,
+          "preco_m": 13.8,
+          "total": 448.84
+        }
+      ]
+    },
+    {
+      "id": "est27",
+      "codigo": "EST27",
+      "proposta": "MSE-2026-077",
+      "projeto": "MS_MATERNIDADE_EST_27_R00",
+      "pecas": 1765,
+      "metros": 6332.99,
+      "valor_bruto": 97312.22,
+      "preco_medio_m": 15.37,
+      "itens": [
+        {
+          "codigo": "VT314b",
+          "laje": "L314",
+          "comp_m": 5.42,
+          "reforco": "2x Ø6,3 mm C=5,53 m",
+          "qtde": 8,
+          "preco_m": 15.94,
+          "total": 691.12
+        },
+        {
+          "codigo": "VT315a",
+          "laje": "L315",
+          "comp_m": 5.42,
+          "reforco": "1x Ø6,3 mm C=5,53 m",
+          "qtde": 6,
+          "preco_m": 14.81,
+          "total": 481.74
+        },
+        {
+          "codigo": "VT315b",
+          "laje": "L315",
+          "comp_m": 5.42,
+          "reforco": "2x Ø6,3 mm C=5,53 m",
+          "qtde": 8,
+          "preco_m": 15.94,
+          "total": 691.12
+        },
+        {
+          "codigo": "VT316a",
+          "laje": "L316",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 15,
+          "preco_m": 14.49,
+          "total": 504.08
+        },
+        {
+          "codigo": "VT317a",
+          "laje": "L317",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 6,
+          "preco_m": 14.49,
+          "total": 201.63
+        },
+        {
+          "codigo": "VT318a",
+          "laje": "L318",
+          "comp_m": 3.62,
+          "reforco": "1x Ø5,0 mm C=3,71 m",
+          "qtde": 8,
+          "preco_m": 14.47,
+          "total": 419.18
+        },
+        {
+          "codigo": "VT319a",
+          "laje": "L319",
+          "comp_m": 1.82,
+          "reforco": "1x Ø5,0 mm C=1,91 m",
+          "qtde": 8,
+          "preco_m": 14.49,
+          "total": 211.02
+        },
+        {
+          "codigo": "VT320a",
+          "laje": "L320",
+          "comp_m": 5.42,
+          "reforco": "1x Ø8,0 mm C=5,56 m",
+          "qtde": 7,
+          "preco_m": 15.53,
+          "total": 589.08
+        },
+        {
+          "codigo": "VT320b",
+          "laje": "L320",
+          "comp_m": 5.42,
+          "reforco": "Sem reforço adicional",
+          "qtde": 1,
+          "preco_m": 13.69,
+          "total": 74.19
+        },
+        {
+          "codigo": "VT321a",
+          "laje": "L321",
+          "comp_m": 3.27,
+          "reforco": "1x Ø5,0 mm C=3,36 m",
+          "qtde": 17,
+          "preco_m": 14.48,
+          "total": 804.75
+        },
+        {
+          "codigo": "VT322a",
+          "laje": "L322",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 29,
+          "preco_m": 14.49,
+          "total": 974.56
+        },
+        {
+          "codigo": "VT323a",
+          "laje": "L323",
+          "comp_m": 4.3,
+          "reforco": "1x Ø12,5 mm C=4,52 m",
+          "qtde": 12,
+          "preco_m": 18.1,
+          "total": 934.1
+        },
+        {
+          "codigo": "VT323b",
+          "laje": "L323",
+          "comp_m": 4.7,
+          "reforco": "1x Ø12,5 mm C=4,92 m",
+          "qtde": 8,
+          "preco_m": 18.08,
+          "total": 679.98
+        },
+        {
+          "codigo": "VT324a",
+          "laje": "L324",
+          "comp_m": 4.38,
+          "reforco": "1x Ø8,0 mm C=4,52 m",
+          "qtde": 22,
+          "preco_m": 15.54,
+          "total": 1497.2
+        },
+        {
+          "codigo": "VT325a",
+          "laje": "L325",
+          "comp_m": 4.33,
+          "reforco": "1x Ø8,0 mm C=4,47 m",
+          "qtde": 22,
+          "preco_m": 15.54,
+          "total": 1480.18
+        },
+        {
+          "codigo": "VT326a",
+          "laje": "L326",
+          "comp_m": 4.28,
+          "reforco": "1x Ø8,0 mm C=4,42 m",
+          "qtde": 22,
+          "preco_m": 15.54,
+          "total": 1463.15
+        },
+        {
+          "codigo": "VT327a",
+          "laje": "L327",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 8,
+          "preco_m": 14.49,
+          "total": 268.84
+        },
+        {
+          "codigo": "VT328a",
+          "laje": "L328",
+          "comp_m": 4.48,
+          "reforco": "1x Ø8,0 mm C=4,62 m",
+          "qtde": 6,
+          "preco_m": 15.54,
+          "total": 417.62
+        },
+        {
+          "codigo": "VT328b",
+          "laje": "L328",
+          "comp_m": 4.48,
+          "reforco": "2x Ø8,0 mm C=4,62 m",
+          "qtde": 12,
+          "preco_m": 17.38,
+          "total": 934.59
+        },
+        {
+          "codigo": "VT329a",
+          "laje": "L329",
+          "comp_m": 4.68,
+          "reforco": "1x Ø8,0 mm C=4,82 m",
+          "qtde": 13,
+          "preco_m": 15.53,
+          "total": 945.08
+        },
+        {
+          "codigo": "VT330a",
+          "laje": "L330",
+          "comp_m": 3.62,
+          "reforco": "1x Ø5,0 mm C=3,71 m",
+          "qtde": 9,
+          "preco_m": 14.47,
+          "total": 471.58
+        },
+        {
+          "codigo": "VT331a",
+          "laje": "L331",
+          "comp_m": 1.82,
+          "reforco": "1x Ø5,0 mm C=1,91 m",
+          "qtde": 9,
+          "preco_m": 14.49,
+          "total": 237.4
+        },
+        {
+          "codigo": "VT332a",
+          "laje": "L332",
+          "comp_m": 5.42,
+          "reforco": "1x Ø6,3 mm C=5,53 m",
+          "qtde": 2,
+          "preco_m": 14.81,
+          "total": 160.58
+        },
+        {
+          "codigo": "VT332b",
+          "laje": "L332",
+          "comp_m": 5.42,
+          "reforco": "2x Ø6,3 mm C=5,53 m",
+          "qtde": 6,
+          "preco_m": 15.94,
+          "total": 518.34
+        },
+        {
+          "codigo": "VT333a",
+          "laje": "L333",
+          "comp_m": 3.83,
+          "reforco": "1x Ø8,0 mm C=3,97 m",
+          "qtde": 17,
+          "preco_m": 15.55,
+          "total": 1012.19
+        },
+        {
+          "codigo": "VT334a",
+          "laje": "L334",
+          "comp_m": 4.21,
+          "reforco": "1x Ø10,0 mm C=4,40 m",
+          "qtde": 18,
+          "preco_m": 16.48,
+          "total": 1249.11
+        },
+        {
+          "codigo": "VT335a",
+          "laje": "L335",
+          "comp_m": 3.58,
+          "reforco": "1x Ø8,0 mm C=3,72 m",
+          "qtde": 19,
+          "preco_m": 15.55,
+          "total": 1057.74
+        },
+        {
+          "codigo": "VT336a",
+          "laje": "L336",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 27,
+          "preco_m": 14.49,
+          "total": 907.35
+        },
+        {
+          "codigo": "VT337a",
+          "laje": "L337",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 11,
+          "preco_m": 14.49,
+          "total": 369.66
+        },
+        {
+          "codigo": "VT338a",
+          "laje": "L338",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 5,
+          "preco_m": 14.49,
+          "total": 168.03
+        },
+        {
+          "codigo": "VT339a",
+          "laje": "L339",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 14,
+          "preco_m": 14.49,
+          "total": 470.48
+        },
+        {
+          "codigo": "VT340a",
+          "laje": "L340",
+          "comp_m": 3.92,
+          "reforco": "1x Ø5,0 mm C=4,01 m",
+          "qtde": 14,
+          "preco_m": 14.47,
+          "total": 794.28
+        },
+        {
+          "codigo": "VT341a",
+          "laje": "L341",
+          "comp_m": 4.93,
+          "reforco": "2x Ø8,0 mm C=5,07 m",
+          "qtde": 20,
+          "preco_m": 17.37,
+          "total": 1713.1
+        },
+        {
+          "codigo": "VT342a",
+          "laje": "L342",
+          "comp_m": 4.27,
+          "reforco": "1x Ø5,0 mm C=4,36 m",
+          "qtde": 8,
+          "preco_m": 14.47,
+          "total": 494.35
+        },
+        {
+          "codigo": "VT343a",
+          "laje": "L343",
+          "comp_m": 4.27,
+          "reforco": "2x Ø6,3 mm C=4,38 m",
+          "qtde": 10,
+          "preco_m": 15.95,
+          "total": 681.11
+        },
+        {
+          "codigo": "VT344a",
+          "laje": "L344",
+          "comp_m": 4.27,
+          "reforco": "1x Ø6,3 mm C=4,38 m",
+          "qtde": 6,
+          "preco_m": 14.82,
+          "total": 379.68
+        },
+        {
+          "codigo": "VT344b",
+          "laje": "L344",
+          "comp_m": 4.27,
+          "reforco": "2x Ø6,3 mm C=4,38 m",
+          "qtde": 20,
+          "preco_m": 15.95,
+          "total": 1362.22
+        },
+        {
+          "codigo": "VT345a",
+          "laje": "L345",
+          "comp_m": 5.13,
+          "reforco": "1x Ø8,0 mm C=5,27 m",
+          "qtde": 14,
+          "preco_m": 15.53,
+          "total": 1115.31
+        },
+        {
+          "codigo": "VT346a",
+          "laje": "L346",
+          "comp_m": 5.46,
+          "reforco": "1x Ø10,0 mm C=5,65 m",
+          "qtde": 28,
+          "preco_m": 16.46,
+          "total": 2515.75
+        },
+        {
+          "codigo": "VT347a",
+          "laje": "L347",
+          "comp_m": 3.37,
+          "reforco": "1x Ø5,0 mm C=3,46 m",
+          "qtde": 17,
+          "preco_m": 14.48,
+          "total": 829.32
+        },
+        {
+          "codigo": "VT348a",
+          "laje": "L348",
+          "comp_m": 3.12,
+          "reforco": "1x Ø5,0 mm C=3,21 m",
+          "qtde": 11,
+          "preco_m": 14.48,
+          "total": 496.87
+        },
+        {
+          "codigo": "VT349a",
+          "laje": "L349",
+          "comp_m": 3.83,
+          "reforco": "1x Ø8,0 mm C=3,97 m",
+          "qtde": 11,
+          "preco_m": 15.55,
+          "total": 654.95
+        },
+        {
+          "codigo": "VT350a",
+          "laje": "L350",
+          "comp_m": 5.26,
+          "reforco": "1x Ø10,0 mm C=5,45 m",
+          "qtde": 28,
+          "preco_m": 16.46,
+          "total": 2424.12
+        },
+        {
+          "codigo": "VT351a",
+          "laje": "L351",
+          "comp_m": 5.22,
+          "reforco": "1x Ø6,3 mm C=5,33 m",
+          "qtde": 8,
+          "preco_m": 14.81,
+          "total": 618.65
+        },
+        {
+          "codigo": "VT351b",
+          "laje": "L351",
+          "comp_m": 5.22,
+          "reforco": "2x Ø6,3 mm C=5,33 m",
+          "qtde": 9,
+          "preco_m": 15.94,
+          "total": 748.9
+        },
+        {
+          "codigo": "VT352a",
+          "laje": "L352",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 9,
+          "preco_m": 14.49,
+          "total": 302.45
+        },
+        {
+          "codigo": "VT353a",
+          "laje": "L353",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 19,
+          "preco_m": 14.49,
+          "total": 638.51
+        },
+        {
+          "codigo": "VT354a",
+          "laje": "L354",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 101,
+          "preco_m": 14.49,
+          "total": 3394.16
+        },
+        {
+          "codigo": "VT355a",
+          "laje": "L355",
+          "comp_m": 4.07,
+          "reforco": "1x Ø5,0 mm C=4,16 m",
+          "qtde": 14,
+          "preco_m": 14.47,
+          "total": 824.63
+        },
+        {
+          "codigo": "VT356a",
+          "laje": "L356",
+          "comp_m": 6.02,
+          "reforco": "1x Ø5,0 mm C=6,11 m",
+          "qtde": 4,
+          "preco_m": 14.47,
+          "total": 348.36
+        },
+        {
+          "codigo": "VT356b",
+          "laje": "L356",
+          "comp_m": 6.02,
+          "reforco": "2x Ø5,0 mm C=6,11 m",
+          "qtde": 9,
+          "preco_m": 15.25,
+          "total": 826.0
+        },
+        {
+          "codigo": "VT356c",
+          "laje": "L356",
+          "comp_m": 6.02,
+          "reforco": "Sem reforço adicional",
+          "qtde": 1,
+          "preco_m": 13.69,
+          "total": 82.4
+        },
+        {
+          "codigo": "VT357a",
+          "laje": "L357",
+          "comp_m": 4.12,
+          "reforco": "1x Ø5,0 mm C=4,21 m",
+          "qtde": 12,
+          "preco_m": 14.47,
+          "total": 715.5
+        },
+        {
+          "codigo": "VT358a",
+          "laje": "L358",
+          "comp_m": 3.82,
+          "reforco": "1x Ø5,0 mm C=3,91 m",
+          "qtde": 11,
+          "preco_m": 14.47,
+          "total": 608.17
+        },
+        {
+          "codigo": "VT359a",
+          "laje": "L359",
+          "comp_m": 3.82,
+          "reforco": "1x Ø5,0 mm C=3,91 m",
+          "qtde": 7,
+          "preco_m": 14.47,
+          "total": 387.02
+        },
+        {
+          "codigo": "VT360a",
+          "laje": "L360",
+          "comp_m": 4.06,
+          "reforco": "1x Ø10,0 mm C=4,25 m",
+          "qtde": 17,
+          "preco_m": 16.49,
+          "total": 1137.99
+        },
+        {
+          "codigo": "VT360b",
+          "laje": "L360",
+          "comp_m": 3.86,
+          "reforco": "1x Ø10,0 mm C=4,05 m",
+          "qtde": 4,
+          "preco_m": 16.49,
+          "total": 254.67
+        },
+        {
+          "codigo": "VT361a",
+          "laje": "L361",
+          "comp_m": 5.88,
+          "reforco": "2x Ø8,0 mm C=6,02 m",
+          "qtde": 8,
+          "preco_m": 17.36,
+          "total": 816.51
+        },
+        {
+          "codigo": "VT361b",
+          "laje": "L361",
+          "comp_m": 5.88,
+          "reforco": "2x Ø8,0 mm C=6,02 m",
+          "qtde": 10,
+          "preco_m": 17.36,
+          "total": 1020.64
+        },
+        {
+          "codigo": "VT362a",
+          "laje": "L362",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 9,
+          "preco_m": 14.49,
+          "total": 302.45
+        },
+        {
+          "codigo": "VT363a",
+          "laje": "L363",
+          "comp_m": 4.03,
+          "reforco": "1x Ø8,0 mm C=4,17 m",
+          "qtde": 10,
+          "preco_m": 15.54,
+          "total": 626.37
+        },
+        {
+          "codigo": "VT364a",
+          "laje": "L364",
+          "comp_m": 4.03,
+          "reforco": "1x Ø8,0 mm C=4,17 m",
+          "qtde": 10,
+          "preco_m": 15.54,
+          "total": 626.37
+        },
+        {
+          "codigo": "VT365a",
+          "laje": "L365",
+          "comp_m": 4.02,
+          "reforco": "Sem reforço adicional",
+          "qtde": 4,
+          "preco_m": 13.69,
+          "total": 220.11
+        },
+        {
+          "codigo": "VT365b",
+          "laje": "L365",
+          "comp_m": 4.02,
+          "reforco": "1x Ø5,0 mm C=4,11 m",
+          "qtde": 2,
+          "preco_m": 14.47,
+          "total": 116.36
+        },
+        {
+          "codigo": "VT366a",
+          "laje": "L366",
+          "comp_m": 4.06,
+          "reforco": "1x Ø10,0 mm C=4,25 m",
+          "qtde": 23,
+          "preco_m": 16.49,
+          "total": 1539.63
+        },
+        {
+          "codigo": "VT366b",
+          "laje": "L366",
+          "comp_m": 4.05,
+          "reforco": "1x Ø10,0 mm C=4,24 m",
+          "qtde": 1,
+          "preco_m": 16.49,
+          "total": 66.78
+        },
+        {
+          "codigo": "VT367a",
+          "laje": "L367",
+          "comp_m": 4.02,
+          "reforco": "1x Ø5,0 mm C=4,11 m",
+          "qtde": 5,
+          "preco_m": 14.47,
+          "total": 290.9
+        },
+        {
+          "codigo": "VT367b",
+          "laje": "L367",
+          "comp_m": 4.02,
+          "reforco": "2x Ø5,0 mm C=4,11 m",
+          "qtde": 7,
+          "preco_m": 15.26,
+          "total": 429.33
+        },
+        {
+          "codigo": "VT368a",
+          "laje": "L368",
+          "comp_m": 4.32,
+          "reforco": "1x Ø5,0 mm C=4,41 m",
+          "qtde": 12,
+          "preco_m": 14.47,
+          "total": 750.2
+        },
+        {
+          "codigo": "VT369a",
+          "laje": "L369",
+          "comp_m": 1.62,
+          "reforco": "1x Ø5,0 mm C=1,71 m",
+          "qtde": 17,
+          "preco_m": 14.5,
+          "total": 399.28
+        },
+        {
+          "codigo": "VT370a",
+          "laje": "L370",
+          "comp_m": 1.62,
+          "reforco": "1x Ø5,0 mm C=1,71 m",
+          "qtde": 5,
+          "preco_m": 14.5,
+          "total": 117.43
+        },
+        {
+          "codigo": "VT371a",
+          "laje": "L371",
+          "comp_m": 4.63,
+          "reforco": "1x Ø8,0 mm C=4,77 m",
+          "qtde": 16,
+          "preco_m": 15.53,
+          "total": 1150.8
+        },
+        {
+          "codigo": "VT372a",
+          "laje": "L372",
+          "comp_m": 4.57,
+          "reforco": "Sem reforço adicional",
+          "qtde": 2,
+          "preco_m": 13.69,
+          "total": 125.11
+        },
+        {
+          "codigo": "VT372b",
+          "laje": "L372",
+          "comp_m": 4.57,
+          "reforco": "1x Ø5,0 mm C=4,66 m",
+          "qtde": 6,
+          "preco_m": 14.47,
+          "total": 396.78
+        },
+        {
+          "codigo": "VT373a",
+          "laje": "L373",
+          "comp_m": 2.92,
+          "reforco": "1x Ø5,0 mm C=3,01 m",
+          "qtde": 17,
+          "preco_m": 14.48,
+          "total": 718.74
+        },
+        {
+          "codigo": "VT374a",
+          "laje": "L374",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 7,
+          "preco_m": 14.49,
+          "total": 235.24
+        },
+        {
+          "codigo": "VT375a",
+          "laje": "L375",
+          "comp_m": 2.92,
+          "reforco": "1x Ø5,0 mm C=3,01 m",
+          "qtde": 69,
+          "preco_m": 14.48,
+          "total": 2917.23
+        },
+        {
+          "codigo": "VT376a",
+          "laje": "L376",
+          "comp_m": 3.92,
+          "reforco": "1x Ø5,0 mm C=4,01 m",
+          "qtde": 13,
+          "preco_m": 14.47,
+          "total": 737.54
+        },
+        {
+          "codigo": "VT377a",
+          "laje": "L377",
+          "comp_m": 2.17,
+          "reforco": "1x Ø5,0 mm C=2,26 m",
+          "qtde": 13,
+          "preco_m": 14.49,
+          "total": 408.68
+        },
+        {
+          "codigo": "VT378a",
+          "laje": "L378",
+          "comp_m": 3.82,
+          "reforco": "1x Ø5,0 mm C=3,91 m",
+          "qtde": 13,
+          "preco_m": 14.47,
+          "total": 718.75
+        },
+        {
+          "codigo": "VT379a",
+          "laje": "L379",
+          "comp_m": 3.92,
+          "reforco": "1x Ø5,0 mm C=4,01 m",
+          "qtde": 13,
+          "preco_m": 14.47,
+          "total": 737.54
+        },
+        {
+          "codigo": "VT380a",
+          "laje": "L380",
+          "comp_m": 2.17,
+          "reforco": "1x Ø5,0 mm C=2,26 m",
+          "qtde": 13,
+          "preco_m": 14.49,
+          "total": 408.68
+        },
+        {
+          "codigo": "VT381a",
+          "laje": "L381",
+          "comp_m": 3.82,
+          "reforco": "1x Ø5,0 mm C=3,91 m",
+          "qtde": 13,
+          "preco_m": 14.47,
+          "total": 718.75
+        },
+        {
+          "codigo": "VT382a",
+          "laje": "L382",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 13,
+          "preco_m": 14.49,
+          "total": 436.87
+        },
+        {
+          "codigo": "VT383a",
+          "laje": "L383",
+          "comp_m": 3.12,
+          "reforco": "1x Ø5,0 mm C=3,21 m",
+          "qtde": 15,
+          "preco_m": 14.48,
+          "total": 677.55
+        },
+        {
+          "codigo": "VT384a",
+          "laje": "L384",
+          "comp_m": 3.47,
+          "reforco": "1x Ø5,0 mm C=3,56 m",
+          "qtde": 11,
+          "preco_m": 14.48,
+          "total": 552.52
+        },
+        {
+          "codigo": "VT385a",
+          "laje": "L385",
+          "comp_m": 3.47,
+          "reforco": "1x Ø5,0 mm C=3,56 m",
+          "qtde": 17,
+          "preco_m": 14.48,
+          "total": 853.9
+        },
+        {
+          "codigo": "VT386a",
+          "laje": "L386",
+          "comp_m": 5.87,
+          "reforco": "Sem reforço adicional",
+          "qtde": 3,
+          "preco_m": 13.69,
+          "total": 241.05
+        },
+        {
+          "codigo": "VT386b",
+          "laje": "L386",
+          "comp_m": 5.87,
+          "reforco": "1x Ø5,0 mm C=5,96 m",
+          "qtde": 5,
+          "preco_m": 14.47,
+          "total": 424.61
+        },
+        {
+          "codigo": "VT387a",
+          "laje": "L387",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 5,
+          "preco_m": 14.49,
+          "total": 168.03
+        },
+        {
+          "codigo": "VT388a",
+          "laje": "L388",
+          "comp_m": 4.32,
+          "reforco": "1x Ø5,0 mm C=4,41 m",
+          "qtde": 14,
+          "preco_m": 14.47,
+          "total": 875.23
+        },
+        {
+          "codigo": "VT389a",
+          "laje": "L389",
+          "comp_m": 6.02,
+          "reforco": "Sem reforço adicional",
+          "qtde": 2,
+          "preco_m": 13.69,
+          "total": 164.81
+        },
+        {
+          "codigo": "VT389b",
+          "laje": "L389",
+          "comp_m": 6.02,
+          "reforco": "1x Ø5,0 mm C=6,11 m",
+          "qtde": 4,
+          "preco_m": 14.47,
+          "total": 348.36
+        },
+        {
+          "codigo": "VT389c",
+          "laje": "L389",
+          "comp_m": 6.02,
+          "reforco": "2x Ø5,0 mm C=6,11 m",
+          "qtde": 8,
+          "preco_m": 15.25,
+          "total": 734.22
+        },
+        {
+          "codigo": "VT390a",
+          "laje": "L390",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 3,
+          "preco_m": 14.49,
+          "total": 100.82
+        },
+        {
+          "codigo": "VT391a",
+          "laje": "L391",
+          "comp_m": 4.06,
+          "reforco": "1x Ø10,0 mm C=4,25 m",
+          "qtde": 10,
+          "preco_m": 16.49,
+          "total": 669.4
+        },
+        {
+          "codigo": "VT392a",
+          "laje": "L392",
+          "comp_m": 1.77,
+          "reforco": "1x Ø5,0 mm C=1,86 m",
+          "qtde": 10,
+          "preco_m": 14.49,
+          "total": 256.55
+        },
+        {
+          "codigo": "VT393a",
+          "laje": "L393",
+          "comp_m": 3.37,
+          "reforco": "2x Ø5,0 mm C=3,46 m",
+          "qtde": 10,
+          "preco_m": 15.26,
+          "total": 514.38
+        },
+        {
+          "codigo": "VT394a",
+          "laje": "L394",
+          "comp_m": 4.48,
+          "reforco": "2x Ø8,0 mm C=4,62 m",
+          "qtde": 10,
+          "preco_m": 17.38,
+          "total": 778.82
+        },
+        {
+          "codigo": "VT395a",
+          "laje": "L395",
+          "comp_m": 3.33,
+          "reforco": "1x Ø8,0 mm C=3,47 m",
+          "qtde": 10,
+          "preco_m": 15.56,
+          "total": 518.0
+        },
+        {
+          "codigo": "VT396a",
+          "laje": "L396",
+          "comp_m": 4.3,
+          "reforco": "1x Ø12,5 mm C=4,52 m",
+          "qtde": 13,
+          "preco_m": 18.1,
+          "total": 1011.94
+        },
+        {
+          "codigo": "VT397a",
+          "laje": "L397",
+          "comp_m": 4.29,
+          "reforco": "1x Ø12,5 mm C=4,51 m",
+          "qtde": 14,
+          "preco_m": 18.1,
+          "total": 1087.28
+        },
+        {
+          "codigo": "VT398a",
+          "laje": "L398",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 57,
+          "preco_m": 14.49,
+          "total": 1915.52
+        },
+        {
+          "codigo": "VT399a",
+          "laje": "L399",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 11,
+          "preco_m": 14.49,
+          "total": 369.66
+        },
+        {
+          "codigo": "VT400a",
+          "laje": "L400",
+          "comp_m": 2.82,
+          "reforco": "1x Ø5,0 mm C=2,91 m",
+          "qtde": 9,
+          "preco_m": 14.48,
+          "total": 367.5
+        },
+        {
+          "codigo": "VT400b",
+          "laje": "L400",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 14,
+          "preco_m": 14.49,
+          "total": 470.48
+        },
+        {
+          "codigo": "VT401a",
+          "laje": "L401",
+          "comp_m": 2.82,
+          "reforco": "1x Ø5,0 mm C=2,91 m",
+          "qtde": 13,
+          "preco_m": 14.48,
+          "total": 530.83
+        },
+        {
+          "codigo": "VT402a",
+          "laje": "L402",
+          "comp_m": 3.22,
+          "reforco": "1x Ø5,0 mm C=3,31 m",
+          "qtde": 9,
+          "preco_m": 14.48,
+          "total": 419.54
+        },
+        {
+          "codigo": "VT403a",
+          "laje": "L403",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 25,
+          "preco_m": 14.49,
+          "total": 840.14
+        },
+        {
+          "codigo": "VT404a",
+          "laje": "L404",
+          "comp_m": 3.32,
+          "reforco": "1x Ø5,0 mm C=3,41 m",
+          "qtde": 10,
+          "preco_m": 14.48,
+          "total": 480.61
+        },
+        {
+          "codigo": "VT405a",
+          "laje": "L405",
+          "comp_m": 3.92,
+          "reforco": "1x Ø5,0 mm C=4,01 m",
+          "qtde": 13,
+          "preco_m": 14.47,
+          "total": 737.54
+        },
+        {
+          "codigo": "VT406a",
+          "laje": "L406",
+          "comp_m": 2.17,
+          "reforco": "1x Ø5,0 mm C=2,26 m",
+          "qtde": 13,
+          "preco_m": 14.49,
+          "total": 408.68
+        },
+        {
+          "codigo": "VT407a",
+          "laje": "L407",
+          "comp_m": 3.82,
+          "reforco": "1x Ø5,0 mm C=3,91 m",
+          "qtde": 13,
+          "preco_m": 14.47,
+          "total": 718.75
+        },
+        {
+          "codigo": "VT408a",
+          "laje": "L408",
+          "comp_m": 5.42,
+          "reforco": "1x Ø6,3 mm C=5,53 m",
+          "qtde": 6,
+          "preco_m": 14.81,
+          "total": 481.74
+        },
+        {
+          "codigo": "VT408b",
+          "laje": "L408",
+          "comp_m": 5.42,
+          "reforco": "2x Ø6,3 mm C=5,53 m",
+          "qtde": 9,
+          "preco_m": 15.94,
+          "total": 777.51
+        },
+        {
+          "codigo": "VT409a",
+          "laje": "L409",
+          "comp_m": 5.42,
+          "reforco": "1x Ø6,3 mm C=5,53 m",
+          "qtde": 7,
+          "preco_m": 14.81,
+          "total": 562.03
+        },
+        {
+          "codigo": "VT409b",
+          "laje": "L409",
+          "comp_m": 5.42,
+          "reforco": "2x Ø6,3 mm C=5,53 m",
+          "qtde": 9,
+          "preco_m": 15.94,
+          "total": 777.51
+        },
+        {
+          "codigo": "VT410a",
+          "laje": "L410",
+          "comp_m": 4.52,
+          "reforco": "Sem reforço adicional",
+          "qtde": 8,
+          "preco_m": 13.69,
+          "total": 494.97
+        },
+        {
+          "codigo": "VT411a",
+          "laje": "L411",
+          "comp_m": 3.48,
+          "reforco": "1x Ø8,0 mm C=3,62 m",
+          "qtde": 19,
+          "preco_m": 15.55,
+          "total": 1028.33
+        },
+        {
+          "codigo": "VT412a",
+          "laje": "L412",
+          "comp_m": 5.43,
+          "reforco": "2x Ø8,0 mm C=5,57 m",
+          "qtde": 8,
+          "preco_m": 17.36,
+          "total": 754.33
+        },
+        {
+          "codigo": "VT412b",
+          "laje": "L412",
+          "comp_m": 5.43,
+          "reforco": "2x Ø8,0 mm C=5,57 m",
+          "qtde": 9,
+          "preco_m": 17.36,
+          "total": 848.62
+        },
+        {
+          "codigo": "VT412c",
+          "laje": "L412",
+          "comp_m": 1.84,
+          "reforco": "2x Ø8,0 mm C=1,98 m",
+          "qtde": 1,
+          "preco_m": 17.55,
+          "total": 32.28
+        },
+        {
+          "codigo": "VT413a",
+          "laje": "L413",
+          "comp_m": 5.37,
+          "reforco": "1x Ø5,0 mm C=5,46 m",
+          "qtde": 2,
+          "preco_m": 14.47,
+          "total": 155.39
+        },
+        {
+          "codigo": "VT414a",
+          "laje": "L414",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 9,
+          "preco_m": 14.49,
+          "total": 302.45
+        },
+        {
+          "codigo": "VT415a",
+          "laje": "L415",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 3,
+          "preco_m": 14.49,
+          "total": 100.82
+        },
+        {
+          "codigo": "VT416a",
+          "laje": "L416",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 43,
+          "preco_m": 14.49,
+          "total": 1445.04
+        },
+        {
+          "codigo": "VT417a",
+          "laje": "L417",
+          "comp_m": 5.41,
+          "reforco": "1x Ø10,0 mm C=5,60 m",
+          "qtde": 6,
+          "preco_m": 16.46,
+          "total": 534.18
+        },
+        {
+          "codigo": "VT417b",
+          "laje": "L417",
+          "comp_m": 5.41,
+          "reforco": "2x Ø10,0 mm C=5,60 m",
+          "qtde": 8,
+          "preco_m": 19.22,
+          "total": 832.05
+        },
+        {
+          "codigo": "VT418a",
+          "laje": "L418",
+          "comp_m": 3.22,
+          "reforco": "1x Ø5,0 mm C=3,31 m",
+          "qtde": 15,
+          "preco_m": 14.48,
+          "total": 699.23
+        },
+        {
+          "codigo": "VT419a",
+          "laje": "L419",
+          "comp_m": 4.33,
+          "reforco": "1x Ø8,0 mm C=4,47 m",
+          "qtde": 18,
+          "preco_m": 15.54,
+          "total": 1211.05
+        },
+        {
+          "codigo": "VT420a",
+          "laje": "L420",
+          "comp_m": 5.02,
+          "reforco": "1x Ø5,0 mm C=5,11 m",
+          "qtde": 8,
+          "preco_m": 14.47,
+          "total": 581.08
+        },
+        {
+          "codigo": "VT420b",
+          "laje": "L420",
+          "comp_m": 5.02,
+          "reforco": "2x Ø5,0 mm C=5,11 m",
+          "qtde": 10,
+          "preco_m": 15.25,
+          "total": 765.55
+        },
+        {
+          "codigo": "VT421a",
+          "laje": "L421",
+          "comp_m": 4.12,
+          "reforco": "1x Ø5,0 mm C=4,21 m",
+          "qtde": 10,
+          "preco_m": 14.47,
+          "total": 596.25
+        },
+        {
+          "codigo": "VT422a",
+          "laje": "L422",
+          "comp_m": 4.29,
+          "reforco": "1x Ø12,5 mm C=4,51 m",
+          "qtde": 14,
+          "preco_m": 18.1,
+          "total": 1087.28
+        },
+        {
+          "codigo": "VT423a",
+          "laje": "L423",
+          "comp_m": 4.23,
+          "reforco": "1x Ø8,0 mm C=4,37 m",
+          "qtde": 6,
+          "preco_m": 15.54,
+          "total": 394.4
+        },
+        {
+          "codigo": "VT423b",
+          "laje": "L423",
+          "comp_m": 4.23,
+          "reforco": "2x Ø8,0 mm C=4,37 m",
+          "qtde": 8,
+          "preco_m": 17.39,
+          "total": 588.51
+        },
+        {
+          "codigo": "VT424a",
+          "laje": "L424",
+          "comp_m": 4.23,
+          "reforco": "2x Ø8,0 mm C=4,37 m",
+          "qtde": 10,
+          "preco_m": 17.39,
+          "total": 735.64
+        },
+        {
+          "codigo": "VT425a",
+          "laje": "L425",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 11,
+          "preco_m": 14.49,
+          "total": 369.66
+        },
+        {
+          "codigo": "VT426a",
+          "laje": "L426",
+          "comp_m": 2.52,
+          "reforco": "1x Ø5,0 mm C=2,61 m",
+          "qtde": 19,
+          "preco_m": 14.48,
+          "total": 693.44
+        },
+        {
+          "codigo": "VT427a",
+          "laje": "L427",
+          "comp_m": 2.33,
+          "reforco": "1x Ø5,0 mm C=2,42 m",
+          "qtde": 6,
+          "preco_m": 14.49,
+          "total": 202.5
+        },
+        {
+          "codigo": "VT428a",
+          "laje": "L428",
+          "comp_m": 4.52,
+          "reforco": "Sem reforço adicional",
+          "qtde": 4,
+          "preco_m": 13.69,
+          "total": 247.48
+        },
+        {
+          "codigo": "VT429a",
+          "laje": "L429",
+          "comp_m": 2.52,
+          "reforco": "1x Ø5,0 mm C=2,61 m",
+          "qtde": 5,
+          "preco_m": 14.48,
+          "total": 182.48
+        },
+        {
+          "codigo": "VT430a",
+          "laje": "L430",
+          "comp_m": 3.96,
+          "reforco": "1x Ø10,0 mm C=4,15 m",
+          "qtde": 5,
+          "preco_m": 16.49,
+          "total": 326.52
+        }
+      ]
+    },
+    {
+      "id": "est28",
+      "codigo": "EST28",
+      "proposta": "MSE-2026-078",
+      "projeto": "MS_MATERNIDADE_EST_28_R00",
+      "pecas": 928,
+      "metros": 2925.08,
+      "valor_bruto": 72807.19,
+      "preco_medio_m": 24.89,
+      "itens": [
+        {
+          "codigo": "VT431a",
+          "laje": "L431",
+          "comp_m": 1.92,
+          "reforco": "1x Ø5,0 mm C=2,01 m",
+          "qtde": 11,
+          "preco_m": 22.92,
+          "total": 484.11
+        },
+        {
+          "codigo": "VT432a",
+          "laje": "L432",
+          "comp_m": 2.12,
+          "reforco": "1x Ø5,0 mm C=2,21 m",
+          "qtde": 7,
+          "preco_m": 22.92,
+          "total": 340.1
+        },
+        {
+          "codigo": "VT433a",
+          "laje": "L433",
+          "comp_m": 2.12,
+          "reforco": "1x Ø5,0 mm C=2,21 m",
+          "qtde": 5,
+          "preco_m": 22.92,
+          "total": 242.93
+        },
+        {
+          "codigo": "VT434a",
+          "laje": "L434",
+          "comp_m": 4.32,
+          "reforco": "1x Ø5,0 mm C=4,41 m",
+          "qtde": 14,
+          "preco_m": 22.9,
+          "total": 1384.78
+        },
+        {
+          "codigo": "VT435a",
+          "laje": "L435",
+          "comp_m": 2.42,
+          "reforco": "1x Ø5,0 mm C=2,51 m",
+          "qtde": 9,
+          "preco_m": 22.91,
+          "total": 499.03
+        },
+        {
+          "codigo": "VT436a",
+          "laje": "L436",
+          "comp_m": 3.93,
+          "reforco": "2x Ø8,0 mm C=4,07 m",
+          "qtde": 7,
+          "preco_m": 26.65,
+          "total": 733.28
+        },
+        {
+          "codigo": "VT437a",
+          "laje": "L437",
+          "comp_m": 2.78,
+          "reforco": "1x Ø10,0 mm C=2,97 m",
+          "qtde": 11,
+          "preco_m": 25.55,
+          "total": 781.49
+        },
+        {
+          "codigo": "VT438a",
+          "laje": "L438",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 12,
+          "preco_m": 22.91,
+          "total": 637.93
+        },
+        {
+          "codigo": "VT438b",
+          "laje": "L438",
+          "comp_m": 2.72,
+          "reforco": "1x Ø5,0 mm C=2,81 m",
+          "qtde": 13,
+          "preco_m": 22.91,
+          "total": 810.04
+        },
+        {
+          "codigo": "VT439a",
+          "laje": "L439",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 25,
+          "preco_m": 22.91,
+          "total": 1329.01
+        },
+        {
+          "codigo": "VT440a",
+          "laje": "L440",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 11,
+          "preco_m": 22.91,
+          "total": 584.77
+        },
+        {
+          "codigo": "VT441a",
+          "laje": "L441",
+          "comp_m": 4.76,
+          "reforco": "2x Ø10,0 mm C=4,95 m",
+          "qtde": 6,
+          "preco_m": 29.02,
+          "total": 828.71
+        },
+        {
+          "codigo": "VT441b",
+          "laje": "L441",
+          "comp_m": 4.36,
+          "reforco": "2x Ø10,0 mm C=4,55 m",
+          "qtde": 20,
+          "preco_m": 29.04,
+          "total": 2532.43
+        },
+        {
+          "codigo": "VT442a",
+          "laje": "L442",
+          "comp_m": 3.23,
+          "reforco": "1x Ø8,0 mm C=3,37 m",
+          "qtde": 11,
+          "preco_m": 24.3,
+          "total": 863.21
+        },
+        {
+          "codigo": "VT443a",
+          "laje": "L443",
+          "comp_m": 2.42,
+          "reforco": "1x Ø5,0 mm C=2,51 m",
+          "qtde": 35,
+          "preco_m": 22.91,
+          "total": 1940.68
+        },
+        {
+          "codigo": "VT444a",
+          "laje": "L444",
+          "comp_m": 3.33,
+          "reforco": "1x Ø8,0 mm C=3,47 m",
+          "qtde": 17,
+          "preco_m": 24.29,
+          "total": 1375.19
+        },
+        {
+          "codigo": "VT445a",
+          "laje": "L445",
+          "comp_m": 3.4,
+          "reforco": "1x Ø12,5 mm C=3,62 m",
+          "qtde": 17,
+          "preco_m": 27.54,
+          "total": 1591.86
+        },
+        {
+          "codigo": "VT446a",
+          "laje": "L446",
+          "comp_m": 4.85,
+          "reforco": "1x Ø12,5 mm C=5,07 m",
+          "qtde": 12,
+          "preco_m": 27.44,
+          "total": 1596.91
+        },
+        {
+          "codigo": "VT447a",
+          "laje": "L447",
+          "comp_m": 5.01,
+          "reforco": "1x Ø16,0 mm C=5,30 m",
+          "qtde": 22,
+          "preco_m": 31.13,
+          "total": 3431.63
+        },
+        {
+          "codigo": "VT448a",
+          "laje": "L448",
+          "comp_m": 1.52,
+          "reforco": "1x Ø5,0 mm C=1,61 m",
+          "qtde": 5,
+          "preco_m": 22.93,
+          "total": 174.3
+        },
+        {
+          "codigo": "VT449a",
+          "laje": "L449",
+          "comp_m": 2.22,
+          "reforco": "1x Ø5,0 mm C=2,31 m",
+          "qtde": 13,
+          "preco_m": 22.92,
+          "total": 661.35
+        },
+        {
+          "codigo": "VT450a",
+          "laje": "L450",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 15,
+          "preco_m": 22.91,
+          "total": 797.41
+        },
+        {
+          "codigo": "VT450b",
+          "laje": "L450",
+          "comp_m": 2.22,
+          "reforco": "1x Ø5,0 mm C=2,31 m",
+          "qtde": 6,
+          "preco_m": 22.92,
+          "total": 305.24
+        },
+        {
+          "codigo": "VT451a",
+          "laje": "L451",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 9,
+          "preco_m": 22.91,
+          "total": 478.44
+        },
+        {
+          "codigo": "VT452a",
+          "laje": "L452",
+          "comp_m": 3.0,
+          "reforco": "2x Ø8,0 mm C=3,14 m",
+          "qtde": 15,
+          "preco_m": 26.71,
+          "total": 1201.75
+        },
+        {
+          "codigo": "VT452b",
+          "laje": "L452",
+          "comp_m": 3.08,
+          "reforco": "1x Ø8,0 mm C=3,22 m",
+          "qtde": 1,
+          "preco_m": 24.3,
+          "total": 74.84
+        },
+        {
+          "codigo": "VT452c",
+          "laje": "L452",
+          "comp_m": 3.0,
+          "reforco": "1x Ø8,0 mm C=3,14 m",
+          "qtde": 5,
+          "preco_m": 24.3,
+          "total": 364.54
+        },
+        {
+          "codigo": "VT453a",
+          "laje": "L453",
+          "comp_m": 4.16,
+          "reforco": "1x Ø10,0 mm C=4,35 m",
+          "qtde": 10,
+          "preco_m": 25.48,
+          "total": 1059.89
+        },
+        {
+          "codigo": "VT454a",
+          "laje": "L454",
+          "comp_m": 4.65,
+          "reforco": "1x Ø12,5 mm C=4,87 m",
+          "qtde": 17,
+          "preco_m": 27.45,
+          "total": 2169.81
+        },
+        {
+          "codigo": "VT455a",
+          "laje": "L455",
+          "comp_m": 4.68,
+          "reforco": "1x Ø8,0 mm C=4,82 m",
+          "qtde": 2,
+          "preco_m": 24.27,
+          "total": 227.12
+        },
+        {
+          "codigo": "VT455b",
+          "laje": "L455",
+          "comp_m": 4.58,
+          "reforco": "2x Ø8,0 mm C=4,72 m",
+          "qtde": 12,
+          "preco_m": 26.63,
+          "total": 1463.67
+        },
+        {
+          "codigo": "VT455c",
+          "laje": "L455",
+          "comp_m": 4.58,
+          "reforco": "1x Ø8,0 mm C=4,72 m",
+          "qtde": 2,
+          "preco_m": 24.27,
+          "total": 222.27
+        },
+        {
+          "codigo": "VT456a",
+          "laje": "L456",
+          "comp_m": 0.52,
+          "reforco": "1x Ø5,0 mm C=0,61 m",
+          "qtde": 8,
+          "preco_m": 23.04,
+          "total": 95.87
+        },
+        {
+          "codigo": "VT457a",
+          "laje": "L457",
+          "comp_m": 3.42,
+          "reforco": "1x Ø5,0 mm C=3,51 m",
+          "qtde": 25,
+          "preco_m": 22.9,
+          "total": 1958.11
+        },
+        {
+          "codigo": "VT458a",
+          "laje": "L458",
+          "comp_m": 4.22,
+          "reforco": "1x Ø5,0 mm C=4,31 m",
+          "qtde": 16,
+          "preco_m": 22.9,
+          "total": 1546.0
+        },
+        {
+          "codigo": "VT458b",
+          "laje": "L458",
+          "comp_m": 3.82,
+          "reforco": "1x Ø5,0 mm C=3,91 m",
+          "qtde": 8,
+          "preco_m": 22.9,
+          "total": 699.8
+        },
+        {
+          "codigo": "VT459a",
+          "laje": "L459",
+          "comp_m": 3.52,
+          "reforco": "2x Ø6,3 mm C=3,63 m",
+          "qtde": 19,
+          "preco_m": 24.84,
+          "total": 1661.53
+        },
+        {
+          "codigo": "VT460a",
+          "laje": "L460",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 14,
+          "preco_m": 22.91,
+          "total": 744.25
+        },
+        {
+          "codigo": "VT461a",
+          "laje": "L461",
+          "comp_m": 5.9,
+          "reforco": "2x Ø12,5 mm C=6,12 m",
+          "qtde": 18,
+          "preco_m": 32.89,
+          "total": 3493.0
+        },
+        {
+          "codigo": "VT462a",
+          "laje": "L462",
+          "comp_m": 1.97,
+          "reforco": "1x Ø5,0 mm C=2,06 m",
+          "qtde": 19,
+          "preco_m": 22.92,
+          "total": 857.92
+        },
+        {
+          "codigo": "VT463a",
+          "laje": "L463",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 7,
+          "preco_m": 22.91,
+          "total": 372.12
+        },
+        {
+          "codigo": "VT464a",
+          "laje": "L464",
+          "comp_m": 2.62,
+          "reforco": "1x Ø5,0 mm C=2,71 m",
+          "qtde": 11,
+          "preco_m": 22.91,
+          "total": 660.26
+        },
+        {
+          "codigo": "VT465a",
+          "laje": "L465",
+          "comp_m": 2.62,
+          "reforco": "1x Ø5,0 mm C=2,71 m",
+          "qtde": 5,
+          "preco_m": 22.91,
+          "total": 300.11
+        },
+        {
+          "codigo": "VT466a",
+          "laje": "L466",
+          "comp_m": 2.62,
+          "reforco": "1x Ø5,0 mm C=2,71 m",
+          "qtde": 14,
+          "preco_m": 22.91,
+          "total": 840.33
+        },
+        {
+          "codigo": "VT466b",
+          "laje": "L466",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 1,
+          "preco_m": 22.91,
+          "total": 53.16
+        },
+        {
+          "codigo": "VT467a",
+          "laje": "L467",
+          "comp_m": 4.6,
+          "reforco": "1x Ø12,5 mm C=4,82 m",
+          "qtde": 13,
+          "preco_m": 27.45,
+          "total": 1641.59
+        },
+        {
+          "codigo": "VT467b",
+          "laje": "L467",
+          "comp_m": 2.9,
+          "reforco": "1x Ø12,5 mm C=3,12 m",
+          "qtde": 16,
+          "preco_m": 27.6,
+          "total": 1280.63
+        },
+        {
+          "codigo": "VT468a",
+          "laje": "L468",
+          "comp_m": 0.52,
+          "reforco": "1x Ø5,0 mm C=0,61 m",
+          "qtde": 5,
+          "preco_m": 23.04,
+          "total": 59.92
+        },
+        {
+          "codigo": "VT469a",
+          "laje": "L469",
+          "comp_m": 2.32,
+          "reforco": "1x Ø5,0 mm C=2,41 m",
+          "qtde": 23,
+          "preco_m": 22.91,
+          "total": 1222.69
+        },
+        {
+          "codigo": "VT470a",
+          "laje": "L470",
+          "comp_m": 4.46,
+          "reforco": "1x Ø10,0 mm C=4,65 m",
+          "qtde": 6,
+          "preco_m": 25.47,
+          "total": 681.51
+        },
+        {
+          "codigo": "VT470b",
+          "laje": "L470",
+          "comp_m": 4.46,
+          "reforco": "2x Ø10,0 mm C=4,65 m",
+          "qtde": 10,
+          "preco_m": 29.04,
+          "total": 1294.96
+        },
+        {
+          "codigo": "VT471a",
+          "laje": "L471",
+          "comp_m": 2.07,
+          "reforco": "1x Ø5,0 mm C=2,16 m",
+          "qtde": 19,
+          "preco_m": 22.92,
+          "total": 901.39
+        },
+        {
+          "codigo": "VT472a",
+          "laje": "L472",
+          "comp_m": 2.62,
+          "reforco": "1x Ø5,0 mm C=2,71 m",
+          "qtde": 13,
+          "preco_m": 22.91,
+          "total": 780.31
+        },
+        {
+          "codigo": "VT473a",
+          "laje": "L473",
+          "comp_m": 2.62,
+          "reforco": "1x Ø5,0 mm C=2,71 m",
+          "qtde": 17,
+          "preco_m": 22.91,
+          "total": 1020.4
+        },
+        {
+          "codigo": "VT474a",
+          "laje": "L474",
+          "comp_m": 2.62,
+          "reforco": "1x Ø5,0 mm C=2,71 m",
+          "qtde": 9,
+          "preco_m": 22.91,
+          "total": 540.21
+        },
+        {
+          "codigo": "VT475a",
+          "laje": "L475",
+          "comp_m": 3.62,
+          "reforco": "1x Ø5,0 mm C=3,71 m",
+          "qtde": 14,
+          "preco_m": 22.9,
+          "total": 1160.59
+        },
+        {
+          "codigo": "VT475b",
+          "laje": "L475",
+          "comp_m": 1.72,
+          "reforco": "1x Ø5,0 mm C=1,81 m",
+          "qtde": 7,
+          "preco_m": 22.93,
+          "total": 276.04
+        },
+        {
+          "codigo": "VT476a",
+          "laje": "L476",
+          "comp_m": 2.77,
+          "reforco": "1x Ø5,0 mm C=2,86 m",
+          "qtde": 13,
+          "preco_m": 22.91,
+          "total": 824.91
+        },
+        {
+          "codigo": "VT477a",
+          "laje": "L477",
+          "comp_m": 0.52,
+          "reforco": "1x Ø5,0 mm C=0,61 m",
+          "qtde": 10,
+          "preco_m": 23.04,
+          "total": 119.83
+        },
+        {
+          "codigo": "VT478a",
+          "laje": "L478",
+          "comp_m": 4.12,
+          "reforco": "1x Ø5,0 mm C=4,21 m",
+          "qtde": 24,
+          "preco_m": 22.9,
+          "total": 2264.1
+        },
+        {
+          "codigo": "VT479a",
+          "laje": "L479",
+          "comp_m": 4.78,
+          "reforco": "2x Ø8,0 mm C=4,92 m",
+          "qtde": 8,
+          "preco_m": 26.62,
+          "total": 1018.17
+        },
+        {
+          "codigo": "VT479b",
+          "laje": "L479",
+          "comp_m": 4.78,
+          "reforco": "2x Ø8,0 mm C=4,92 m",
+          "qtde": 16,
+          "preco_m": 26.62,
+          "total": 2036.33
+        },
+        {
+          "codigo": "VT480a",
+          "laje": "L480",
+          "comp_m": 3.57,
+          "reforco": "1x Ø5,0 mm C=3,66 m",
+          "qtde": 15,
+          "preco_m": 22.9,
+          "total": 1226.34
+        },
+        {
+          "codigo": "VT481a",
+          "laje": "L481",
+          "comp_m": 3.52,
+          "reforco": "1x Ø5,0 mm C=3,61 m",
+          "qtde": 15,
+          "preco_m": 22.9,
+          "total": 1209.18
+        },
+        {
+          "codigo": "VT482a",
+          "laje": "L482",
+          "comp_m": 3.47,
+          "reforco": "1x Ø5,0 mm C=3,56 m",
+          "qtde": 15,
+          "preco_m": 22.9,
+          "total": 1192.02
+        },
+        {
+          "codigo": "VT483a",
+          "laje": "L483",
+          "comp_m": 3.52,
+          "reforco": "1x Ø5,0 mm C=3,61 m",
+          "qtde": 15,
+          "preco_m": 22.9,
+          "total": 1209.18
+        },
+        {
+          "codigo": "VT484a",
+          "laje": "L484",
+          "comp_m": 1.97,
+          "reforco": "1x Ø5,0 mm C=2,06 m",
+          "qtde": 5,
+          "preco_m": 22.92,
+          "total": 225.77
+        },
+        {
+          "codigo": "VT485a",
+          "laje": "L485",
+          "comp_m": 2.97,
+          "reforco": "1x Ø5,0 mm C=3,06 m",
+          "qtde": 15,
+          "preco_m": 22.91,
+          "total": 1020.45
+        },
+        {
+          "codigo": "VT486a",
+          "laje": "L486",
+          "comp_m": 3.07,
+          "reforco": "1x Ø5,0 mm C=3,16 m",
+          "qtde": 15,
+          "preco_m": 22.91,
+          "total": 1054.76
+        },
+        {
+          "codigo": "VT487a",
+          "laje": "L487",
+          "comp_m": 3.02,
+          "reforco": "1x Ø5,0 mm C=3,11 m",
+          "qtde": 9,
+          "preco_m": 22.91,
+          "total": 622.56
+        },
+        {
+          "codigo": "VT488a",
+          "laje": "L488",
+          "comp_m": 3.02,
+          "reforco": "1x Ø5,0 mm C=3,11 m",
+          "qtde": 11,
+          "preco_m": 22.91,
+          "total": 760.91
+        },
+        {
+          "codigo": "VT489a",
+          "laje": "L489",
+          "comp_m": 3.22,
+          "reforco": "1x Ø5,0 mm C=3,31 m",
+          "qtde": 9,
+          "preco_m": 22.9,
+          "total": 663.74
+        },
+        {
+          "codigo": "VT490a",
+          "laje": "L490",
+          "comp_m": 3.22,
+          "reforco": "1x Ø5,0 mm C=3,31 m",
+          "qtde": 11,
+          "preco_m": 22.9,
+          "total": 811.24
+        },
+        {
+          "codigo": "VT491a",
+          "laje": "L491",
+          "comp_m": 2.62,
+          "reforco": "1x Ø5,0 mm C=2,71 m",
+          "qtde": 7,
+          "preco_m": 22.91,
+          "total": 420.16
+        },
+        {
+          "codigo": "VT492a",
+          "laje": "L492",
+          "comp_m": 2.62,
+          "reforco": "1x Ø5,0 mm C=2,71 m",
+          "qtde": 7,
+          "preco_m": 22.91,
+          "total": 420.16
+        },
+        {
+          "codigo": "VT493a",
+          "laje": "L493",
+          "comp_m": 1.17,
+          "reforco": "1x Ø5,0 mm C=1,26 m",
+          "qtde": 7,
+          "preco_m": 22.95,
+          "total": 187.97
+        },
+        {
+          "codigo": "VT494a",
+          "laje": "L494",
+          "comp_m": 1.17,
+          "reforco": "1x Ø5,0 mm C=1,26 m",
+          "qtde": 7,
+          "preco_m": 22.95,
+          "total": 187.99
+        }
+      ]
+    }
+  ]
+}
