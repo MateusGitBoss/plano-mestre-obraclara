@@ -293,11 +293,6 @@ function loadState(cb){
 // FORMATAÇÃO
 // ============================================================================
 var fmt   = function(v){ return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v||0); };
-var fmtK  = function(v){
-  var a = Math.abs(v||0);
-  if(a >= 1000) return (v<0?'-':'')+'R$ '+new Intl.NumberFormat('pt-BR',{maximumFractionDigits:0}).format(a);
-  return fmt(v);
-};
 var fmtN  = function(v,d){ return new Intl.NumberFormat('pt-BR',{minimumFractionDigits:d||0,maximumFractionDigits:d||0}).format(v||0); };
 var fmtPct= function(v,d){ return fmtN(v,d!=null?d:0)+'%'; };
 var fmtDate = function(d){
