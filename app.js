@@ -1,109 +1,80 @@
 // ============================================================================
 // ObraClara — Maternidade Porte I
-// App de gestão de uma obra: ritmo, cronograma, financeiro, caixa, restrições.
+// Controle financeiro da obra: o que entra, o que sai, e se está sobrando.
 // ============================================================================
 
-// === CONTRATO (fonte: 3 propostas MSE de 14/07/2026 + parâmetros do Maurício) ===
+// === CONTRATO (3 propostas MSE de 14/07/2026 + números passados pelo Maurício) ===
 var CONTRATO = {
   cliente: 'Sr. Rafael',
   obra: 'Maternidade Porte I',
-  fornecedor: 'MSE — Maranhão Soluções de Engenharia',
   metros: 16639.19,
   pecas: 4567,
   bruto: 277341.79,
   descontoPct: 18,
   entradaPct: 50,
-  prazoMeses: 3,          // pedido de prazo na negociação
+  prazoMeses: 3,
   metaMDia: 300,
   diasUteisMes: 22,
-  concretoTotal: 52156.00, // já com perda de 10%, ferragem 100% do contratante
-  custosFixos: [
-    {id:'mao_obra',    nome:'Mão de obra da fábrica', valor:21760, grupo:'direto'},
-    {id:'patio',       nome:'Pátio da fábrica',        valor:3000,  grupo:'direto'},
-    {id:'escritorio1', nome:'Salário escritório',      valor:16000, grupo:'estrutura'},
-    {id:'divida',      nome:'Dívida Mateus',           valor:5000,  grupo:'estrutura'},
-    {id:'escritorio2', nome:'Escritório',              valor:4000,  grupo:'estrutura'},
+  concretoTotal: 52156.00,   // já com perda de 10%; ferragem é 100% do contratante
+
+  // As contas que se repetem todo mês. O app gera essas 5 sozinho.
+  contasFixas: [
+    {id:'mao_obra',    nome:'Mão de obra da fábrica', valor:21760, grupo:'obra'},
+    {id:'patio',       nome:'Pátio da fábrica',       valor:3000,  grupo:'obra'},
+    {id:'salario',     nome:'Salário escritório',     valor:16000, grupo:'estrutura'},
+    {id:'divida',      nome:'Dívida Mateus',          valor:5000,  grupo:'estrutura'},
+    {id:'escritorio',  nome:'Escritório',             valor:4000,  grupo:'estrutura'},
   ],
+
   lotes: [
-    {id:'est26', codigo:'EST 26', proposta:'MSE-2026-076', pecas:1874, metros:7381.12, valorBruto:107222.38},
-    {id:'est27', codigo:'EST 27', proposta:'MSE-2026-077', pecas:1765, metros:6332.99, valorBruto:97312.22},
-    {id:'est28', codigo:'EST 28', proposta:'MSE-2026-078', pecas:928,  metros:2925.08, valorBruto:72807.19},
+    {id:'est26', codigo:'EST 26', pecas:1874, metros:7381.12},
+    {id:'est27', codigo:'EST 27', pecas:1765, metros:6332.99},
+    {id:'est28', codigo:'EST 28', pecas:928,  metros:2925.08},
   ],
 };
 
-// === ESTADO (o que a equipe lança no dia a dia) ===
+CONTRATO.liquido      = CONTRATO.bruto * (1 - CONTRATO.descontoPct/100);
+CONTRATO.entradaValor = CONTRATO.liquido * CONTRATO.entradaPct/100;
+CONTRATO.precoM       = CONTRATO.liquido / CONTRATO.metros;
+CONTRATO.concretoM    = CONTRATO.concretoTotal / CONTRATO.metros;
+CONTRATO.fixoMensal   = CONTRATO.contasFixas.reduce(function(s,c){return s+c.valor},0);
+
+// Quanto sobra no plano original (300 m/dia): referência fixa pra comparar
+var PLANO = (function(){
+  var meses = CONTRATO.metros / (CONTRATO.metaMDia * CONTRATO.diasUteisMes);
+  var custo = CONTRATO.concretoTotal + CONTRATO.fixoMensal * meses;
+  return {
+    meses: meses,
+    custo: custo,
+    resultado: CONTRATO.liquido - custo,
+    margemPct: (CONTRATO.liquido - custo) / CONTRATO.liquido * 100,
+    // ritmo mínimo pra obra não dar prejuízo
+    ritmoMinimo: (CONTRATO.fixoMensal / (CONTRATO.precoM - CONTRATO.concretoM)) / CONTRATO.diasUteisMes,
+  };
+})();
+
+// === O QUE A EQUIPE LANÇA ===
 var STATE = {
-  producao: [],     // {id,data,loteId,metros,pecas,efetivo,m3,viagens,obs}
-  custos: [],       // {id,data,categoria,tipo(fixo|variavel),valor,obs}
-  medicoes: [],      // {id,periodo,metros,valorLiquido,status,dataPrevista,dataPgto}
-  restricoes: [],   // {id,tipo,desc,responsavel,prazo,status,criadaEm}
-  planoSemanal: [],  // {id,semana,metaM,realizadoM}
-  config: {
-    dataInicio: null,       // definida no primeiro apontamento
-    metaMDia: CONTRATO.metaMDia,
-    descontoPctAplicado: CONTRATO.descontoPct,
-    entradaRecebida: false,
-  },
+  contas: [],        // a pagar  {id,descricao,categoria,valor,vencimento,status,pagoEm,fixaId,mes}
+  recebimentos: [],  // a receber {id,descricao,valor,previsao,status,recebidoEm}
+  producao: [],      // {id,data,loteId,metros,pecas,m3,obs}
+  config: { dataInicio:null, mesesGerados:[], recebimentosIniciados:false },
 };
 
 // ============================================================================
-// MOTOR DE CÁLCULO
+// DATAS
 // ============================================================================
-
-function calcModel(opts){
-  opts = opts || {};
-  var ritmoMDia   = opts.ritmoMDia   != null ? opts.ritmoMDia   : CONTRATO.metaMDia;
-  var diasUteisMes= opts.diasUteisMes!= null ? opts.diasUteisMes: CONTRATO.diasUteisMes;
-  var descontoPct = opts.descontoPct != null ? opts.descontoPct : CONTRATO.descontoPct;
-  var concretoTotal = opts.concretoTotal != null ? opts.concretoTotal : CONTRATO.concretoTotal;
-  var custosFixos = opts.custosFixos || CONTRATO.custosFixos;
-  var metros = opts.metros != null ? opts.metros : CONTRATO.metros;
-  var bruto = opts.bruto != null ? opts.bruto : CONTRATO.bruto;
-
-  var liquido = bruto * (1 - descontoPct/100);
-  var custoDiretoMensal = custosFixos.filter(function(c){return c.grupo==='direto'}).reduce(function(s,c){return s+c.valor},0);
-  var custoEstruturaMensal = custosFixos.filter(function(c){return c.grupo==='estrutura'}).reduce(function(s,c){return s+c.valor},0);
-  var custoFixoMensalTotal = custoDiretoMensal + custoEstruturaMensal;
-
-  var mesesNecessarios = ritmoMDia > 0 ? metros / (ritmoMDia * diasUteisMes) : Infinity;
-  var custoDireto = concretoTotal + custoDiretoMensal * mesesNecessarios;
-  var custoTotal = custoDireto + custoEstruturaMensal * mesesNecessarios;
-  var resultado = liquido - custoTotal;
-  var margemPct = liquido > 0 ? (resultado/liquido*100) : 0;
-
-  var precoM = liquido / metros;
-  var concretoM = concretoTotal / metros;
-  var contribM = precoM - concretoM;
-  var breakEvenTotalMMes = contribM > 0 ? custoFixoMensalTotal / contribM : Infinity;
-  var breakEvenDiretoMMes = contribM > 0 ? custoDiretoMensal / contribM : Infinity;
-
-  return {
-    liquido: liquido,
-    precoM: precoM,
-    concretoM: concretoM,
-    contribM: contribM,
-    custoDiretoMensal: custoDiretoMensal,
-    custoEstruturaMensal: custoEstruturaMensal,
-    custoFixoMensalTotal: custoFixoMensalTotal,
-    mesesNecessarios: mesesNecessarios,
-    diasUteisNecessarios: mesesNecessarios * diasUteisMes,
-    custoDireto: custoDireto,
-    custoTotal: custoTotal,
-    custoPorM: custoTotal / metros,
-    resultado: resultado,
-    margemPct: margemPct,
-    breakEvenTotalMDia: breakEvenTotalMMes / diasUteisMes,
-    breakEvenDiretoMDia: breakEvenDiretoMMes / diasUteisMes,
-  };
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+function parseDate(s){ return new Date(s + 'T12:00:00'); }
+function diasAte(dataStr){
+  if(!dataStr) return null;
+  var hoje = parseDate(todayStr());
+  return Math.round((parseDate(dataStr) - hoje) / 864e5);
 }
-
-var MODELO_PLANO = calcModel(); // cenário base, 300 m/dia — referência fixa do contrato
-
-// --- dias úteis (seg-sex) ---
 function addBusinessDays(dateObj, n){
   var d = new Date(dateObj.getTime());
-  var dir = n >= 0 ? 1 : -1;
   var left = Math.abs(Math.round(n));
+  var dir = n >= 0 ? 1 : -1;
   while(left > 0){
     d.setDate(d.getDate() + dir);
     var dow = d.getDay();
@@ -111,135 +82,154 @@ function addBusinessDays(dateObj, n){
   }
   return d;
 }
-function parseDate(s){ return new Date(s + 'T12:00:00'); }
-function todayStr(){ return new Date().toISOString().slice(0,10); }
+function mesAtualStr(){ return todayStr().slice(0,7); }
+function nomeMes(mesStr){
+  var m = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  var p = mesStr.split('-');
+  return m[parseInt(p[1],10)-1] + ' de ' + p[0];
+}
 
-// --- produção realizada ---
-function metrosRealizados(){
-  return STATE.producao.reduce(function(s,p){return s + (p.metros||0)}, 0);
+// ============================================================================
+// CONTAS A PAGAR
+// ============================================================================
+function statusConta(c){
+  if(c.status === 'paga') return 'paga';
+  var d = diasAte(c.vencimento);
+  if(d === null) return 'aberta';
+  if(d < 0) return 'vencida';
+  if(d <= 7) return 'vence';
+  return 'aberta';
 }
-function pecasRealizadas(){
-  return STATE.producao.reduce(function(s,p){return s + (p.pecas||0)}, 0);
+function contasAbertas(){ return STATE.contas.filter(function(c){return c.status!=='paga'}); }
+function contasVencidas(){ return contasAbertas().filter(function(c){return statusConta(c)==='vencida'}); }
+function contasProximas(dias){
+  return contasAbertas().filter(function(c){
+    var d = diasAte(c.vencimento);
+    return d !== null && d >= 0 && d <= (dias||7);
+  });
 }
-function metrosRealizadosPorLote(loteId){
+function totalPago(){
+  return STATE.contas.filter(function(c){return c.status==='paga'}).reduce(function(s,c){return s+(c.valor||0)},0);
+}
+function totalAPagar(){ return contasAbertas().reduce(function(s,c){return s+(c.valor||0)},0); }
+
+// Gera as 5 contas fixas de um mês. Não duplica se o mês já foi gerado.
+function gerarContasDoMes(mes, dia){
+  if(STATE.config.mesesGerados.indexOf(mes) >= 0) return 0;
+  var d = Math.min(28, Math.max(1, parseInt(dia,10) || 5));
+  var venc = mes + '-' + (d<10 ? '0'+d : d);
+  CONTRATO.contasFixas.forEach(function(f){
+    STATE.contas.push({
+      id: uid(), descricao: f.nome, categoria: f.grupo === 'obra' ? 'Obra' : 'Estrutura',
+      valor: f.valor, vencimento: venc, status: 'aberta', fixaId: f.id, mes: mes,
+    });
+  });
+  STATE.config.mesesGerados.push(mes);
+  return CONTRATO.contasFixas.length;
+}
+
+// ============================================================================
+// CONTAS A RECEBER
+// ============================================================================
+function recebimentosAbertos(){ return STATE.recebimentos.filter(function(r){return r.status!=='recebido'}); }
+function totalRecebido(){
+  return STATE.recebimentos.filter(function(r){return r.status==='recebido'}).reduce(function(s,r){return s+(r.valor||0)},0);
+}
+function totalAReceber(){ return recebimentosAbertos().reduce(function(s,r){return s+(r.valor||0)},0); }
+function recebimentosAtrasados(){
+  return recebimentosAbertos().filter(function(r){
+    var d = diasAte(r.previsao);
+    return d !== null && d < 0;
+  });
+}
+
+// Cria a entrada + o saldo previsto, uma única vez
+function criarRecebimentosIniciais(){
+  if(STATE.config.recebimentosIniciados) return 0;
+  STATE.recebimentos.push({
+    id: uid(), descricao: 'Entrada do contrato (' + CONTRATO.entradaPct + '%)',
+    valor: CONTRATO.entradaValor, previsao: null, status: 'aberto',
+  });
+  STATE.recebimentos.push({
+    id: uid(), descricao: 'Saldo — a medir conforme produção',
+    valor: CONTRATO.liquido - CONTRATO.entradaValor, previsao: null, status: 'aberto',
+  });
+  STATE.config.recebimentosIniciados = true;
+  return 2;
+}
+
+// ============================================================================
+// CAIXA
+// ============================================================================
+function saldoCaixa(){ return totalRecebido() - totalPago(); }
+
+// ============================================================================
+// PRODUÇÃO
+// ============================================================================
+function metrosRealizados(){ return STATE.producao.reduce(function(s,p){return s+(p.metros||0)},0); }
+function metrosPorLote(loteId){
   return STATE.producao.filter(function(p){return p.loteId===loteId}).reduce(function(s,p){return s+(p.metros||0)},0);
 }
 function producaoOrdenada(){
-  return STATE.producao.slice().sort(function(a,b){return a.data < b.data ? -1 : a.data > b.data ? 1 : 0});
+  return STATE.producao.slice().sort(function(a,b){return a.data<b.data?-1:a.data>b.data?1:0});
 }
-// ritmo médio dos últimos 7 dias com apontamento (não 7 dias corridos — 7 registros)
-function ritmoReal7d(){
+function ritmoRecente(){
   var ord = producaoOrdenada();
-  if(ord.length === 0) return 0;
-  var ultimos = ord.slice(-7);
-  var soma = ultimos.reduce(function(s,p){return s+(p.metros||0)},0);
-  return soma / ultimos.length;
+  if(!ord.length) return 0;
+  var ult = ord.slice(-7);
+  return ult.reduce(function(s,p){return s+(p.metros||0)},0) / ult.length;
 }
-function ultimaDataProducao(){
-  var ord = producaoOrdenada();
-  return ord.length ? ord[ord.length-1].data : null;
-}
+function pctFisico(){ return CONTRATO.metros>0 ? metrosRealizados()/CONTRATO.metros*100 : 0; }
 
-function custosLancados(){
-  return STATE.custos.reduce(function(s,c){return s+(c.valor||0)},0);
-}
+// ============================================================================
+// RESULTADO — quanto deve sobrar no fim, do jeito que a obra está indo
+// ============================================================================
+function resultado(){
+  var feitos = metrosRealizados();
+  var faltam = Math.max(0, CONTRATO.metros - feitos);
+  var ritmo = ritmoRecente() > 0 ? ritmoRecente() : CONTRATO.metaMDia;
 
-// --- projeção viva: usa ritmo real quando existe apontamento, senão a meta ---
-function projecao(){
-  var realizados = metrosRealizados();
-  var restantes = Math.max(0, CONTRATO.metros - realizados);
-  var ritmoR = ritmoReal7d();
-  var ritmo = ritmoR > 0 ? ritmoR : STATE.config.metaMDia;
-  var diasUteisRestantes = ritmo > 0 ? restantes / ritmo : Infinity;
+  // O custo da obra é o tempo que ela ocupa a fábrica: o que já passou + o que falta.
+  // Assim o resultado só muda com ritmo e prazo — pagar uma conta não piora a obra,
+  // só tira o valor de "ainda vamos gastar" e põe em "já pagamos".
+  var mesesDecorridos = 0;
+  if(STATE.config.dataInicio){
+    var diasCorridos = (parseDate(todayStr()) - parseDate(STATE.config.dataInicio)) / 864e5;
+    mesesDecorridos = Math.max(0, diasCorridos / 30.4);
+  }
+  var mesesQueFaltam = ritmo > 0 ? faltam / (ritmo * CONTRATO.diasUteisMes) : 0;
+  var mesesTotais = mesesDecorridos + mesesQueFaltam;
 
-  var dataBase = ultimaDataProducao() ? parseDate(ultimaDataProducao()) : new Date();
-  var dataProjetada = isFinite(diasUteisRestantes) ? addBusinessDays(dataBase, diasUteisRestantes) : null;
+  var custoTotalEstimado = CONTRATO.concretoTotal + CONTRATO.fixoMensal * mesesTotais;
+  var jaPago = totalPago();
+  var custoQueFalta = Math.max(0, custoTotalEstimado - jaPago);
+  var res = CONTRATO.liquido - custoTotalEstimado;
 
-  var dataInicio = STATE.config.dataInicio ? parseDate(STATE.config.dataInicio) : (ultimaDataProducao() ? parseDate(producaoOrdenada()[0].data) : null);
-  var dataFimContratual = dataInicio ? addBusinessDays(dataInicio, CONTRATO.prazoMeses*CONTRATO.diasUteisMes) : null;
+  var diasUteisQueFaltam = ritmo > 0 ? faltam / ritmo : 0;
+  var base = producaoOrdenada().length ? parseDate(producaoOrdenada().slice(-1)[0].data) : new Date();
+  var terminoPrevisto = faltam > 0 ? addBusinessDays(base, diasUteisQueFaltam) : base;
 
-  // custo: o que já foi lançado + o que falta, estimado no ritmo projetado
-  var lancado = custosLancados();
-  var modeloRitmo = calcModel({ritmoMDia: ritmo});
-  var custoRestanteEstimado = restantes * modeloRitmo.custoPorM;
-  var eac = lancado > 0 ? (lancado + custoRestanteEstimado) : modeloRitmo.custoTotal;
-  var resultadoProjetado = MODELO_PLANO.liquido - eac;
+  var inicio = STATE.config.dataInicio ? parseDate(STATE.config.dataInicio) : null;
+  var prazoContratual = inicio ? addBusinessDays(inicio, CONTRATO.prazoMeses*CONTRATO.diasUteisMes) : null;
 
   return {
-    metrosRealizados: realizados,
-    metrosRestantes: restantes,
-    pctFisico: CONTRATO.metros>0 ? (realizados/CONTRATO.metros*100) : 0,
-    ritmoReal: ritmoR,
-    ritmoUsado: ritmo,
-    diasUteisRestantes: diasUteisRestantes,
-    dataProjetada: dataProjetada,
-    dataFimContratual: dataFimContratual,
-    atrasoDias: (dataProjetada && dataFimContratual) ? Math.round((dataProjetada-dataFimContratual)/864e5) : null,
-    eac: eac,
-    resultadoProjetado: resultadoProjetado,
-    margemProjetadaPct: MODELO_PLANO.liquido>0 ? (resultadoProjetado/MODELO_PLANO.liquido*100) : 0,
-    lancado: lancado,
+    metrosFeitos: feitos, metrosFaltam: faltam, pct: pctFisico(),
+    ritmo: ritmoRecente(),
+    jaPago: jaPago, custoQueFalta: custoQueFalta, custoTotalEstimado: custoTotalEstimado,
+    resultado: res,
+    margemPct: CONTRATO.liquido>0 ? res/CONTRATO.liquido*100 : 0,
+    terminoPrevisto: faltam>0 ? terminoPrevisto : null,
+    prazoContratual: prazoContratual,
+    diasDeAtraso: (faltam>0 && prazoContratual) ? Math.round((terminoPrevisto-prazoContratual)/864e5) : null,
+    mesesQueFaltam: mesesQueFaltam,
+    mesesTotais: mesesTotais,
   };
 }
 
-// --- caixa: 12 semanas, entrada + medições (lançadas ou projetadas) - custo fixo prorrateado - concreto proporcional ---
-function projetarCaixa(semanas){
-  semanas = semanas || 12;
-  var p = projecao();
-  var hoje = new Date();
-  var buckets = [];
-  for(var i=0;i<semanas;i++){
-    var ini = new Date(hoje.getTime() + i*7*864e5);
-    buckets.push({semana:i+1, dataIni:ini, recebe:0, paga:0, detalhe:[]});
-  }
-
-  // entrada — cai na semana 0 se ainda não marcada como recebida
-  if(!STATE.config.entradaRecebida){
-    buckets[0].recebe += MODELO_PLANO.liquido * CONTRATO.entradaPct/100;
-    buckets[0].detalhe.push('Entrada (' + CONTRATO.entradaPct + '%)');
-  }
-
-  // medições lançadas manualmente pelo usuário, pelas datas previstas
-  STATE.medicoes.forEach(function(m){
-    if(m.status === 'paga' || !m.dataPrevista) return;
-    var dt = parseDate(m.dataPrevista);
-    var idx = Math.floor((dt - hoje) / (7*864e5));
-    if(idx >= 0 && idx < semanas){
-      buckets[idx].recebe += m.valorLiquido || 0;
-      buckets[idx].detalhe.push('Medição ' + (m.periodo||''));
-    }
-  });
-
-  // despesas: custo fixo semanal enquanto durar a produção projetada + concreto proporcional
-  var custoFixoSemanal = MODELO_PLANO.custoFixoMensalTotal / 4.33;
-  var concretoRestante = Math.max(0, CONTRATO.concretoTotal - (p.metrosRealizados/CONTRATO.metros*CONTRATO.concretoTotal));
-  var semanasProducaoRestantes = p.ritmoUsado>0 ? Math.ceil(p.metrosRestantes / (p.ritmoUsado*5)) : 0; // 5 dias úteis/semana
-  var concretoPorSemana = semanasProducaoRestantes>0 ? concretoRestante/semanasProducaoRestantes : 0;
-
-  for(var i=0;i<semanas;i++){
-    if(i < semanasProducaoRestantes){
-      buckets[i].paga += custoFixoSemanal + concretoPorSemana;
-      buckets[i].detalhe.push('Fábrica + concreto');
-    } else {
-      buckets[i].paga += CONTRATO.custosFixos.filter(function(c){return c.grupo==='estrutura'}).reduce(function(s,c){return s+c.valor},0) / 4.33;
-      buckets[i].detalhe.push('Estrutura');
-    }
-  }
-
-  // custos já lançados manualmente na semana corrente (informativo, não duplicado no futuro)
-  var saldo = 0;
-  buckets.forEach(function(b){
-    saldo += b.recebe - b.paga;
-    b.saldo = saldo;
-  });
-  return buckets;
-}
-
 // ============================================================================
-// PERSISTÊNCIA — localStorage sempre + Firebase (mesmo projeto do mse-gestao)
+// PERSISTÊNCIA — salva no aparelho e sincroniza com o Firebase do mse-gestao
 // ============================================================================
-
-var LS_KEY = 'obraclara_maternidade_v1';
+var LS_KEY = 'obraclara_maternidade_v2';
 var FB_COLLECTION = 'obraclara_maternidade';
 var db = null;
 
@@ -257,71 +247,64 @@ try {
     db = firebase.firestore();
     try { db.enablePersistence({synchronizeTabs:true}).catch(function(){}); } catch(e){}
   }
-} catch(e) { console.log('Firebase init error:', e); }
+} catch(e) { console.log('Firebase init:', e); }
 
-function setSyncStatus(status){
+function setSyncStatus(s){
   var el = document.getElementById('syncStatus');
   if(!el) return;
   var map = {
-    loading: ['Carregando…', '#FFD166'],
-    syncing: ['Salvando…', '#FFD166'],
-    synced:  ['Sincronizado', '#52B788'],
-    offline: ['Somente local', 'rgba(255,255,255,.4)'],
+    loading:['Carregando…','#FFD166'], syncing:['Salvando…','#FFD166'],
+    synced:['Tudo salvo','#52B788'], offline:['Salvo no aparelho','rgba(255,255,255,.45)'],
   };
-  var m = map[status] || map.offline;
+  var m = map[s] || map.offline;
   el.innerHTML = '<span class="dot" style="color:'+m[1]+'"></span><span>'+m[0]+'</span>';
-}
-
-function saveLocal(){
-  try{ localStorage.setItem(LS_KEY, JSON.stringify(STATE)); }catch(e){}
 }
 
 var syncTimer = null;
 function persist(){
-  saveLocal();
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(STATE)); }catch(e){}
   if(!db){ setSyncStatus('offline'); return; }
   setSyncStatus('syncing');
   clearTimeout(syncTimer);
   syncTimer = setTimeout(function(){
-    var payload = JSON.stringify(STATE);
-    db.collection(FB_COLLECTION).doc('estado').set({d: payload, ts: Date.now()})
+    db.collection(FB_COLLECTION).doc('estado').set({d: JSON.stringify(STATE), ts: Date.now()})
       .then(function(){ setSyncStatus('synced'); })
-      .catch(function(e){ console.log('sync err', e); setSyncStatus('offline'); });
+      .catch(function(){ setSyncStatus('offline'); });
   }, 500);
 }
 
 function loadState(cb){
-  var local = null;
-  try{ local = JSON.parse(localStorage.getItem(LS_KEY)); }catch(e){}
-  if(local){ Object.assign(STATE, local); }
-
+  try{
+    var local = JSON.parse(localStorage.getItem(LS_KEY));
+    if(local) Object.assign(STATE, local);
+  }catch(e){}
   if(!db){ setSyncStatus('offline'); cb && cb(); return; }
   setSyncStatus('loading');
   db.collection(FB_COLLECTION).doc('estado').get().then(function(doc){
     if(doc.exists && doc.data().d){
-      try{
-        var remoto = JSON.parse(doc.data().d);
-        // usa o mais recente entre local e remoto de forma simples: remoto vence se existir
-        Object.assign(STATE, remoto);
-      }catch(e){}
+      try{ Object.assign(STATE, JSON.parse(doc.data().d)); }catch(e){}
     }
     setSyncStatus('synced');
     cb && cb();
-  }).catch(function(){
-    setSyncStatus('offline');
-    cb && cb();
-  });
+  }).catch(function(){ setSyncStatus('offline'); cb && cb(); });
 }
 
 // ============================================================================
-// HELPERS DE FORMATAÇÃO
+// FORMATAÇÃO
 // ============================================================================
-
-var fmt = function(v){ return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v||0); };
-var fmtN = function(v,d){ return new Intl.NumberFormat('pt-BR',{minimumFractionDigits:d||0,maximumFractionDigits:d||0}).format(v||0); };
-var fmtDate = function(d){ if(!d) return '—'; try{ var dt = typeof d==='string'?parseDate(d):d; return dt.toLocaleDateString('pt-BR'); }catch(e){return '—'} };
-var fmtPct = function(v,d){ return fmtN(v,d!=null?d:1) + '%'; };
-function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+var fmt   = function(v){ return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v||0); };
+var fmtK  = function(v){
+  var a = Math.abs(v||0);
+  if(a >= 1000) return (v<0?'-':'')+'R$ '+new Intl.NumberFormat('pt-BR',{maximumFractionDigits:0}).format(a);
+  return fmt(v);
+};
+var fmtN  = function(v,d){ return new Intl.NumberFormat('pt-BR',{minimumFractionDigits:d||0,maximumFractionDigits:d||0}).format(v||0); };
+var fmtPct= function(v,d){ return fmtN(v,d!=null?d:0)+'%'; };
+var fmtDate = function(d){
+  if(!d) return '—';
+  try{ var dt = typeof d==='string'?parseDate(d):d; return dt.toLocaleDateString('pt-BR'); }catch(e){ return '—'; }
+};
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
 
 function toast(msg){
   var t = document.getElementById('toast');
@@ -334,23 +317,17 @@ function toast(msg){
 function svg(name,w,h){
   w=w||20;h=h||20;
   var s = {
-    hoje:'<path d="M8 2v4M16 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>',
-    cronograma:'<path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.1-3-3L5 15.5"/>',
-    financeiro:'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
-    caixa:'<rect x="1" y="5" width="22" height="14" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
-    simulador:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
-    restricoes:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
-    up:'<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
-    down:'<polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/>',
-    clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    painel:'<rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>',
+    pagar:'<line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>',
+    receber:'<line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>',
+    producao:'<rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',
+    resultado:'<path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.1-3-3L5 15.5"/>',
     plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+    check:'<polyline points="20 6 9 17 4 12"/>',
     trash:'<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
-    check:'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
-    truck:'<rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',
-    camera:'<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',
-    menu:'<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>',
-    close:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
     alert:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+    clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    ok:'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
   };
   return '<svg width="'+w+'" height="'+h+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(s[name]||'')+'</svg>';
 }

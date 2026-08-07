@@ -3,28 +3,28 @@
 // ============================================================================
 
 var PAGES = [
-  {id:'hoje',        label:'Hoje',        icon:'hoje'},
-  {id:'cronograma',  label:'Cronograma',  icon:'cronograma'},
-  {id:'financeiro',  label:'Financeiro',  icon:'financeiro'},
-  {id:'caixa',       label:'Caixa',       icon:'caixa'},
-  {id:'simulador',   label:'Simulador',   icon:'simulador'},
-  {id:'restricoes',  label:'Restrições',  icon:'restricoes'},
+  {id:'painel',    label:'Painel',           icon:'painel'},
+  {id:'pagar',     label:'Contas a pagar',   icon:'pagar'},
+  {id:'receber',   label:'Contas a receber', icon:'receber'},
+  {id:'producao',  label:'Produção',         icon:'producao'},
+  {id:'resultado', label:'Resultado',        icon:'resultado'},
 ];
-var currentPage = 'hoje';
+var currentPage = 'painel';
 
 function renderNav(){
+  var vencidas = contasVencidas().length;
   document.getElementById('nav').innerHTML = PAGES.map(function(p){
+    var alerta = (p.id==='pagar' && vencidas>0) ? '<span class="nav-badge">'+vencidas+'</span>' : '';
     return '<a class="nav-item '+(currentPage===p.id?'active':'')+'" onclick="navigate(\''+p.id+'\')" href="#">'+
-      svg(p.icon)+'<span class="nav-label">'+p.label+'</span></a>';
+      svg(p.icon)+'<span class="nav-label">'+p.label+'</span>'+alerta+'</a>';
   }).join('');
 }
 function navigate(page){
   currentPage = page;
-  renderNav();
-  renderPage();
-  closeSidebar();
+  renderNav(); renderPage(); closeSidebar();
   window.scrollTo(0,0);
-  document.getElementById('headerTitle').textContent = PAGES.find(function(p){return p.id===page}).label + ' · Maternidade Porte I';
+  document.getElementById('headerTitle').textContent =
+    PAGES.find(function(p){return p.id===page}).label;
 }
 function openSidebar(){
   document.getElementById('sidebar').classList.add('open');
@@ -36,478 +36,486 @@ function closeSidebar(){
   document.getElementById('sidebarOverlay').classList.remove('open');
   document.body.style.overflow='';
 }
-
 function renderPage(){
   var c = document.getElementById('content');
-  switch(currentPage){
-    case 'hoje': c.innerHTML = renderHoje(); break;
-    case 'cronograma': c.innerHTML = renderCronograma(); break;
-    case 'financeiro': c.innerHTML = renderFinanceiro(); break;
-    case 'caixa': c.innerHTML = renderCaixa(); break;
-    case 'simulador': c.innerHTML = renderSimulador(); initSimulador(); break;
-    case 'restricoes': c.innerHTML = renderRestricoes(); break;
+  if(currentPage==='painel')    c.innerHTML = renderPainel();
+  if(currentPage==='pagar')     c.innerHTML = renderPagar();
+  if(currentPage==='receber')   c.innerHTML = renderReceber();
+  if(currentPage==='producao')  c.innerHTML = renderProducao();
+  if(currentPage==='resultado'){c.innerHTML = renderResultado(); initSimulador();}
+}
+
+// ============================================================================
+// TELA 1 — PAINEL
+// ============================================================================
+function renderPainel(){
+  var saldo = saldoCaixa();
+  var venc = contasVencidas();
+  var prox = contasProximas(7);
+  var vencTotal = venc.reduce(function(s,c){return s+c.valor},0);
+  var proxTotal = prox.reduce(function(s,c){return s+c.valor},0);
+  var r = resultado();
+
+  var alertas = '';
+  if(venc.length){
+    alertas += '<div class="alert danger">'+svg('alert')+'<div>'+
+      '<h3>'+venc.length+(venc.length===1?' conta vencida':' contas vencidas')+' — '+fmt(vencTotal)+'</h3>'+
+      '<p>'+venc.slice(0,3).map(function(c){return c.descricao+' ('+fmtDate(c.vencimento)+')'}).join(' · ')+
+      (venc.length>3?' e mais '+(venc.length-3):'')+'</p>'+
+      '<button class="btn btn-danger-outline btn-sm" style="margin-top:8px" onclick="navigate(\'pagar\')">Ver contas</button>'+
+      '</div></div>';
   }
-}
-
-// ============================================================================
-// KPI BAR — os 4 números, no topo de toda tela
-// ============================================================================
-function kpiBar(){
-  var p = projecao();
-  var ritmoTone = p.ritmoReal === 0 ? '' : p.ritmoUsado >= CONTRATO.metaMDia ? 'ok' : p.ritmoUsado >= MODELO_PLANO.breakEvenTotalMDia ? 'warn' : 'danger';
-  var prazoTone = p.metrosRealizados === 0 || p.atrasoDias == null ? '' : p.atrasoDias <= 0 ? 'ok' : p.atrasoDias <= 7 ? 'warn' : 'danger';
-  var resTone = p.resultadoProjetado >= MODELO_PLANO.resultado*0.9 ? 'ok' : p.resultadoProjetado >= 0 ? 'warn' : 'danger';
-
-  var temApontamento = p.metrosRealizados > 0;
-  var prazoTxt = temApontamento && p.dataProjetada ? fmtDate(p.dataProjetada) : '—';
-  var prazoNote = !temApontamento ? 'aguardando 1º apontamento'
-    : p.atrasoDias == null ? ''
-    : p.atrasoDias <= 0 ? Math.abs(p.atrasoDias) + ' dias de folga vs. contrato'
-    : p.atrasoDias + ' dias além do prazo pedido';
-
-  return '<div class="kpi-bar">'+
-    '<div class="kpi-tile '+ritmoTone+'"><div class="k-label">Ritmo (média 7 dias)</div>'+
-      '<div class="k-value">'+(p.ritmoReal>0?fmtN(p.ritmoReal):'—')+' m/dia</div>'+
-      '<div class="k-note">meta '+CONTRATO.metaMDia+' · equilíbrio '+fmtN(MODELO_PLANO.breakEvenTotalMDia)+'</div></div>'+
-    '<div class="kpi-tile '+prazoTone+'"><div class="k-label">Término projetado</div>'+
-      '<div class="k-value" style="font-size:17px">'+prazoTxt+'</div>'+
-      '<div class="k-note">'+prazoNote+'</div></div>'+
-    '<div class="kpi-tile '+resTone+'"><div class="k-label">Resultado projetado</div>'+
-      '<div class="k-value">'+fmt(p.resultadoProjetado)+'</div>'+
-      '<div class="k-note">plano: '+fmt(MODELO_PLANO.resultado)+' ('+fmtPct(MODELO_PLANO.margemPct)+')</div></div>'+
-    '<div class="kpi-tile"><div class="k-label">Avanço físico</div>'+
-      '<div class="k-value">'+fmtPct(p.pctFisico)+'</div>'+
-      '<div class="k-note">'+fmtN(p.metrosRealizados)+' de '+fmtN(CONTRATO.metros)+' m</div></div>'+
-  '</div>';
-}
-
-function fraseHoje(){
-  var p = projecao();
-  if(p.metrosRealizados === 0){
-    return '<div class="kpi-frase">Nenhum apontamento ainda. Lance a produção de hoje para o painel começar a projetar ritmo, prazo e resultado.</div>';
+  var atrasadosReceber = recebimentosAtrasados();
+  if(atrasadosReceber.length){
+    alertas += '<div class="alert">'+svg('clock')+'<div>'+
+      '<h3>'+atrasadosReceber.length+' recebimento(s) atrasado(s)</h3>'+
+      '<p>'+atrasadosReceber.map(function(x){return x.descricao}).join(' · ')+'</p>'+
+      '<button class="btn btn-outline btn-sm" style="margin-top:8px" onclick="navigate(\'receber\')">Ver</button>'+
+      '</div></div>';
   }
-  var diff = MODELO_PLANO.resultado - p.resultadoProjetado;
-  var diffTxt = diff > 500 ? ('−'+fmt(diff)+' vs. plano') : diff < -500 ? ('+'+fmt(-diff)+' vs. plano') : 'em linha com o plano';
-  return '<div class="kpi-frase">Ritmo dos últimos dias: <strong>'+fmtN(p.ritmoReal)+' m/dia</strong>. '+
-    'No ritmo atual a obra termina em <strong>'+fmtDate(p.dataProjetada)+'</strong> e fecha com <strong>'+fmt(p.resultadoProjetado)+'</strong> ('+diffTxt+').</div>';
-}
 
-// ============================================================================
-// TELA 1 — HOJE
-// ============================================================================
-function renderHoje(){
-  var ord = producaoOrdenada().slice().reverse().slice(0,10);
+  // últimos movimentos: pagos e recebidos juntos
+  var movs = [];
+  STATE.contas.filter(function(c){return c.status==='paga'}).forEach(function(c){
+    movs.push({data:c.pagoEm||c.vencimento, desc:c.descricao, valor:-c.valor});
+  });
+  STATE.recebimentos.filter(function(r){return r.status==='recebido'}).forEach(function(x){
+    movs.push({data:x.recebidoEm||x.previsao, desc:x.descricao, valor:x.valor});
+  });
+  movs.sort(function(a,b){return (b.data||'')<(a.data||'')?-1:1});
+  movs = movs.slice(0,8);
 
-  return '<div class="page-header"><div><h1 class="page-title">Hoje</h1><p class="page-sub">Apontamento diário — leva 30 segundos</p></div></div>'+
-    kpiBar() + fraseHoje() +
-    '<div class="card" style="margin-bottom:16px">'+
-      '<div class="card-title" style="margin-bottom:12px">Lançar produção de hoje</div>'+
-      '<div class="form-grid cols2">'+
-        '<div class="fgroup"><label>Data</label><input type="date" id="p-data" value="'+todayStr()+'"></div>'+
-        '<div class="fgroup"><label>Lote</label><select id="p-lote">'+CONTRATO.lotes.map(function(l){return '<option value="'+l.id+'">'+l.codigo+'</option>'}).join('')+'</select></div>'+
-        '<div class="fgroup"><label>Metros produzidos</label><input type="number" step="0.1" id="p-metros" placeholder="Ex: 285"></div>'+
-        '<div class="fgroup"><label>Peças</label><input type="number" id="p-pecas" placeholder="Ex: 78"></div>'+
-        '<div class="fgroup"><label>Efetivo (pessoas)</label><input type="number" id="p-efetivo" placeholder="Ex: 6"></div>'+
-        '<div class="fgroup"><label>m³ de concreto recebido</label><input type="number" step="0.1" id="p-m3" placeholder="Ex: 12"></div>'+
-        '<div class="fgroup"><label>Nº de viagens (concreto)</label><input type="number" id="p-viagens" placeholder="Ex: 2"></div>'+
-        '<div class="fgroup" style="grid-column:1/-1"><label>Ocorrência (opcional)</label><input type="text" id="p-obs" placeholder="Ex: chuva à tarde, parou 2h"></div>'+
-      '</div>'+
-      '<button class="btn btn-primary" onclick="salvarProducao()">'+svg('plus',16,16)+' Salvar apontamento</button>'+
+  return '<h1 class="page-title">Painel</h1>'+
+    '<p class="page-sub">Maternidade Porte I · Sr. Rafael</p>'+
+
+    '<div class="hero '+(saldo>=0?'pos':'neg')+'">'+
+      '<div class="hero-label">Saldo em caixa da obra</div>'+
+      '<div class="hero-value">'+fmt(saldo)+'</div>'+
+      '<div class="hero-note">'+fmt(totalRecebido())+' recebido · '+fmt(totalPago())+' pago</div>'+
     '</div>'+
+
+    '<div class="duo">'+
+      '<div class="card mini '+(vencTotal>0?'red':'')+'" onclick="navigate(\'pagar\')">'+
+        '<div class="mini-label">A pagar nos próximos 7 dias</div>'+
+        '<div class="mini-value">'+fmt(proxTotal+vencTotal)+'</div>'+
+        '<div class="mini-note">'+(venc.length? venc.length+' vencida(s) · ' : '')+prox.length+' a vencer</div>'+
+      '</div>'+
+      '<div class="card mini green" onclick="navigate(\'receber\')">'+
+        '<div class="mini-label">Ainda a receber do cliente</div>'+
+        '<div class="mini-value">'+fmt(totalAReceber())+'</div>'+
+        '<div class="mini-note">de '+fmt(CONTRATO.liquido)+' do contrato</div>'+
+      '</div>'+
+    '</div>'+
+
+    alertas +
+
+    '<div class="card" style="margin-bottom:14px">'+
+      '<div class="card-title" style="margin-bottom:12px">Como está a obra</div>'+
+      '<div class="linha"><span>Produção entregue</span><b>'+fmtPct(r.pct,1)+'</b></div>'+
+      '<div class="progress-bar" style="margin:6px 0 14px"><div class="fill" style="width:'+Math.min(100,r.pct)+'%;background:var(--primary)"></div></div>'+
+      '<div class="linha"><span>Contrato fechado</span><b>'+fmt(CONTRATO.liquido)+'</b></div>'+
+      '<div class="linha"><span>Já pagamos</span><b>'+fmt(r.jaPago)+'</b></div>'+
+      '<div class="linha"><span>Ainda vamos gastar (estimado)</span><b>'+fmt(r.custoQueFalta)+'</b></div>'+
+      '<div class="linha destaque"><span>Deve sobrar no fim</span>'+
+        '<b style="color:'+(r.resultado>=0?'var(--ok)':'var(--danger)')+'">'+fmt(r.resultado)+'</b></div>'+
+      '<button class="btn btn-outline btn-sm" style="margin-top:12px" onclick="navigate(\'resultado\')">Ver detalhe</button>'+
+    '</div>'+
+
     '<div class="card">'+
-      '<div class="card-title" style="margin-bottom:10px">Últimos apontamentos</div>'+
-      (ord.length===0 ? '<div class="empty">'+svg('truck')+'<p>Nenhum apontamento lançado ainda.</p></div>' :
-      '<div class="table-wrap"><table><thead><tr><th>Data</th><th>Lote</th><th class="n">Metros</th><th class="n">Peças</th><th class="n">Efetivo</th><th class="n">m³</th><th></th></tr></thead><tbody>'+
-        ord.map(function(p){
-          var lote = CONTRATO.lotes.find(function(l){return l.id===p.loteId});
-          return '<tr><td>'+fmtDate(p.data)+'</td><td>'+(lote?lote.codigo:'—')+'</td><td class="n">'+fmtN(p.metros,1)+'</td><td class="n">'+(p.pecas||'—')+'</td><td class="n">'+(p.efetivo||'—')+'</td><td class="n">'+(p.m3||'—')+'</td>'+
-            '<td><button class="btn-icon" onclick="excluirProducao(\''+p.id+'\')">'+svg('trash',15,15)+'</button></td></tr>';
-        }).join('')+
-      '</tbody></table></div>')+
+      '<div class="card-title" style="margin-bottom:10px">Últimos movimentos</div>'+
+      (movs.length===0
+        ? '<div class="empty">'+svg('painel')+'<p>Nada lançado ainda. Comece pelas contas a pagar.</p></div>'
+        : movs.map(function(m){
+            return '<div class="mov"><div><div class="mov-desc">'+m.desc+'</div>'+
+              '<div class="mov-data">'+fmtDate(m.data)+'</div></div>'+
+              '<div class="mov-valor '+(m.valor>=0?'in':'out')+'">'+(m.valor>=0?'+ ':'− ')+fmt(Math.abs(m.valor))+'</div></div>';
+          }).join(''))+
+    '</div>';
+}
+
+// ============================================================================
+// TELA 2 — CONTAS A PAGAR
+// ============================================================================
+var filtroPagar = 'abertas';
+var mesPagar = null;
+function setFiltroPagar(f){ filtroPagar = f; renderPage(); }
+function mudarMesPagar(v){ mesPagar = v; renderPage(); }
+
+function renderPagar(){
+  var mes = mesPagar || mesAtualStr();
+  var jaGerado = STATE.config.mesesGerados.indexOf(mes) >= 0;
+
+  var lista = STATE.contas.slice();
+  if(filtroPagar==='abertas') lista = lista.filter(function(c){return c.status!=='paga'});
+  if(filtroPagar==='pagas')   lista = lista.filter(function(c){return c.status==='paga'});
+  lista.sort(function(a,b){
+    if(a.status!==b.status) return a.status==='paga'?1:-1;
+    return (a.vencimento||'') < (b.vencimento||'') ? -1 : 1;
+  });
+
+  var rotulo = {vencida:'Vencida', vence:'Vence essa semana', aberta:'Em dia', paga:'Paga'};
+
+  return '<h1 class="page-title">Contas a pagar</h1>'+
+    '<p class="page-sub">Total em aberto: <b>'+fmt(totalAPagar())+'</b></p>'+
+
+    '<div class="card" style="margin-bottom:14px">'+
+      '<div class="card-title" style="margin-bottom:6px">Contas fixas do mês</div>'+
+      '<p class="hint">'+CONTRATO.contasFixas.map(function(f){return f.nome}).join(', ')+' — total '+fmt(CONTRATO.fixoMensal)+'. O app lança as cinco de uma vez.</p>'+
+      '<div class="form-grid cols2">'+
+        '<div class="fgroup"><label>Mês</label><input type="month" id="gm-mes" value="'+mes+'" onchange="mudarMesPagar(this.value)"></div>'+
+        '<div class="fgroup"><label>Vencem no dia</label><input type="number" id="gm-dia" min="1" max="28" value="5"></div>'+
+      '</div>'+
+      (jaGerado
+        ? '<div class="ok-line">'+svg('ok',16,16)+' '+nomeMes(mes)+' já foi lançado</div>'
+        : '<button class="btn btn-primary" onclick="gerarMes()">'+svg('plus',16,16)+' Lançar as 5 contas de '+nomeMes(mes)+'</button>')+
+    '</div>'+
+
+    '<div class="card" style="margin-bottom:14px">'+
+      '<div class="card-title" style="margin-bottom:12px">Nova conta</div>'+
+      '<div class="fgroup"><label>O que é</label><input type="text" id="ct-desc" placeholder="Ex: Concreto — 3ª viagem"></div>'+
+      '<div class="form-grid cols2">'+
+        '<div class="fgroup"><label>Valor</label><input type="number" step="0.01" id="ct-valor" placeholder="0,00"></div>'+
+        '<div class="fgroup"><label>Vence em</label><input type="date" id="ct-venc" value="'+todayStr()+'"></div>'+
+      '</div>'+
+      '<div class="fgroup" style="margin-bottom:12px"><label>Categoria</label>'+
+        '<select id="ct-cat"><option>Concreto</option><option>Obra</option><option>Estrutura</option><option>Frete</option><option>Outros</option></select></div>'+
+      '<button class="btn btn-primary" onclick="salvarConta()">'+svg('plus',16,16)+' Adicionar conta</button>'+
+    '</div>'+
+
+    '<div class="chips">'+
+      ['abertas','pagas','todas'].map(function(f){
+        var nome = {abertas:'Em aberto',pagas:'Pagas',todas:'Todas'}[f];
+        return '<button class="chip '+(filtroPagar===f?'on':'')+'" onclick="setFiltroPagar(\''+f+'\')">'+nome+'</button>';
+      }).join('')+
+    '</div>'+
+
+    (lista.length===0
+      ? '<div class="card"><div class="empty">'+svg('pagar')+'<p>Nenhuma conta aqui.</p></div></div>'
+      : lista.map(function(c){
+          var st = statusConta(c);
+          var d = diasAte(c.vencimento);
+          var quando = st==='paga' ? 'Paga em '+fmtDate(c.pagoEm)
+            : st==='vencida' ? 'Venceu há '+Math.abs(d)+(Math.abs(d)===1?' dia':' dias')
+            : d===0 ? 'Vence hoje'
+            : 'Vence em '+fmtDate(c.vencimento);
+          return '<div class="conta '+st+'">'+
+            '<div class="conta-info">'+
+              '<div class="conta-desc">'+c.descricao+'</div>'+
+              '<div class="conta-meta"><span class="tag '+st+'">'+rotulo[st]+'</span> '+quando+' · '+c.categoria+'</div>'+
+            '</div>'+
+            '<div class="conta-acao">'+
+              '<div class="conta-valor">'+fmt(c.valor)+'</div>'+
+              (c.status==='paga'
+                ? '<button class="btn-link" onclick="desfazerPagamento(\''+c.id+'\')">desfazer</button>'
+                : '<button class="btn btn-primary btn-sm" onclick="pagarConta(\''+c.id+'\')">'+svg('check',14,14)+' Paguei</button>')+
+            '</div>'+
+            '<button class="btn-icon del" onclick="excluirConta(\''+c.id+'\')">'+svg('trash',15,15)+'</button>'+
+          '</div>';
+        }).join(''));
+}
+
+function gerarMes(){
+  var mes = document.getElementById('gm-mes').value || mesAtualStr();
+  var dia = document.getElementById('gm-dia').value || 5;
+  var n = gerarContasDoMes(mes, dia);
+  persist();
+  toast(n>0 ? n+' contas lançadas' : 'Esse mês já foi lançado');
+  renderNav(); renderPage();
+}
+function salvarConta(){
+  var desc = document.getElementById('ct-desc').value.trim();
+  var valor = parseFloat(document.getElementById('ct-valor').value);
+  if(!desc || !valor || valor<=0){ toast('Preencha o que é e o valor'); return; }
+  STATE.contas.push({
+    id:uid(), descricao:desc, valor:valor,
+    vencimento:document.getElementById('ct-venc').value||todayStr(),
+    categoria:document.getElementById('ct-cat').value, status:'aberta',
+  });
+  persist(); toast('Conta adicionada'); renderNav(); renderPage();
+}
+function pagarConta(id){
+  var c = STATE.contas.find(function(x){return x.id===id});
+  if(c){ c.status='paga'; c.pagoEm=todayStr(); persist(); toast('Conta paga'); renderNav(); renderPage(); }
+}
+function desfazerPagamento(id){
+  var c = STATE.contas.find(function(x){return x.id===id});
+  if(c){ c.status='aberta'; c.pagoEm=null; persist(); renderNav(); renderPage(); }
+}
+function excluirConta(id){
+  STATE.contas = STATE.contas.filter(function(c){return c.id!==id});
+  persist(); renderNav(); renderPage();
+}
+
+// ============================================================================
+// TELA 3 — CONTAS A RECEBER
+// ============================================================================
+function renderReceber(){
+  var lista = STATE.recebimentos.slice().sort(function(a,b){
+    if(a.status!==b.status) return a.status==='recebido'?1:-1;
+    return (a.previsao||'9999') < (b.previsao||'9999') ? -1 : 1;
+  });
+  var temIniciais = STATE.config.recebimentosIniciados;
+
+  return '<h1 class="page-title">Contas a receber</h1>'+
+    '<p class="page-sub">Já recebido: <b>'+fmt(totalRecebido())+'</b> · Falta: <b>'+fmt(totalAReceber())+'</b></p>'+
+
+    (!temIniciais
+      ? '<div class="card" style="margin-bottom:14px">'+
+          '<div class="card-title" style="margin-bottom:6px">Começar pelo contrato</div>'+
+          '<p class="hint">Lança a entrada de '+fmt(CONTRATO.entradaValor)+' ('+CONTRATO.entradaPct+'%) e o saldo de '+fmt(CONTRATO.liquido-CONTRATO.entradaValor)+' que vem por medição.</p>'+
+          '<button class="btn btn-primary" onclick="iniciarRecebimentos()">'+svg('plus',16,16)+' Lançar entrada e saldo</button>'+
+        '</div>'
+      : '')+
+
+    '<div class="card" style="margin-bottom:14px">'+
+      '<div class="card-title" style="margin-bottom:12px">Nova cobrança / medição</div>'+
+      '<div class="fgroup"><label>O que é</label><input type="text" id="rc-desc" placeholder="Ex: Medição de agosto"></div>'+
+      '<div class="form-grid cols2">'+
+        '<div class="fgroup"><label>Valor</label><input type="number" step="0.01" id="rc-valor" placeholder="0,00"></div>'+
+        '<div class="fgroup"><label>Previsão de pagamento</label><input type="date" id="rc-prev"></div>'+
+      '</div>'+
+      '<button class="btn btn-primary" onclick="salvarRecebimento()">'+svg('plus',16,16)+' Adicionar</button>'+
+    '</div>'+
+
+    (lista.length===0
+      ? '<div class="card"><div class="empty">'+svg('receber')+'<p>Nada lançado ainda.</p></div></div>'
+      : lista.map(function(r){
+          var recebido = r.status==='recebido';
+          var d = diasAte(r.previsao);
+          var quando = recebido ? 'Recebido em '+fmtDate(r.recebidoEm)
+            : !r.previsao ? 'Sem data definida'
+            : d < 0 ? 'Atrasado há '+Math.abs(d)+(Math.abs(d)===1?' dia':' dias')
+            : d===0 ? 'Previsto para hoje'
+            : 'Previsto para '+fmtDate(r.previsao);
+          var st = recebido ? 'paga' : (d!==null && d<0 ? 'vencida' : 'aberta');
+          return '<div class="conta '+st+'">'+
+            '<div class="conta-info">'+
+              '<div class="conta-desc">'+r.descricao+'</div>'+
+              '<div class="conta-meta">'+quando+'</div>'+
+            '</div>'+
+            '<div class="conta-acao">'+
+              '<div class="conta-valor '+(recebido?'':'verde')+'">'+fmt(r.valor)+'</div>'+
+              (recebido
+                ? '<button class="btn-link" onclick="desfazerRecebimento(\''+r.id+'\')">desfazer</button>'
+                : '<button class="btn btn-primary btn-sm" onclick="receberValor(\''+r.id+'\')">'+svg('check',14,14)+' Recebi</button>')+
+            '</div>'+
+            '<button class="btn-icon del" onclick="excluirRecebimento(\''+r.id+'\')">'+svg('trash',15,15)+'</button>'+
+          '</div>';
+        }).join(''));
+}
+
+function iniciarRecebimentos(){
+  criarRecebimentosIniciais(); persist(); toast('Entrada e saldo lançados'); renderPage();
+}
+function salvarRecebimento(){
+  var desc = document.getElementById('rc-desc').value.trim();
+  var valor = parseFloat(document.getElementById('rc-valor').value);
+  if(!desc || !valor || valor<=0){ toast('Preencha o que é e o valor'); return; }
+  STATE.recebimentos.push({
+    id:uid(), descricao:desc, valor:valor,
+    previsao:document.getElementById('rc-prev').value||null, status:'aberto',
+  });
+  persist(); toast('Cobrança adicionada'); renderPage();
+}
+function receberValor(id){
+  var r = STATE.recebimentos.find(function(x){return x.id===id});
+  if(r){ r.status='recebido'; r.recebidoEm=todayStr(); persist(); toast('Recebimento registrado'); renderPage(); }
+}
+function desfazerRecebimento(id){
+  var r = STATE.recebimentos.find(function(x){return x.id===id});
+  if(r){ r.status='aberto'; r.recebidoEm=null; persist(); renderPage(); }
+}
+function excluirRecebimento(id){
+  STATE.recebimentos = STATE.recebimentos.filter(function(r){return r.id!==id});
+  persist(); renderPage();
+}
+
+// ============================================================================
+// TELA 4 — PRODUÇÃO (quem entende de obra lança aqui)
+// ============================================================================
+function renderProducao(){
+  var ord = producaoOrdenada().slice().reverse().slice(0,15);
+  var r = resultado();
+
+  return '<h1 class="page-title">Produção</h1>'+
+    '<p class="page-sub">Quanto a fábrica produziu por dia</p>'+
+
+    '<div class="duo">'+
+      '<div class="card mini"><div class="mini-label">Já produzido</div>'+
+        '<div class="mini-value">'+fmtN(metrosRealizados())+' m</div>'+
+        '<div class="mini-note">de '+fmtN(CONTRATO.metros)+' m · '+fmtPct(r.pct,1)+'</div></div>'+
+      '<div class="card mini"><div class="mini-label">Média por dia</div>'+
+        '<div class="mini-value">'+(r.ritmo>0?fmtN(r.ritmo):'—')+' m</div>'+
+        '<div class="mini-note">meta '+CONTRATO.metaMDia+' m/dia</div></div>'+
+    '</div>'+
+
+    '<div class="card" style="margin-bottom:14px">'+
+      '<div class="card-title" style="margin-bottom:12px">Lançar o dia</div>'+
+      '<div class="form-grid cols2">'+
+        '<div class="fgroup"><label>Data</label><input type="date" id="pr-data" value="'+todayStr()+'"></div>'+
+        '<div class="fgroup"><label>Projeto</label><select id="pr-lote">'+
+          CONTRATO.lotes.map(function(l){return '<option value="'+l.id+'">'+l.codigo+'</option>'}).join('')+'</select></div>'+
+        '<div class="fgroup"><label>Metros produzidos</label><input type="number" step="0.1" id="pr-metros" placeholder="Ex: 285"></div>'+
+        '<div class="fgroup"><label>Peças</label><input type="number" id="pr-pecas" placeholder="Ex: 78"></div>'+
+      '</div>'+
+      '<button class="btn btn-primary" onclick="salvarProducao()">'+svg('plus',16,16)+' Salvar</button>'+
+    '</div>'+
+
+    '<div class="card" style="margin-bottom:14px">'+
+      '<div class="card-title" style="margin-bottom:12px">Andamento por projeto</div>'+
+      CONTRATO.lotes.map(function(l){
+        var feito = metrosPorLote(l.id);
+        var pct = l.metros>0 ? feito/l.metros*100 : 0;
+        return '<div class="lote"><div class="linha"><span>'+l.codigo+'</span>'+
+          '<b>'+fmtN(feito)+' / '+fmtN(l.metros)+' m</b></div>'+
+          '<div class="progress-bar" style="margin-top:5px"><div class="fill" style="width:'+Math.min(100,pct)+'%;background:'+(pct>=100?'var(--ok)':'var(--primary)')+'"></div></div></div>';
+      }).join('')+
+    '</div>'+
+
+    '<div class="card">'+
+      '<div class="card-title" style="margin-bottom:10px">Últimos dias</div>'+
+      (ord.length===0
+        ? '<div class="empty">'+svg('producao')+'<p>Nenhum dia lançado ainda.</p></div>'
+        : ord.map(function(p){
+            var l = CONTRATO.lotes.find(function(x){return x.id===p.loteId});
+            return '<div class="mov"><div><div class="mov-desc">'+fmtN(p.metros,1)+' m'+(p.pecas?' · '+p.pecas+' peças':'')+'</div>'+
+              '<div class="mov-data">'+fmtDate(p.data)+' · '+(l?l.codigo:'—')+'</div></div>'+
+              '<button class="btn-icon del" onclick="excluirProducao(\''+p.id+'\')">'+svg('trash',15,15)+'</button></div>';
+          }).join(''))+
     '</div>';
 }
 
 function salvarProducao(){
-  var metros = parseFloat(document.getElementById('p-metros').value);
-  if(!metros || metros<=0){ toast('Informe os metros produzidos'); return; }
-  var data = document.getElementById('p-data').value || todayStr();
-  var reg = {
-    id: uid(),
-    data: data,
-    loteId: document.getElementById('p-lote').value,
-    metros: metros,
-    pecas: parseInt(document.getElementById('p-pecas').value)||0,
-    efetivo: parseInt(document.getElementById('p-efetivo').value)||0,
-    m3: parseFloat(document.getElementById('p-m3').value)||0,
-    viagens: parseInt(document.getElementById('p-viagens').value)||0,
-    obs: document.getElementById('p-obs').value||'',
-  };
-  STATE.producao.push(reg);
+  var metros = parseFloat(document.getElementById('pr-metros').value);
+  if(!metros || metros<=0){ toast('Informe os metros'); return; }
+  var data = document.getElementById('pr-data').value || todayStr();
+  STATE.producao.push({
+    id:uid(), data:data, loteId:document.getElementById('pr-lote').value,
+    metros:metros, pecas:parseInt(document.getElementById('pr-pecas').value)||0,
+  });
   if(!STATE.config.dataInicio || data < STATE.config.dataInicio) STATE.config.dataInicio = data;
-  persist();
-  toast('Apontamento salvo');
-  renderPage();
+  persist(); toast('Produção salva'); renderPage();
 }
 function excluirProducao(id){
   STATE.producao = STATE.producao.filter(function(p){return p.id!==id});
-  persist();
-  renderPage();
+  persist(); renderPage();
 }
 
 // ============================================================================
-// TELA 2 — CRONOGRAMA
+// TELA 5 — RESULTADO
 // ============================================================================
-function renderCronograma(){
-  var p = projecao();
+function renderResultado(){
+  var r = resultado();
+  var bom = r.resultado >= PLANO.resultado*0.9;
+  var ruim = r.resultado < 0;
 
-  // curva S simplificada em % por "mês de obra" (meses do plano contratual)
-  var meses = Math.max(3, Math.ceil(MODELO_PLANO.mesesNecessarios)+1);
-  var linhas = [];
-  for(var i=1;i<=meses;i++){
-    var prevPct = Math.min(100, (i / MODELO_PLANO.mesesNecessarios) * 100);
-    linhas.push({mes:'Mês '+i, prev: prevPct});
+  var frase;
+  if(r.metrosFeitos === 0){
+    frase = 'A obra ainda não começou a produzir. Pelo plano fechado, deve sobrar <b>'+fmt(PLANO.resultado)+'</b> no fim, produzindo '+CONTRATO.metaMDia+' m por dia.';
+  } else if(ruim){
+    frase = 'No ritmo de agora a obra <b>fecha no vermelho</b>. Precisa produzir pelo menos <b>'+fmtN(PLANO.ritmoMinimo)+' m por dia</b> pra não dar prejuízo.';
+  } else if(bom){
+    frase = 'A obra está <b>indo bem</b>. No ritmo de agora deve sobrar <b>'+fmt(r.resultado)+'</b> no fim.';
+  } else {
+    frase = 'A obra ainda dá lucro, mas <b>abaixo do previsto</b>. Deve sobrar '+fmt(r.resultado)+', contra '+fmt(PLANO.resultado)+' do plano.';
   }
-  // realizado: distribui metros realizados proporcionalmente ao tempo decorrido (aprox simples, mês corrente)
-  var mesAtual = STATE.config.dataInicio ? Math.max(1, Math.ceil((new Date()-parseDate(STATE.config.dataInicio))/(30.4*864e5))) : 0;
 
-  return '<div class="page-header"><div><h1 class="page-title">Cronograma</h1><p class="page-sub">Curva de produção — previsto × realizado × projetado</p></div></div>'+
-    kpiBar() +
-    '<div class="card" style="margin-bottom:16px">'+
-      '<div class="card-title" style="margin-bottom:14px">Curva S — % do contrato (em metros)</div>'+
-      '<div class="bar-chart">'+
-        linhas.map(function(l,idx){
-          var real = (idx+1)<=mesAtual ? Math.min(100, p.pctFisico) : null;
-          return '<div class="bar-row"><span class="bar-label">'+l.mes+'</span><div class="bar-track">'+
-            '<div class="bar-fill bar-expected" style="width:'+l.prev+'%"></div>'+
-            (real!==null?'<div class="bar-fill bar-actual" style="width:'+real+'%"></div>':'')+
-            '</div><span class="bar-value">'+(real!=null?fmtN(real,0)+'%':'—')+'</span></div>';
-        }).join('')+
-      '</div>'+
-      '<div class="legend-row">'+
-        '<span><i style="background:rgba(45,106,79,.18)"></i>Previsto (plano contratual)</span>'+
-        '<span><i style="background:var(--primary)"></i>Realizado</span>'+
-      '</div>'+
-    '</div>'+
-    '<div class="grid-2">'+
-      '<div class="card">'+
-        '<div class="card-title" style="margin-bottom:10px">Datas</div>'+
-        '<div style="display:flex;flex-direction:column;gap:10px;font-size:13px">'+
-          '<div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Início da produção</span><b>'+(STATE.config.dataInicio?fmtDate(STATE.config.dataInicio):'ainda não iniciada')+'</b></div>'+
-          '<div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Prazo pedido (3 meses)</span><b>'+(p.dataFimContratual?fmtDate(p.dataFimContratual):'—')+'</b></div>'+
-          '<div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Término projetado</span><b style="color:'+(p.atrasoDias>0?'var(--danger)':'var(--ok)')+'">'+(p.dataProjetada?fmtDate(p.dataProjetada):'—')+'</b></div>'+
-          '<div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Dias úteis restantes</span><b>'+(isFinite(p.diasUteisRestantes)?fmtN(p.diasUteisRestantes,0):'—')+'</b></div>'+
-        '</div>'+
-      '</div>'+
-      '<div class="card">'+
-        '<div class="card-title" style="margin-bottom:10px">Avanço por lote</div>'+
-        CONTRATO.lotes.map(function(l){
-          var real = metrosRealizadosPorLote(l.id);
-          var pct = l.metros>0 ? (real/l.metros*100) : 0;
-          var tone = pct>=100?'var(--ok)':pct>0?'var(--primary)':'var(--border)';
-          return '<div class="lote-row"><div class="lote-head"><b>'+l.codigo+'</b><span class="meta">'+fmtN(real,1)+' / '+fmtN(l.metros,1)+' m</span></div>'+
-            '<div class="progress-bar"><div class="fill" style="width:'+Math.min(100,pct)+'%;background:'+tone+'"></div></div></div>';
-        }).join('')+
-      '</div>'+
-    '</div>';
-}
+  return '<h1 class="page-title">Resultado</h1>'+
+    '<p class="page-sub">Quanto deve sobrar no fim da obra</p>'+
 
-// ============================================================================
-// TELA 3 — FINANCEIRO
-// ============================================================================
-function renderFinanceiro(){
-  var p = projecao();
-  var custosOrdenados = STATE.custos.slice().sort(function(a,b){return a.data<b.data?1:-1});
-  var medOrdenadas = STATE.medicoes.slice().sort(function(a,b){return (a.periodo||'')<(b.periodo||'')?1:-1});
-
-  return '<div class="page-header"><div><h1 class="page-title">Financeiro</h1><p class="page-sub">Orçado, comprometido, realizado e projetado</p></div></div>'+
-    kpiBar() +
-    '<div class="card" style="margin-bottom:16px">'+
-      '<div class="card-title" style="margin-bottom:12px">Contrato</div>'+
-      '<div class="table-wrap"><table><tbody>'+
-        '<tr><td>Valor bruto</td><td class="n">'+fmt(CONTRATO.bruto)+'</td></tr>'+
-        '<tr><td>Desconto negociado ('+CONTRATO.descontoPct+'%)</td><td class="n">−'+fmt(CONTRATO.bruto-MODELO_PLANO.liquido)+'</td></tr>'+
-        '<tr class="tot"><td>Valor líquido</td><td class="n">'+fmt(MODELO_PLANO.liquido)+'</td></tr>'+
-        '<tr><td>Entrada ('+CONTRATO.entradaPct+'%)</td><td class="n">'+fmt(MODELO_PLANO.liquido*CONTRATO.entradaPct/100)+'</td></tr>'+
-      '</tbody></table></div>'+
-    '</div>'+
-    '<div class="card" style="margin-bottom:16px">'+
-      '<div class="card-title" style="margin-bottom:12px">Orçado × comprometido × realizado × projetado</div>'+
-      '<div class="table-wrap"><table><thead><tr><th>Linha</th><th class="n">Plano (300 m/dia)</th><th class="n">Realizado</th><th class="n">Projetado (EAC)</th></tr></thead><tbody>'+
-        '<tr><td>Custo direto (concreto + fábrica)</td><td class="n">'+fmt(MODELO_PLANO.custoDireto)+'</td><td class="n">'+fmt(p.lancado)+'</td><td class="n">—</td></tr>'+
-        '<tr><td>Custo total</td><td class="n">'+fmt(MODELO_PLANO.custoTotal)+'</td><td class="n">'+fmt(p.lancado)+'</td><td class="n">'+fmt(p.eac)+'</td></tr>'+
-        '<tr class="tot"><td>Resultado</td><td class="n">'+fmt(MODELO_PLANO.resultado)+'</td><td class="n">'+fmt(MODELO_PLANO.liquido-p.lancado)+'</td><td class="n" style="color:'+(p.resultadoProjetado>=0?'var(--ok)':'var(--danger)')+'">'+fmt(p.resultadoProjetado)+'</td></tr>'+
-      '</tbody></table></div>'+
-      '<div class="k-note" style="margin-top:8px">Projetado = custos já lançados + estimativa do que falta, no ritmo real atual.</div>'+
+    '<div class="hero '+(r.resultado>=0?'pos':'neg')+'">'+
+      '<div class="hero-label">Deve sobrar no fim</div>'+
+      '<div class="hero-value">'+fmt(r.resultado)+'</div>'+
+      '<div class="hero-note">'+fmtPct(r.margemPct,1)+' do contrato · plano era '+fmt(PLANO.resultado)+'</div>'+
     '</div>'+
 
-    '<div class="card" style="margin-bottom:16px">'+
-      '<div class="card-title" style="margin-bottom:12px">Lançar custo</div>'+
-      '<div class="form-grid">'+
-        '<div class="fgroup"><label>Data</label><input type="date" id="c-data" value="'+todayStr()+'"></div>'+
-        '<div class="fgroup"><label>Categoria</label><input type="text" id="c-cat" list="cat-dl" placeholder="Ex: Concreto, Mão de obra..."><datalist id="cat-dl"><option value="Concreto"></option><option value="Mão de obra"></option><option value="Pátio"></option><option value="Escritório"></option><option value="Combustível"></option><option value="Outros"></option></datalist></div>'+
-        '<div class="fgroup"><label>Valor (R$)</label><input type="number" step="0.01" id="c-valor" placeholder="0,00"></div>'+
-      '</div>'+
-      '<div class="fgroup" style="margin-bottom:10px"><label>Observação</label><input type="text" id="c-obs" placeholder="opcional"></div>'+
-      '<button class="btn btn-primary" onclick="salvarCusto()">'+svg('plus',16,16)+' Salvar custo</button>'+
+    '<div class="frase">'+frase+'</div>'+
+
+    '<div class="card" style="margin-bottom:14px">'+
+      '<div class="card-title" style="margin-bottom:12px">A conta</div>'+
+      '<div class="linha"><span>Contrato (já com os '+CONTRATO.descontoPct+'% de desconto)</span><b>'+fmt(CONTRATO.liquido)+'</b></div>'+
+      '<div class="linha"><span>Concreto da obra inteira</span><b>− '+fmt(CONTRATO.concretoTotal)+'</b></div>'+
+      '<div class="linha"><span>Fábrica e estrutura — '+fmtN(r.mesesTotais,1)+' meses a '+fmt(CONTRATO.fixoMensal)+'/mês</span>'+
+        '<b>− '+fmt(CONTRATO.fixoMensal*r.mesesTotais)+'</b></div>'+
+      '<div class="linha destaque"><span>Sobra</span><b style="color:'+(r.resultado>=0?'var(--ok)':'var(--danger)')+'">'+fmt(r.resultado)+'</b></div>'+
+      '<p class="hint" style="margin-top:10px">Desse custo total, <b>'+fmt(r.jaPago)+'</b> já foi pago e <b>'+fmt(r.custoQueFalta)+'</b> ainda vai sair. '+
+        'Quanto mais rápido a fábrica produzir, menos meses de custo fixo a obra carrega — é isso que muda o resultado.</p>'+
     '</div>'+
 
-    '<div class="card" style="margin-bottom:16px">'+
-      '<div class="card-title" style="margin-bottom:10px">Custos lançados</div>'+
-      (custosOrdenados.length===0?'<div class="empty">'+svg('financeiro')+'<p>Nenhum custo lançado ainda.</p></div>':
-      '<div class="table-wrap"><table><thead><tr><th>Data</th><th>Categoria</th><th>Obs.</th><th class="n">Valor</th><th></th></tr></thead><tbody>'+
-        custosOrdenados.map(function(c){
-          return '<tr><td>'+fmtDate(c.data)+'</td><td>'+c.categoria+'</td><td style="color:var(--text3)">'+(c.obs||'—')+'</td><td class="n">'+fmt(c.valor)+'</td>'+
-            '<td><button class="btn-icon" onclick="excluirCusto(\''+c.id+'\')">'+svg('trash',15,15)+'</button></td></tr>';
-        }).join('')+
-      '</tbody></table></div>')+
+    '<div class="card" style="margin-bottom:14px">'+
+      '<div class="card-title" style="margin-bottom:12px">Prazo</div>'+
+      '<div class="linha"><span>Início da produção</span><b>'+(STATE.config.dataInicio?fmtDate(STATE.config.dataInicio):'não iniciada')+'</b></div>'+
+      '<div class="linha"><span>Prazo combinado (3 meses)</span><b>'+(r.prazoContratual?fmtDate(r.prazoContratual):'—')+'</b></div>'+
+      '<div class="linha"><span>Previsão no ritmo de agora</span><b style="color:'+(r.diasDeAtraso>0?'var(--danger)':'var(--ok)')+'">'+
+        (r.terminoPrevisto?fmtDate(r.terminoPrevisto):'—')+'</b></div>'+
+      (r.diasDeAtraso!=null
+        ? '<div class="linha"><span>Situação</span><b style="color:'+(r.diasDeAtraso>0?'var(--danger)':'var(--ok)')+'">'+
+            (r.diasDeAtraso>0 ? r.diasDeAtraso+' dias atrasado' : Math.abs(r.diasDeAtraso)+' dias de folga')+'</b></div>'
+        : '')+
     '</div>'+
 
     '<div class="card">'+
-      '<div class="card-title" style="margin-bottom:12px">Medições</div>'+
-      '<div class="form-grid">'+
-        '<div class="fgroup"><label>Período</label><input type="text" id="m-periodo" placeholder="Ex: Medição 1"></div>'+
-        '<div class="fgroup"><label>Metros medidos</label><input type="number" step="0.1" id="m-metros" placeholder="0"></div>'+
-        '<div class="fgroup"><label>Valor líquido (R$)</label><input type="number" step="0.01" id="m-valor" placeholder="0,00"></div>'+
-        '<div class="fgroup"><label>Data prevista de pagamento</label><input type="date" id="m-data"></div>'+
-        '<div class="fgroup"><label>Status</label><select id="m-status"><option value="prevista">Prevista</option><option value="enviada">Enviada</option><option value="aprovada">Aprovada</option><option value="paga">Paga</option></select></div>'+
-      '</div>'+
-      '<button class="btn btn-primary" onclick="salvarMedicao()">'+svg('plus',16,16)+' Salvar medição</button>'+
-      (medOrdenadas.length>0 ? '<div class="table-wrap" style="margin-top:14px"><table><thead><tr><th>Período</th><th class="n">Metros</th><th class="n">Valor</th><th>Previsão</th><th>Status</th><th></th></tr></thead><tbody>'+
-        medOrdenadas.map(function(m){
-          var statusMap={prevista:'badge-neutral',enviada:'badge-blue',aprovada:'badge-warn',paga:'badge-ok'};
-          return '<tr><td>'+m.periodo+'</td><td class="n">'+fmtN(m.metros,1)+'</td><td class="n">'+fmt(m.valorLiquido)+'</td><td>'+fmtDate(m.dataPrevista)+'</td><td><span class="badge '+statusMap[m.status]+'">'+m.status+'</span></td>'+
-            '<td><button class="btn-icon" onclick="excluirMedicao(\''+m.id+'\')">'+svg('trash',15,15)+'</button></td></tr>';
-        }).join('')+'</tbody></table></div>' : '')+
-    '</div>';
-}
-
-function salvarCusto(){
-  var valor = parseFloat(document.getElementById('c-valor').value);
-  var cat = document.getElementById('c-cat').value;
-  if(!valor || valor<=0 || !cat){ toast('Preencha categoria e valor'); return; }
-  STATE.custos.push({id:uid(), data:document.getElementById('c-data').value||todayStr(), categoria:cat, valor:valor, obs:document.getElementById('c-obs').value||''});
-  persist(); toast('Custo salvo'); renderPage();
-}
-function excluirCusto(id){ STATE.custos = STATE.custos.filter(function(c){return c.id!==id}); persist(); renderPage(); }
-
-function salvarMedicao(){
-  var valor = parseFloat(document.getElementById('m-valor').value);
-  var periodo = document.getElementById('m-periodo').value;
-  if(!valor || !periodo){ toast('Preencha período e valor'); return; }
-  STATE.medicoes.push({
-    id:uid(), periodo:periodo, metros:parseFloat(document.getElementById('m-metros').value)||0,
-    valorLiquido:valor, dataPrevista:document.getElementById('m-data').value||null,
-    status:document.getElementById('m-status').value,
-  });
-  persist(); toast('Medição salva'); renderPage();
-}
-function excluirMedicao(id){ STATE.medicoes = STATE.medicoes.filter(function(m){return m.id!==id}); persist(); renderPage(); }
-
-// ============================================================================
-// TELA 4 — CAIXA
-// ============================================================================
-function renderCaixa(){
-  var buckets = projetarCaixa(12);
-  var minSaldo = Math.min.apply(null, buckets.map(function(b){return b.saldo}));
-  var minIdx = buckets.findIndex(function(b){return b.saldo===minSaldo});
-  var maxAbs = Math.max.apply(null, buckets.map(function(b){return Math.max(Math.abs(b.recebe),Math.abs(b.paga))}), 1);
-
-  return '<div class="page-header"><div><h1 class="page-title">Caixa</h1><p class="page-sub">Projeção de 12 semanas — recebimento × desembolso</p></div></div>'+
-    kpiBar() +
-    (minSaldo<0 ? '<div class="alert danger">'+svg('alert')+'<div><h3>Alerta de furo de caixa</h3><p>O saldo projetado fica negativo na semana '+(minIdx+1)+' ('+fmtDate(buckets[minIdx].dataIni)+'), em '+fmt(minSaldo)+'.</p></div></div>'
-      : '<div class="alert" style="border-left-color:var(--ok);background:var(--primary-pale)">'+svg('check')+'<div><h3>Caixa não fica negativo nas 12 semanas</h3><p>Saldo mínimo projetado: '+fmt(minSaldo)+', na semana '+(minIdx+1)+'.</p></div></div>')+
-    '<div class="card" style="margin-bottom:16px">'+
-      '<div class="card-title" style="margin-bottom:12px">Fluxo semanal</div>'+
-      '<div class="bar-chart">'+
-        buckets.map(function(b,i){
-          var pct = Math.abs(b.recebe-b.paga)/maxAbs*100;
-          var cor = (b.recebe-b.paga)>=0?'var(--primary)':'var(--danger)';
-          return '<div class="bar-row"><span class="bar-label">S'+(i+1)+'</span><div class="bar-track">'+
-            '<div class="bar-fill" style="width:'+Math.min(100,pct)+'%;background:'+cor+'"></div></div>'+
-            '<span class="bar-value" style="color:'+(b.saldo<0?'var(--danger)':'var(--text)')+'">'+fmtN(b.saldo/1000,0)+'k</span></div>';
-        }).join('')+
-      '</div>'+
-      '<div class="legend-row"><span><i style="background:var(--primary)"></i>Saldo positivo na semana</span><span><i style="background:var(--danger)"></i>Saldo negativo na semana</span><span style="color:var(--text3)">valores à direita = saldo acumulado (milhares)</span></div>'+
-    '</div>'+
-    '<div class="card">'+
-      '<div class="table-wrap"><table><thead><tr><th>Semana</th><th>Data</th><th class="n">Recebe</th><th class="n">Paga</th><th class="n">Saldo acumulado</th></tr></thead><tbody>'+
-        buckets.map(function(b,i){
-          return '<tr'+(i===minIdx&&minSaldo<0?' style="background:#FFF2F1"':'')+'><td>S'+(i+1)+'</td><td>'+fmtDate(b.dataIni)+'</td><td class="n" style="color:var(--ok)">'+fmt(b.recebe)+'</td><td class="n" style="color:var(--danger)">'+fmt(b.paga)+'</td><td class="n" style="font-weight:700;color:'+(b.saldo<0?'var(--danger)':'var(--text)')+'">'+fmt(b.saldo)+'</td></tr>';
-        }).join('')+
-      '</tbody></table></div>'+
-    '</div>';
-}
-
-// ============================================================================
-// TELA 5 — SIMULADOR
-// ============================================================================
-function renderSimulador(){
-  return '<div class="page-header"><div><h1 class="page-title">Simulador</h1><p class="page-sub">Mexa nos parâmetros e veja o resultado em tempo real</p></div></div>'+
-    '<div class="card">'+
-      '<div class="sim-slider"><div class="sl-head"><span>Ritmo de produção</span><b id="sv-ritmo">300 m/dia</b></div><input type="range" id="s-ritmo" min="100" max="500" step="5" value="300"></div>'+
-      '<div class="sim-slider"><div class="sl-head"><span>Desconto negociado</span><b id="sv-desc">18%</b></div><input type="range" id="s-desc" min="0" max="30" step="1" value="18"></div>'+
-      '<div class="sim-slider"><div class="sl-head"><span>Custo do concreto (total)</span><b id="sv-conc">'+fmt(CONTRATO.concretoTotal)+'</b></div><input type="range" id="s-conc" min="20000" max="90000" step="1000" value="'+CONTRATO.concretoTotal+'"></div>'+
-      '<div class="sim-slider"><div class="sl-head"><span>Custo fixo mensal (fábrica + estrutura)</span><b id="sv-fixo">'+fmt(MODELO_PLANO.custoFixoMensalTotal)+'</b></div><input type="range" id="s-fixo" min="20000" max="90000" step="1000" value="'+MODELO_PLANO.custoFixoMensalTotal+'"></div>'+
-      '<div class="sim-result" id="sim-result"></div>'+
-    '</div>'+
-    '<div class="card" style="margin-top:16px">'+
-      '<div class="card-title" style="margin-bottom:8px">Ponto de equilíbrio</div>'+
-      '<div id="sim-be" style="font-size:13px;color:var(--text2)"></div>'+
+      '<div class="card-title" style="margin-bottom:4px">E se mudar?</div>'+
+      '<p class="hint" style="margin-bottom:16px">Arraste pra ver o efeito no resultado da obra.</p>'+
+      '<div class="slider"><div class="sl-head"><span>Produção por dia</span><b id="sv-ritmo">'+CONTRATO.metaMDia+' m</b></div>'+
+        '<input type="range" id="s-ritmo" min="100" max="450" step="10" value="'+CONTRATO.metaMDia+'"></div>'+
+      '<div class="slider"><div class="sl-head"><span>Desconto dado ao cliente</span><b id="sv-desc">'+CONTRATO.descontoPct+'%</b></div>'+
+        '<input type="range" id="s-desc" min="0" max="30" step="1" value="'+CONTRATO.descontoPct+'"></div>'+
+      '<div class="sim-out" id="sim-out"></div>'+
     '</div>';
 }
 
 function initSimulador(){
-  var $ = function(id){return document.getElementById(id)};
-  function recalc(){
-    var ritmo = parseFloat($('s-ritmo').value);
-    var desc = parseFloat($('s-desc').value);
-    var conc = parseFloat($('s-conc').value);
-    var fixoTotal = parseFloat($('s-fixo').value);
-    // distribui o fixo total mantendo a proporção direto/estrutura original do contrato
-    var propDireto = MODELO_PLANO.custoDiretoMensal / MODELO_PLANO.custoFixoMensalTotal;
-    var custosFixosSim = [
-      {id:'direto', nome:'Direto', valor: fixoTotal*propDireto, grupo:'direto'},
-      {id:'estrutura', nome:'Estrutura', valor: fixoTotal*(1-propDireto), grupo:'estrutura'},
-    ];
-    var m = calcModel({ritmoMDia:ritmo, descontoPct:desc, concretoTotal:conc, custosFixos:custosFixosSim});
+  var el = function(id){ return document.getElementById(id); };
+  if(!el('s-ritmo')) return;
+  function calc(){
+    var ritmo = parseFloat(el('s-ritmo').value);
+    var desc  = parseFloat(el('s-desc').value);
+    var liquido = CONTRATO.bruto * (1 - desc/100);
+    var meses = CONTRATO.metros / (ritmo * CONTRATO.diasUteisMes);
+    var custo = CONTRATO.concretoTotal + CONTRATO.fixoMensal * meses;
+    var res = liquido - custo;
+    var minimo = (CONTRATO.fixoMensal / (liquido/CONTRATO.metros - CONTRATO.concretoM)) / CONTRATO.diasUteisMes;
 
-    $('sv-ritmo').textContent = ritmo+' m/dia';
-    $('sv-desc').textContent = desc+'%';
-    $('sv-conc').textContent = fmt(conc);
-    $('sv-fixo').textContent = fmt(fixoTotal);
-
-    document.getElementById('sim-result').innerHTML =
-      '<div class="sr-item"><div class="l">Prazo</div><div class="v">'+fmtN(m.diasUteisNecessarios,0)+' du</div></div>'+
-      '<div class="sr-item"><div class="l">Custo total</div><div class="v">'+fmt(m.custoTotal)+'</div></div>'+
-      '<div class="sr-item"><div class="l">Resultado</div><div class="v" style="color:'+(m.resultado>=0?'var(--ok)':'var(--danger)')+'">'+fmt(m.resultado)+'</div></div>'+
-      '<div class="sr-item"><div class="l">Margem</div><div class="v" style="color:'+(m.margemPct>=0?'var(--ok)':'var(--danger)')+'">'+fmtPct(m.margemPct)+'</div></div>';
-
-    document.getElementById('sim-be').innerHTML =
-      'Equilíbrio total: <b>'+fmtN(m.breakEvenTotalMDia)+' m/dia</b> · Equilíbrio direto (só fábrica): <b>'+fmtN(m.breakEvenDiretoMDia)+' m/dia</b>'+
-      (ritmo < m.breakEvenTotalMDia ? '<div style="color:var(--danger);margin-top:6px;font-weight:600">Nesse ritmo a obra não paga a estrutura.</div>' : '');
+    el('sv-ritmo').textContent = ritmo + ' m';
+    el('sv-desc').textContent = desc + '%';
+    el('sim-out').innerHTML =
+      '<div class="sim-box '+(res>=0?'pos':'neg')+'">'+
+        '<div class="sim-label">Deve sobrar</div>'+
+        '<div class="sim-value">'+fmt(res)+'</div>'+
+        '<div class="sim-note">obra levaria '+fmtN(meses*CONTRATO.diasUteisMes,0)+' dias de trabalho · '+fmtPct(res/liquido*100,1)+' do contrato</div>'+
+      '</div>'+
+      (ritmo < minimo
+        ? '<div class="sim-aviso">Nesse ritmo a obra dá prejuízo. O mínimo é '+fmtN(minimo)+' m por dia.</div>'
+        : '<div class="sim-ok">Acima do mínimo de '+fmtN(minimo)+' m por dia.</div>');
   }
-  ['s-ritmo','s-desc','s-conc','s-fixo'].forEach(function(id){ $(id).addEventListener('input', recalc); });
-  recalc();
+  el('s-ritmo').addEventListener('input', calc);
+  el('s-desc').addEventListener('input', calc);
+  calc();
 }
 
 // ============================================================================
-// TELA 6 — RESTRIÇÕES
-// ============================================================================
-function semanaAtualStr(){
-  var d = new Date();
-  var onejan = new Date(d.getFullYear(),0,1);
-  var week = Math.ceil((((d-onejan)/864e5)+onejan.getDay()+1)/7);
-  return d.getFullYear()+'-S'+week;
-}
-
-function renderRestricoes(){
-  var abertas = STATE.restricoes.filter(function(r){return r.status!=='liberada'});
-  var liberadas = STATE.restricoes.filter(function(r){return r.status==='liberada'});
-  var planoOrd = STATE.planoSemanal.slice().sort(function(a,b){return (a.semana||'')<(b.semana||'')?1:-1});
-
-  var tipoIcon = {ferragem:'Ferragem', concreto:'Concreto', formas:'Formas', projeto:'Projeto', pagamento:'Pagamento', outro:'Outro'};
-
-  return '<div class="page-header"><div><h1 class="page-title">Restrições</h1><p class="page-sub">O que trava a produção da semana — Last Planner enxuto</p></div></div>'+
-    kpiBar() +
-    '<div class="card" style="margin-bottom:16px">'+
-      '<div class="card-title" style="margin-bottom:12px">Nova restrição</div>'+
-      '<div class="form-grid">'+
-        '<div class="fgroup"><label>Tipo</label><select id="r-tipo">'+Object.keys(tipoIcon).map(function(k){return '<option value="'+k+'">'+tipoIcon[k]+'</option>'}).join('')+'</select></div>'+
-        '<div class="fgroup"><label>Responsável</label><input type="text" id="r-resp" placeholder="Ex: Mauricio"></div>'+
-        '<div class="fgroup"><label>Prazo</label><input type="date" id="r-prazo"></div>'+
-      '</div>'+
-      '<div class="fgroup" style="margin-bottom:10px"><label>Descrição</label><input type="text" id="r-desc" placeholder="Ex: Ferragem do lote EST 27 ainda não chegou"></div>'+
-      '<button class="btn btn-primary" onclick="salvarRestricao()">'+svg('plus',16,16)+' Adicionar restrição</button>'+
-    '</div>'+
-
-    '<div class="card" style="margin-bottom:16px">'+
-      '<div class="card-title" style="margin-bottom:10px">Em aberto ('+abertas.length+')</div>'+
-      (abertas.length===0 ? '<div class="empty">'+svg('check')+'<p>Nenhuma restrição travando a produção.</p></div>' :
-      abertas.map(function(r){
-        return '<div class="restr-card '+r.status+'">'+
-          '<div class="restr-top"><b>'+tipoIcon[r.tipo]+' — '+r.desc+'</b>'+
-            '<select onchange="mudarStatusRestricao(\''+r.id+'\',this.value)" style="border:1px solid var(--border);border-radius:6px;padding:3px 6px;font-size:11px">'+
-              '<option value="aberta"'+(r.status==='aberta'?' selected':'')+'>Aberta</option>'+
-              '<option value="andamento"'+(r.status==='andamento'?' selected':'')+'>Em andamento</option>'+
-              '<option value="liberada"'+(r.status==='liberada'?' selected':'')+'>Liberada</option>'+
-            '</select></div>'+
-          '<div class="restr-meta"><span>'+svg('clock',13,13)+' '+(r.prazo?fmtDate(r.prazo):'sem prazo')+'</span><span>Resp.: '+(r.responsavel||'—')+'</span>'+
-          '<button class="btn-icon" onclick="excluirRestricao(\''+r.id+'\')" style="margin-left:auto">'+svg('trash',14,14)+'</button></div>'+
-        '</div>';
-      }).join(''))+
-    '</div>'+
-
-    (liberadas.length>0 ? '<div class="card" style="margin-bottom:16px"><div class="card-title" style="margin-bottom:10px">Liberadas ('+liberadas.length+')</div>'+
-      liberadas.map(function(r){ return '<div class="restr-card liberada"><div class="restr-top"><b>'+tipoIcon[r.tipo]+' — '+r.desc+'</b></div></div>'; }).join('')+
-    '</div>' : '')+
-
-    '<div class="card">'+
-      '<div class="card-title" style="margin-bottom:12px">PPC semanal — Percentual do Plano Concluído</div>'+
-      '<div class="form-grid cols2" style="margin-bottom:10px">'+
-        '<div class="fgroup"><label>Semana</label><input type="text" id="pp-semana" value="'+semanaAtualStr()+'"></div>'+
-        '<div class="fgroup"><label>Meta (m)</label><input type="number" id="pp-meta" placeholder="Ex: 1500"></div>'+
-        '<div class="fgroup" style="grid-column:1/-1"><label>Realizado (m)</label><input type="number" id="pp-real" placeholder="Ex: 1260"></div>'+
-      '</div>'+
-      '<button class="btn btn-primary" onclick="salvarPlanoSemanal()">'+svg('plus',16,16)+' Salvar semana</button>'+
-      (planoOrd.length>0 ? '<div style="margin-top:14px">'+planoOrd.map(function(pl){
-        var ppc = pl.metaM>0 ? Math.min(100,(pl.realizadoM/pl.metaM*100)) : 0;
-        var tone = ppc>=85?'var(--ok)':ppc>=70?'var(--warn)':'var(--danger)';
-        return '<div class="ppc-row"><span class="ppc-week">'+pl.semana+'</span>'+
-          '<div class="progress-bar" style="flex:1"><div class="fill" style="width:'+ppc+'%;background:'+tone+'"></div></div>'+
-          '<span style="font-family:var(--font-mono);width:50px;text-align:right;color:'+tone+';font-weight:700">'+fmtN(ppc,0)+'%</span>'+
-          '<button class="btn-icon" onclick="excluirPlanoSemanal(\''+pl.id+'\')">'+svg('trash',14,14)+'</button></div>';
-      }).join('')+'</div>' : '')+
-      '<div class="k-note" style="margin-top:10px">Referência lean: PPC 70–85% é obra sob controle; acima de 85% é excelência operacional.</div>'+
-    '</div>';
-}
-
-function salvarRestricao(){
-  var desc = document.getElementById('r-desc').value;
-  if(!desc){ toast('Descreva a restrição'); return; }
-  STATE.restricoes.push({
-    id:uid(), tipo:document.getElementById('r-tipo').value, desc:desc,
-    responsavel:document.getElementById('r-resp').value||'', prazo:document.getElementById('r-prazo').value||null,
-    status:'aberta', criadaEm:todayStr(),
-  });
-  persist(); toast('Restrição adicionada'); renderPage();
-}
-function mudarStatusRestricao(id,status){
-  var r = STATE.restricoes.find(function(x){return x.id===id});
-  if(r){ r.status = status; persist(); renderPage(); }
-}
-function excluirRestricao(id){ STATE.restricoes = STATE.restricoes.filter(function(r){return r.id!==id}); persist(); renderPage(); }
-
-function salvarPlanoSemanal(){
-  var meta = parseFloat(document.getElementById('pp-meta').value);
-  var real = parseFloat(document.getElementById('pp-real').value);
-  var semana = document.getElementById('pp-semana').value;
-  if(!meta || !semana){ toast('Preencha semana e meta'); return; }
-  STATE.planoSemanal.push({id:uid(), semana:semana, metaM:meta, realizadoM:real||0});
-  persist(); toast('Semana salva'); renderPage();
-}
-function excluirPlanoSemanal(id){ STATE.planoSemanal = STATE.planoSemanal.filter(function(p){return p.id!==id}); persist(); renderPage(); }
-
-// ============================================================================
-// LOGIN GATE — senha simples de equipe (mesmo padrão de segurança leve dos outros apps MSE)
+// ENTRADA NO APP
 // ============================================================================
 var APP_PIN = '2027';
 function tentarEntrar(){
-  var v = document.getElementById('gatePin').value;
-  if(v === APP_PIN){
+  if(document.getElementById('gatePin').value === APP_PIN){
     document.getElementById('gate').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
     try{ sessionStorage.setItem('oc_mat_auth','1'); }catch(e){}
     boot();
   } else {
-    document.getElementById('gateErr').textContent = 'PIN incorreto';
+    document.getElementById('gateErr').textContent = 'Senha incorreta';
     document.getElementById('gatePin').value = '';
   }
 }
 document.addEventListener('DOMContentLoaded', function(){
-  document.getElementById('gatePin').addEventListener('keydown', function(e){ if(e.key==='Enter') tentarEntrar(); });
-  var jaAutenticado = false;
-  try{ jaAutenticado = sessionStorage.getItem('oc_mat_auth')==='1'; }catch(e){}
-  if(jaAutenticado){
+  document.getElementById('gatePin').addEventListener('keydown', function(e){
+    if(e.key==='Enter') tentarEntrar();
+  });
+  var ja = false;
+  try{ ja = sessionStorage.getItem('oc_mat_auth')==='1'; }catch(e){}
+  if(ja){
     document.getElementById('gate').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
     boot();
@@ -516,10 +524,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 function boot(){
   loadState(function(){
-    renderNav();
-    renderPage();
-    if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('sw.js').catch(function(){});
-    }
+    renderNav(); renderPage();
+    if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function(){});
   });
 }

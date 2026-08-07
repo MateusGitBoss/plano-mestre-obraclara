@@ -1,6 +1,6 @@
 // ObraClara — service worker do app shell (Maternidade Porte I)
 // Cache-first para o shell local; passa direto pra rede em tudo mais (Firebase, fontes).
-var CACHE = 'obraclara-mat-v1';
+var CACHE = 'obraclara-mat-v2';
 var SHELL = ['./index.html', './app.js', './pages.js', './manifest.json', './icon.svg'];
 
 self.addEventListener('install', function(e){
